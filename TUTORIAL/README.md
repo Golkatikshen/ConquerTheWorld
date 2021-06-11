@@ -18,9 +18,9 @@ Built with [Node.js](https://nodejs.org/), [socket.io](https://socket.io/), and 
 
 To see this code with [Flow](https://flow.org/) typing, visit the [flow branch](https://github.com/vzhou842/example-.io-game/tree/flow).
 
-## Development
+## Development LEL
 
-To get lel started, make sure you have Node and NPM installed. Then,
+To get started, make sure you have Node and NPM installed. Then,
 
 ```bash
 $ npm install
