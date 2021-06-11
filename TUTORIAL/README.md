@@ -20,7 +20,7 @@ To see this code with [Flow](https://flow.org/) typing, visit the [flow branch](
 
 ## Development
 
-To get started, make sure you have Node and NPM installed. Then,
+To get lel started, make sure you have Node and NPM installed. Then,
 
 ```bash
 $ npm install
