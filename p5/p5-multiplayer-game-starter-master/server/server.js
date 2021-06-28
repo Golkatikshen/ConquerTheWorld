@@ -28,6 +28,3 @@ function updateGame() {
   io.sockets.emit("heartbeat", players);
 }
 
-
-
-
