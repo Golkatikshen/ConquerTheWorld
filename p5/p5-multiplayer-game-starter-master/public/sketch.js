@@ -4,7 +4,7 @@ let players = [];
 socket.on("heartbeat", players => updatePlayers(players));
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -36,4 +36,8 @@ function playerExists(playerFromServer) {
 
 function removePlayer(playerId) {
   players = players.filter(player => player.id !== playerId);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
