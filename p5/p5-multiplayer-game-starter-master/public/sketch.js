@@ -1,15 +1,19 @@
-const socket = io.connect('http://localhost');
-
+let socket; //= io.connect('http://localhost');
+let input, buton, greeting;
+let connected = false;
 let players = [];
-socket.on("heartbeat", players => updatePlayers(players));
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  console.log("hello");
+
 }
 
 function draw() {
   background(220);
-  players.forEach(player => player.draw());
+  if(connected) {
+    players.forEach(player => player.draw());
+  }
 }
 
 function updatePlayers(serverPlayers) {
@@ -40,4 +44,27 @@ function removePlayer(playerId) {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function initialForm()
+{
+  input = createInput();
+  input.position(20, 65);
+
+  button = createButton('submit');
+  button.position(input.x + input.width, 65);
+  button.mousePressed(connect);
+
+  greeting = createElement('h2', 'what is your name?');
+  greeting.position(20, 5);
+
+  textAlign(CENTER);
+  textSize(50);
+}
+
+function connect()
+{
+  socket = io.connect('http://localhost');
+  socket.on("heartbeat", players => updatePlayers(players));
+  connected = true;
 }
