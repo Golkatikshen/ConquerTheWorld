@@ -11,7 +11,7 @@ console.log('The server is now running at http://localhost:3000');
 function listen() {
   var host = server.address().address;
   var port = server.address().port;
-  console.log('Example app listening at http://' + host + ':' + port);
+  //console.log('Example app listening at http://' + host + ':' + port);
 }
 
 app.use(express.static("public"));
@@ -45,11 +45,17 @@ io.sockets.on("connection", socket => {
   players.push(new Player(socket.id));
 
   socket.on("nick_login", name => {
-    console.long(name);
+    players.push(new Player(socket.id, name));
   });
 
   socket.on("guest_login", name => {
-    
+    players.push(new Player(socket.id, "Guest" + guest_counter));
+    guest_counter ++;
+  });
+
+  socket.on("update", data => {
+    for (let i = 0; i < players.length; i++) {
+    }
   });
 
   socket.on("disconnect", () => {
