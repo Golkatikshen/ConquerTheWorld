@@ -1,7 +1,7 @@
 class Player {
   constructor(id, name) {
-    this.x = Math.random() * 800 + 1;
-    this.y = Math.random() * 800 + 1;
+    this.x = getRandomInt(100, 400);
+    this.y = getRandomInt(100, 400);
     this.id = id;
     this.name = name;
 
@@ -12,6 +12,13 @@ class Player {
     }
   }
 
+}
+
+function getRandomInt(min, max)
+{
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
 module.exports = Player;

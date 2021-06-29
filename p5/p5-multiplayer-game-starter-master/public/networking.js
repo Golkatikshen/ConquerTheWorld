@@ -5,7 +5,20 @@ let local_player;
 
 socket.on("heartbeat", players => updatePlayers(players));
 
-socket.on("start", player => spawnPlayer(player)) 
+socket.on("start", player => spawnPlayer(player));
+
+
+setInterval(updateLocalPlayer, 10);
+function updateLocalPlayer()
+{
+    if(connected) {
+        let data = {
+            x: local_player.x,
+            y: local_player.y,
+        };
+        socket.emit("update", data);
+    }
+}
 
 
 function spawnPlayer(player_data)
@@ -13,6 +26,7 @@ function spawnPlayer(player_data)
     local_player = new Player(player_data);
     connected = true;
 }
+
 
 function updatePlayers(serverPlayers)
 {
@@ -27,16 +41,18 @@ function updatePlayers(serverPlayers)
         }
     }
 }
+
   
 function playerExists(playerFromServer)
 {
     for (let i = 0; i < players.length; i++) {
-        if (players[i].id === playerFromServer) {
-        return true;
+        if (players[i].id === playerFromServer.id) {
+            return true;
         }
     }
     return false;
 }
+
 
 function removePlayer(playerId)
 {
