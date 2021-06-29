@@ -11,7 +11,7 @@ console.log('The server is now running at http://localhost:3000');
 function listen() {
   var host = server.address().address;
   var port = server.address().port;
-  console.log('Example app listening at http://' + host + ':' + port);
+  //console.log('Example app listening at http://' + host + ':' + port);
 }
 
 app.use(express.static("public"));
@@ -59,6 +59,7 @@ io.sockets.on("connection", socket => {
   socket.on("update", data => {
     for (let i = 0; i < players.length; i++) {
       if(players[i].id == socket.id) {
+        console.log("updated: " + players[i].name);
         players[i].x = data.x;
         players[i].y = data.y;
       }

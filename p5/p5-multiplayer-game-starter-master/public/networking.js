@@ -1,3 +1,5 @@
+
+//const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
 const socket = io.connect('http://localhost:3000');
 let connected = false;
 let players = [];
@@ -8,7 +10,7 @@ socket.on("heartbeat", players => updatePlayers(players));
 socket.on("start", player => spawnPlayer(player));
 
 
-setInterval(updateLocalPlayer, 10);
+//setInterval(updateLocalPlayer, 10);
 function updateLocalPlayer()
 {
     if(connected) {

@@ -35,6 +35,8 @@ function keyPressed()
   if (key === 'd') {
     local_player.x += 5;
   }
+
+  updateLocalPlayer();
 }
 
 function windowResized()
