@@ -4,7 +4,7 @@ const app = express();
 let Player = require("./Player");
 
 let server = app.listen(process.env.PORT || 3000, listen);
-console.log('The server is now running at http://localhost/');
+console.log('The server is now running at http://localhost:3000');
 
 function listen() {
   var host = server.address().address;
