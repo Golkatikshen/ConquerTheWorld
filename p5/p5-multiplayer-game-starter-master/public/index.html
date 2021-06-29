@@ -6,59 +6,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.sound.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+    <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
 
 </head>
 <body>
-    <div class="container">
-
-        <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
-            <div class="border border-red p-4 mt-5">
-                <div class="d-grid gap-2">
-                    <label class="form-label">Nickname</label>
-                    <input class="form-control" id="nickname">
-                    <button type="submit" class="btn btn-success mt-3">Enter</button>
-                </div>
-                <div class="text-center">
-                    <label class="form-label mt-4 mb-4">--------- or ---------</label>
-                </div>
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary mb-3">Enter as Guest</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-     <!-- p5js class full screen -->
-      <!-- <div id="contenu">
-            <div class="row h-100 justify-content-md-center align-middle">
-                <div class="col-md-auto my-auto">
-                    <form>
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Email address</label>
-                          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">Password</label>
-                          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                        </div>
-                        <div class="form-check">
-                          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+    <!-- p5js class full screen -->
+    <div id="contenu">
+        <div id="login_form" class="container">
+            <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
+                <div class="border border-secondary border-5 rounded-3 p-4 mt-5">
+                    <div class="d-grid gap-2">
+                        <label class="form-label">Nickname</label>
+                        <input class="form-control" id="nickname">
+                        <button type="submit" class="btn btn-success mt-3">Enter</button>
+                    </div>
+                    <div class="text-center">
+                        <label class="form-label mt-4 mb-4">--------- or ---------</label>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mb-3" onclick="guestLogin();">Enter as Guest</button>
+                    </div>
                 </div>
             </div>
+        </div>  
 
-            
-
-    
+        <script src="clientManager.js"></script>
         <script src="sketch.js"></script>
         <script src="Player.js"></script>
-    </div> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </div>
 </body>
 </html>
