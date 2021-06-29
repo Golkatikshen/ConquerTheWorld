@@ -1,3 +1,5 @@
+// ###### BEG SERVER INIT ######
+
 const express = require("express");
 const socket = require('socket.io');
 const app = express();
@@ -14,20 +16,41 @@ function listen() {
 
 app.use(express.static("public"));
 
-
 let io = socket(server);
 
+// ###### END SERVER INIT ######
+
+
+
+
+// ###### BEG SERVER VARS INIT ######
+
 let players = [];
+let guest_counter = 0;
+
+// ###### END SERVER VARS INIT ######
+
+
+
+
+// ###### BEG SERVER-CLINET HANDLING ######
 
 setInterval(updateGame, 16);
 function updateGame() {
   io.sockets.emit("heartbeat", players);
 }
 
-
 io.sockets.on("connection", socket => {
-  console.log(`New connection ${socket.id}`);
+  console.log("New connection: " + socket.id);
   players.push(new Player(socket.id));
+
+  socket.on("nick_login", name => {
+    console.long(name);
+  });
+
+  socket.on("guest_login", name => {
+    
+  });
 
   socket.on("disconnect", () => {
     io.sockets.emit("disconnect", socket.id);
@@ -35,5 +58,4 @@ io.sockets.on("connection", socket => {
   });
 });
 
-
-
+// ###### END SERVER-CLINET HANDLING ######
