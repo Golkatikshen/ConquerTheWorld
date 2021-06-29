@@ -11,7 +11,7 @@ console.log('The server is now running at http://localhost:3000');
 function listen() {
   var host = server.address().address;
   var port = server.address().port;
-  //console.log('Example app listening at http://' + host + ':' + port);
+  console.log('Example app listening at http://' + host + ':' + port);
 }
 
 app.use(express.static("public"));
