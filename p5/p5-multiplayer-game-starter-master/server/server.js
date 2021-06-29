@@ -42,23 +42,31 @@ function updateGame() {
 
 io.sockets.on("connection", socket => {
   console.log("New connection: " + socket.id);
-  players.push(new Player(socket.id));
 
   socket.on("nick_login", name => {
-    players.push(new Player(socket.id, name));
+    let p = new Player(socket.id, name);
+    socket.emit("start", p);
+    players.push(p);
   });
 
   socket.on("guest_login", name => {
-    players.push(new Player(socket.id, "Guest" + guest_counter));
+    let p = new Player(socket.id, "Guest_" + guest_counter);
+    socket.emit("start", p);
+    players.push(p);
     guest_counter ++;
   });
 
   socket.on("update", data => {
     for (let i = 0; i < players.length; i++) {
+      if(players[i].id == socket.id) {
+        players[i].x = data.x;
+        players[i].y = data.y;
+      }
     }
   });
 
   socket.on("disconnect", () => {
+    console.log("Disconnected: " + socket.id);
     io.sockets.emit("disconnect", socket.id);
     players = players.filter(player => player.id !== socket.id);
   });

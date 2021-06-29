@@ -13,7 +13,7 @@ class Player {
     circle(this.x, this.y, 20);
 
     textSize(10);
-    textFill(255);
+    fill(255);
     textAlign(CENTER, CENTER);
     text(this.name, this.x, this.y);
   }

@@ -4,7 +4,6 @@ function nicknameLogin()
     let nickname = document.getElementById("nickname").value;
     console.log(nickname);
     socket.emit("nick_login", nickname);
-    console.log(nickname);
     
     document.getElementById("login_form").hidden = true;
 }
