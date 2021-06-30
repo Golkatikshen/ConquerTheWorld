@@ -32,21 +32,68 @@ function spawnPlayer(player_data)
 
 function updatePlayers(serverPlayers)
 {
-    let removedPlayers = players.filter(p => serverPlayers.findIndex(s => s.id == p.id));
+    let removedPlayers = findRemoved(serverPlayers);
     for (let player of removedPlayers) {
         removePlayer(player.id);
     }
-    for (let i = 0; i < serverPlayers.length; i++) {
-        let playerFromServer = serverPlayers[i];
+
+    for (let playerFromServer of serverPlayers) {
         if (!playerExists(playerFromServer)) {
             players.push(new Player(playerFromServer));
         }
+        else {
+            updatePlayerCoord(playerFromServer);
+        }
     }
+}
+
+
+function updatePlayerCoord(playerFromServer)
+{
+    if(local_player) {
+        if(playerFromServer.id === local_player.id) {
+            return;
+        }
+    }
+
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].id === playerFromServer.id) {
+            players[i].x = playerFromServer.x;
+            players[i].y = playerFromServer.y;
+        }
+    }
+}
+
+
+function findRemoved(playersFromServer)
+{
+    let removed = [];
+    for(let i=0; i<players.length; i++) {
+        let found = false;
+        for(let j=0; j<playersFromServer.length; j++) {
+            if(players[i].id === playersFromServer[j].id) {
+                found = true;
+                break;
+            }
+        }
+
+        if(!found) {
+            removed.push(players[i]);
+        }
+    }
+
+    return removed;
 }
 
   
 function playerExists(playerFromServer)
 {
+    if(local_player){
+        if(playerFromServer.id === local_player.id) {
+            return true;
+        }
+    }
+
     for (let i = 0; i < players.length; i++) {
         if (players[i].id === playerFromServer.id) {
             return true;

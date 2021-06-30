@@ -35,7 +35,7 @@ let guest_counter = 0;
 
 // ###### BEG SERVER-CLINET HANDLING ######
 
-setInterval(updateGame, 16);
+setInterval(updateGame, 50);
 function updateGame() {
   io.sockets.emit("heartbeat", players);
 }
@@ -59,7 +59,7 @@ io.sockets.on("connection", socket => {
   socket.on("update", data => {
     for (let i = 0; i < players.length; i++) {
       if(players[i].id == socket.id) {
-        console.log("updated: " + players[i].name);
+        console.log("updated: " + players[i].name + ", " + socket.id);
         players[i].x = data.x;
         players[i].y = data.y;
       }
