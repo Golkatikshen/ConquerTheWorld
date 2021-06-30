@@ -1,50 +1,15 @@
 
-
-
 function setup()
 {
 	createCanvas(windowWidth, windowHeight);
 	textSize(15);
 
-	voronoiInit();
+	mapInit();
 }
 
 function draw()
 {
-    background(220);
-
-    for(let i=0; i<points.length; i++) {
-        //fill(0);
-        //ellipse(points[i][0], points[i][1], 10, 10);
-
-        let conv_poly = voronoi.cellPolygon(i);
-
-        if(voronoi.contains(i, mouseX, mouseY)) {
-            fill(0, 100, 0);
-        }
-        else {
-            let tn = false;
-            for(let neighbor of voronoi.neighbors(i)) {
-                if(voronoi.contains(neighbor, mouseX, mouseY)) {
-                    tn = true;
-                    break;
-                }
-            }
-
-            if(tn) {
-                fill(100, 0, 0);
-            }
-            else {
-                noFill();
-            }
-        }
-
-        beginShape();
-        for(let j=0; j<conv_poly.length; j++) {
-            vertex(conv_poly[j][0], conv_poly[j][1]);
-        }
-        endShape(CLOSE);
-    }
+    image(map, 0, 0, windowWidth, windowHeight);
 
     if(connected) {
         for(let i=0; i<players.length; i++) {

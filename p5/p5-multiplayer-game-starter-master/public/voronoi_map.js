@@ -2,6 +2,50 @@
 let points = [];
 let delaunay;
 let voronoi;
+let map;
+
+function mapInit()
+{
+    voronoiInit();
+
+    map = createGraphics(windowWidth, windowHeight);
+
+    map.background(6, 66, 115);
+    for(let i=0; i<points.length; i++) {
+        //fill(0);
+        //ellipse(points[i][0], points[i][1], 10, 10);
+
+        let conv_poly = voronoi.cellPolygon(i);
+
+        /*if(voronoi.contains(i, mouseX, mouseY)) {
+            fill(0, 100, 0);
+        }
+        else {
+            let tn = false;
+            for(let neighbor of voronoi.neighbors(i)) {
+                if(voronoi.contains(neighbor, mouseX, mouseY)) {
+                    tn = true;
+                    break;
+                }
+            }
+
+            if(tn) {
+                fill(100, 0, 0);
+            }
+            else {
+                noFill();
+            }
+        }*/
+        map.noFill();
+
+        map.beginShape();
+        for(let j=0; j<conv_poly.length; j++) {
+            map.vertex(conv_poly[j][0], conv_poly[j][1]);
+        }
+        map.endShape(CLOSE);
+    }
+}
+
 
 function voronoiInit()
 {
@@ -13,14 +57,10 @@ function voronoiInit()
 
 function genPoints(n_points)
 {
-    /*for(let i=0; i<n_points; i++) {
-        points.push([getRandomInt(0, windowWidth), getRandomInt(0, windowHeight)])
-    }*/
-
     var p = new PoissonDiskSampling({
         shape: [windowWidth, windowHeight],
-        minDistance: 20,
-        maxDistance: 30,
+        minDistance: 5,
+        maxDistance: 15,
         tries: 10
     });
 
