@@ -3,6 +3,7 @@ function setup()
 {
 	createCanvas(windowWidth, windowHeight);
 	textSize(15);
+    noiseDetail(2, 0.85);
 
 	worldInit(); // probabilmente bisognerà passare un seed dato dal server
 }
@@ -10,7 +11,7 @@ function setup()
 function draw()
 {
     image(map, 0, 0, windowWidth, windowHeight);
-    drawRegions();
+    //drawRegions();
 
     if(connected) {
         for(let i=0; i<players.length; i++) {
@@ -21,8 +22,9 @@ function draw()
         local_player.draw();
     }
   
+    textSize(20);
     fill(255, 0, 255);
-    text((int)(frameRate()), 10, 20);
+    text((int)(frameRate()), 10, 35);
 }
 
 function keyPressed()
