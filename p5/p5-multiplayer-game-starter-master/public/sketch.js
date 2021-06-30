@@ -10,8 +10,8 @@ function setup()
 
 function draw()
 {
-    image(map, 0, 0, windowWidth, windowHeight);
-    //drawRegions();
+    image(map_image, 0, 0, windowWidth, windowHeight);
+    drawRegions();
 
     if(connected) {
         for(let i=0; i<players.length; i++) {

@@ -2,7 +2,7 @@
 let delaunay;
 let points_map = [];
 let voronoi_map;
-let map;
+let map_image;
 let points_regions = [];
 let voronoi_regions;
 let islands_points = [];
@@ -13,23 +13,24 @@ function worldInit()
     voronoiRegionsInit();
     islandsPointsInit();
 
-    map = createGraphics(windowWidth, windowHeight);
+    map_image = createGraphics(windowWidth, windowHeight);
 
 
-    map.background(6, 66, 115);
+    map_image.background(6, 66, 115);
     for(let i=0; i<points_map.length; i++) {
         let conv_poly = voronoi_map.cellPolygon(i);
 
         //map.noFill();
-        //let hv = islandPointMinH(points_map[i][0], points_map[i][1]);
         let hv = noise(points_map[i][0]*0.01, points_map[i][1]*0.01);
+        hv -= islandPointMinH(points_map[i][0], points_map[i][1]);
+        hv = max(0, hv);
 
-        map.fill(255*hv);
-        map.beginShape();
+        map_image.fill(255*hv);
+        map_image.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
-            map.vertex(conv_poly[j][0], conv_poly[j][1]);
+            map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
         }
-        map.endShape(CLOSE);
+        map_image.endShape(CLOSE);
     }
 }
 
@@ -37,7 +38,8 @@ function worldInit()
 function drawRegions()
 {
     noFill();
-    stroke(255, 0, 0);
+    stroke(0);
+    strokeWeight(3);
     for(let i=0; i<points_regions.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
         
@@ -59,12 +61,15 @@ function islandPointMinH(x, y)
             min_dist = curr_val;
         }
     }
+
+    let v = map(min_dist, 0, 300, 0, 1);
+    return v;
 }
 
 
 function islandsPointsInit()
 {
-    let n_islands = getRandomInt(3, 5);
+    let n_islands = getRandomInt(8, 12);
 
     for(let i=0; i<n_islands; i++) {
         let x = getRandomInt(200, map_width-200);
