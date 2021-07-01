@@ -22,6 +22,7 @@ function worldInit()
     map_image = createGraphics(map_width, map_height);
 
     map_image.background(6, 66, 115);
+    map_image.noStroke();
     for(let i=0; i<points_map.length; i++) {
         let conv_poly = voronoi_map.cellPolygon(i);
 

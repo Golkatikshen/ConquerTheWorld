@@ -74,9 +74,11 @@ function keyPressed()
 }
 
 
-let z_t = 0;
+let z_t = 0; // zoom times
 function mouseWheel(event)
 {
+    let old_zoom = zoom;
+
     if(event.delta < 0 && z_t > -5) {
         zoom += 0.1;
         z_t --;
@@ -86,6 +88,12 @@ function mouseWheel(event)
         z_t ++;
     }
 
+    let delta_zoom = zoom - old_zoom;
+    off_x += mouseX*delta_zoom;
+    off_y += mouseY*delta_zoom;
+
+    off_x = max(off_x, 0);
+    off_y = max(off_y, 0);
     off_x = min(off_x, map_width*zoom-windowWidth);
     off_y = min(off_y, map_height*zoom-windowHeight);
 }
