@@ -8,12 +8,15 @@ function setup()
 	textSize(15);
     noiseDetail(2, 0.85);
 
+    zoom = windowWidth/map_width;
+
 	worldInit(); // probabilmente bisognerà passare un seed dato dal server
 }
 
 function draw()
 {
-    image(map_image, off_x, off_y, map_width+off_x, map_height+off_y);
+    background(6, 66, 115);
+    image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
     //drawRegions();
 
     if(connected) {
@@ -24,10 +27,29 @@ function draw()
         }
         local_player.draw();
     }
-  
+
     textSize(20);
     fill(255, 0, 255);
     text((int)(frameRate()), 10, 35);
+
+
+    // movement screen with mouse close to edges
+    if(mouseX < 100) {
+        off_x -= 5*zoom;
+        off_x = max(off_x, 0);
+    }
+    if(windowWidth - mouseX < 100) {
+        off_x += 5*zoom;
+        off_x = min(off_x, map_width*zoom-windowWidth);
+    }
+    if(mouseY < 100) {
+        off_y -= 5*zoom;
+        off_y = max(off_y, 0);
+    }
+    if(windowHeight - mouseY < 100) {
+        off_y += 5*zoom;
+        off_y = min(off_y, map_height*zoom-windowHeight);
+    }
 }
 
 function keyPressed()
@@ -48,20 +70,24 @@ function keyPressed()
         local_player.x += 5;
     }
 
-    if (keyCode === LEFT_ARROW) {
-        off_x -= 5;
+    updateLocalPlayer();
+}
+
+
+let z_t = 0;
+function mouseWheel(event)
+{
+    if(event.delta < 0 && z_t > -5) {
+        zoom += 0.1;
+        z_t --;
     }
-    else if(keyCode === RIGHT_ARROW) {
-        off_x += 5;
-    }
-    else if(keyCode === UP_ARROW) {
-        off_y -= 5;
-    }
-    else if(keyCode === DOWN_ARROW) {
-        off_y += 5;
+    if(event.delta > 0 && z_t < 0) {
+        zoom -= 0.1;
+        z_t ++;
     }
 
-    updateLocalPlayer();
+    off_x = min(off_x, map_width*zoom-windowWidth);
+    off_y = min(off_y, map_height*zoom-windowHeight);
 }
 
 function windowResized()

@@ -17,11 +17,9 @@ function worldInit()
     islandsPointsInit();
     voronoiRegionsInit();
     voronoiMapInit();
-    
-    console.log(points_regions.length);
-    console.log(voronoi_regions);
 
-    map_image = createGraphics(windowWidth, windowHeight);
+
+    map_image = createGraphics(map_width, map_height);
 
     map_image.background(6, 66, 115);
     for(let i=0; i<points_map.length; i++) {
@@ -119,7 +117,7 @@ function voronoiMapInit()
     points_map = genPoints(5, 15);
 
     delaunay = d3.Delaunay.from(points_map);
-    voronoi_map = delaunay.voronoi([0, 0, windowWidth, windowHeight]);
+    voronoi_map = delaunay.voronoi([0, 0, map_width, map_height]);
 
     for(let i=0; i<points_map.length; i++) {
         let is_land = false;
@@ -146,7 +144,7 @@ function voronoiRegionsInit()
     points_regions = genPoints(30, 45);
 
     delaunay = d3.Delaunay.from(points_regions);
-    voronoi_regions = delaunay.voronoi([0, 0, windowWidth, windowHeight]);
+    voronoi_regions = delaunay.voronoi([0, 0, map_width, map_height]);
 
     for(let i=0; i<points_regions.length; i++) {  
         let hv = noise(points_regions[i][0]*0.01, points_regions[i][1]*0.01);
@@ -196,7 +194,7 @@ function DFSfindSeaRegionCells(index_region)
 function genPoints(min_d, max_d)
 {
     var p = new PoissonDiskSampling({
-        shape: [windowWidth, windowHeight],
+        shape: [map_width, map_height],
         minDistance: min_d,
         maxDistance: max_d,
         tries: 10
@@ -212,25 +210,3 @@ function getRandomInt(min, max)
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
-
-
-
- /*if(voronoi.contains(i, mouseX, mouseY)) {
-            fill(0, 100, 0);
-        }
-        else {
-            let tn = false;
-            for(let neighbor of voronoi.neighbors(i)) {
-                if(voronoi.contains(neighbor, mouseX, mouseY)) {
-                    tn = true;
-                    break;
-                }
-            }
-
-            if(tn) {
-                fill(100, 0, 0);
-            }
-            else {
-                noFill();
-            }
-        }*/
