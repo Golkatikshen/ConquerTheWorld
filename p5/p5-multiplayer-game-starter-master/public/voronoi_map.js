@@ -18,6 +18,8 @@ function worldInit()
     voronoiRegionsInit();
     voronoiMapInit();
     
+    console.log(points_regions.length);
+    console.log(voronoi_regions);
 
     map_image = createGraphics(windowWidth, windowHeight);
 
@@ -49,8 +51,9 @@ function worldInit()
 function drawRegions()
 {
     noFill();
-    noStroke();
-    strokeWeight(3);
+    stroke(0);
+    strokeWeight(1);
+
     for(let i=0; i<points_regions.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
         
@@ -60,6 +63,13 @@ function drawRegions()
         else {
             noFill();
         }*/
+
+        if(i === most_top_left_index) {
+            fill(255, 0, 0);
+        }
+        else{
+            noFill();
+        }
 
         beginShape();
         for(let j=0; j<conv_poly.length; j++) {
@@ -137,7 +147,22 @@ function voronoiRegionsInit()
 
         region_cells.push(new RegionCell(is_land));
     }
+
+
+    //trova la cell più in alto a sinistra
+    let most_top_left_index = 0;
+    let min_val = points_regions[0][0] + points_regions[0][1];
+    for(let i=1; i<points_regions.length; i++) {
+        if(points_regions[i][0] + points_regions[i][1] < min_val) {
+            min_val = points_regions[i][0] + points_regions[i][1];
+            most_top_left_index = i;
+        }
+    }
+
+
+    //TO DO: BFS per trovare il mare a partire da most_top_left_index
 }
+
 
 
 function genPoints(min_d, max_d)
