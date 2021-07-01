@@ -33,12 +33,26 @@ function worldInit()
 
         map_image.fill(255*hv);*/
 
-        if(map_cells[i].is_land) 
-            map_image.fill(200);
-        else if(map_cells[i].is_sea)
+        if(map_cells[i].is_land) {
+            if(map_cells[i].h == 4) { // snow
+                map_image.fill(200);
+            }
+            if(map_cells[i].h == 3) { // mountains
+                map_image.fill(60, 37, 21);
+            }
+            else if(map_cells[i].h == 2) { // colline
+                map_image.fill(85, 65, 36);
+            }
+            else if(map_cells[i].h == 1) { // pianura
+                map_image.fill(71, 218, 116);
+            }
+        } 
+        else if(map_cells[i].is_sea) {
             map_image.noFill();
-        else
+        }
+        else {
             map_image.fill(29,162,216);
+        }
 
         map_image.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
@@ -123,10 +137,12 @@ function voronoiMapInit()
     for(let i=0; i<points_map.length; i++) {
         let is_land = false;
         let is_sea = false;
+        let h = 0;
         for(let j=0; j<region_cells.length; j++) {
             if(voronoi_regions.contains(j, points_map[i][0], points_map[i][1])) {
                 if(region_cells[j].is_land) {
                     is_land = true;
+                    h = getHeight(points_map[i]);
                     break;
                 }
                 else if(region_cells[j].is_sea) {
@@ -135,7 +151,7 @@ function voronoiMapInit()
                 }
             }
         }
-        map_cells.push(new MapCell(is_land, is_sea));
+        map_cells.push(new MapCell(is_land, is_sea, h));
     }
 }
 
@@ -173,6 +189,31 @@ function voronoiRegionsInit()
 
     //DFS per trovare il mare a partire da most_top_left_index
     DFSfindSeaRegionCells(most_top_left_index);
+
+    for(let i=0; i<points_regions.length; i++) {
+        if(region_cells[i].is_land) {
+            region_cells[i].h = getHeight(points_regions[i]);
+        }
+    }
+}
+
+
+function getHeight(point) // [x, y]
+{
+    let h = noise(69+point[0]*0.01, 420+point[1]*0.01);
+   
+    if(h > 0.9) { // snow
+        return 4;
+    }
+    if(h > 0.75) { // montagna
+        return 3;
+    }
+    else if(h > 0.6) { // collina
+        return 2;
+    }
+    else { // pianura
+        return 1;
+    }
 }
 
 
