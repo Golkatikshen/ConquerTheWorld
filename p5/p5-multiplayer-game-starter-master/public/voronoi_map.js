@@ -7,25 +7,36 @@ let points_regions = [];
 let voronoi_regions;
 let islands_points = [];
 
+let map_cells = [];
+let region_cells = [];
+
+
+
 function worldInit()
 {
-    voronoiMapInit();
-    voronoiRegionsInit();
     islandsPointsInit();
+    voronoiRegionsInit();
+    voronoiMapInit();
+    
 
     map_image = createGraphics(windowWidth, windowHeight);
-
 
     map_image.background(6, 66, 115);
     for(let i=0; i<points_map.length; i++) {
         let conv_poly = voronoi_map.cellPolygon(i);
 
         //map.noFill();
-        let hv = noise(points_map[i][0]*0.01, points_map[i][1]*0.01);
+        /*let hv = noise(points_map[i][0]*0.01, points_map[i][1]*0.01);
         hv -= islandPointMinH(points_map[i][0], points_map[i][1]);
         hv = max(0, hv);
 
-        map_image.fill(255*hv);
+        map_image.fill(255*hv);*/
+
+        if(map_cells[i].is_land) 
+            map_image.fill(200);
+        else 
+            map_image.noFill();
+        
         map_image.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
             map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
@@ -38,11 +49,18 @@ function worldInit()
 function drawRegions()
 {
     noFill();
-    stroke(0);
+    noStroke();
     strokeWeight(3);
     for(let i=0; i<points_regions.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
         
+        /*if(region_cells[i].is_land) {
+            fill(255, 0, 0);
+        }
+        else {
+            noFill();
+        }*/
+
         beginShape();
         for(let j=0; j<conv_poly.length; j++) {
             vertex(conv_poly[j][0], conv_poly[j][1]);
@@ -62,6 +80,9 @@ function islandPointMinH(x, y)
         }
     }
 
+    if(min_dist > 300) {
+        min_dist = 300;
+    }
     let v = map(min_dist, 0, 300, 0, 1);
     return v;
 }
@@ -84,6 +105,17 @@ function voronoiMapInit()
 
     delaunay = d3.Delaunay.from(points_map);
     voronoi_map = delaunay.voronoi([0, 0, windowWidth, windowHeight]);
+
+    for(let i=0; i<points_map.length; i++) {
+        let is_land = false;
+        for(let j=0; j<region_cells.length; j++) {
+            if(region_cells[j].is_land && voronoi_regions.contains(j, points_map[i][0], points_map[i][1])) {
+                is_land = true;
+                break;
+            }
+        }
+        map_cells.push(new MapCell(is_land));
+    }
 }
 
 
@@ -93,6 +125,18 @@ function voronoiRegionsInit()
 
     delaunay = d3.Delaunay.from(points_regions);
     voronoi_regions = delaunay.voronoi([0, 0, windowWidth, windowHeight]);
+
+    for(let i=0; i<points_regions.length; i++) {  
+        let hv = noise(points_regions[i][0]*0.01, points_regions[i][1]*0.01);
+        hv -= islandPointMinH(points_regions[i][0], points_regions[i][1]);
+        hv = max(0, hv);
+
+        let is_land = false;
+        if(hv > 0.05)
+            is_land = true;
+
+        region_cells.push(new RegionCell(is_land));
+    }
 }
 
 
