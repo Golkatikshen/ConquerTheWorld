@@ -33,6 +33,9 @@ function worldInit()
 
         map_image.fill(255*hv);*/
 
+        //let hv = islandPointMinH(points_map[i][0], points_map[i][1]);
+        //map_image.fill(255*hv);
+
         if(map_cells[i].is_land) {
             if(map_cells[i].h == 4) { // snow
                 map_image.fill(200);
@@ -121,8 +124,8 @@ function islandsPointsInit()
     let n_islands = getRandomInt(8, 12);
 
     for(let i=0; i<n_islands; i++) {
-        let x = getRandomInt(200, map_width-200);
-        let y = getRandomInt(200, map_height-200);
+        let x = getRandomInt(250, map_width-250);
+        let y = getRandomInt(250, map_height-250);
         islands_points.push([x, y]);
     }
 }
@@ -200,12 +203,12 @@ function voronoiRegionsInit()
 
 function getHeight(point) // [x, y]
 {
-    let h = noise(69+point[0]*0.01, 420+point[1]*0.01);
+    let h = noise(69+point[0]*0.005, 420+point[1]*0.005);
    
-    if(h > 0.9) { // snow
+    if(h > 0.85) { // snow
         return 4;
     }
-    if(h > 0.75) { // montagna
+    if(h > 0.7) { // montagna
         return 3;
     }
     else if(h > 0.6) { // collina

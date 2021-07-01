@@ -89,8 +89,8 @@ function mouseWheel(event)
     }
 
     let delta_zoom = zoom - old_zoom;
-    off_x += mouseX*delta_zoom;
-    off_y += mouseY*delta_zoom;
+    off_x += (mouseX)*delta_zoom;
+    off_y += (mouseY)*delta_zoom;
 
     off_x = max(off_x, 0);
     off_y = max(off_y, 0);
