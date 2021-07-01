@@ -36,9 +36,11 @@ function worldInit()
 
         if(map_cells[i].is_land) 
             map_image.fill(200);
-        else 
+        else if(map_cells[i].is_sea)
             map_image.noFill();
-        
+        else
+            map_image.fill(29,162,216);
+
         map_image.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
             map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
@@ -51,7 +53,7 @@ function worldInit()
 function drawRegions()
 {
     noFill();
-    stroke(0);
+    stroke(0, 0, 0, 100);
     strokeWeight(1);
 
     for(let i=0; i<points_regions.length; i++) {
@@ -64,12 +66,15 @@ function drawRegions()
             noFill();
         }*/
 
-        if(i === most_top_left_index) {
-            fill(255, 0, 0);
+        /*if(region_cells[i].is_land) {
+            fill(222,243,246);
         }
-        else{
-            noFill();
+        else if(region_cells[i].is_sea) {
+            fill(6, 66, 115);
         }
+        else {
+            fill(29,162,216);
+        }*/
 
         beginShape();
         for(let j=0; j<conv_poly.length; j++) {
@@ -118,13 +123,20 @@ function voronoiMapInit()
 
     for(let i=0; i<points_map.length; i++) {
         let is_land = false;
+        let is_sea = false;
         for(let j=0; j<region_cells.length; j++) {
-            if(region_cells[j].is_land && voronoi_regions.contains(j, points_map[i][0], points_map[i][1])) {
-                is_land = true;
-                break;
+            if(voronoi_regions.contains(j, points_map[i][0], points_map[i][1])) {
+                if(region_cells[j].is_land) {
+                    is_land = true;
+                    break;
+                }
+                else if(region_cells[j].is_sea) {
+                    is_sea = true;
+                    break;
+                }
             }
         }
-        map_cells.push(new MapCell(is_land));
+        map_cells.push(new MapCell(is_land, is_sea));
     }
 }
 
@@ -160,9 +172,25 @@ function voronoiRegionsInit()
     }
 
 
-    //TO DO: BFS per trovare il mare a partire da most_top_left_index
+    //DFS per trovare il mare a partire da most_top_left_index
+    DFSfindSeaRegionCells(most_top_left_index);
 }
 
+
+function DFSfindSeaRegionCells(index_region)
+{
+    if(!region_cells[index_region].visited) {
+        region_cells[index_region].visited = true;
+
+        if(!region_cells[index_region].is_land) {
+            region_cells[index_region].is_sea = true;
+
+            for(ni of voronoi_regions.neighbors(index_region)) {
+                DFSfindSeaRegionCells(ni);
+            }
+        }
+    }
+}
 
 
 function genPoints(min_d, max_d)

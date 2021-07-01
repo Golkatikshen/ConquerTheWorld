@@ -1,4 +1,7 @@
 
+let off_x = 0, off_y = 0, zoom = 1;
+
+
 function setup()
 {
 	createCanvas(windowWidth, windowHeight);
@@ -10,8 +13,8 @@ function setup()
 
 function draw()
 {
-    image(map_image, 0, 0, windowWidth, windowHeight);
-    drawRegions();
+    image(map_image, off_x, off_y, map_width+off_x, map_height+off_y);
+    //drawRegions();
 
     if(connected) {
         for(let i=0; i<players.length; i++) {
@@ -43,6 +46,19 @@ function keyPressed()
 
     if (key === 'd') {
         local_player.x += 5;
+    }
+
+    if (keyCode === LEFT_ARROW) {
+        off_x -= 5;
+    }
+    else if(keyCode === RIGHT_ARROW) {
+        off_x += 5;
+    }
+    else if(keyCode === UP_ARROW) {
+        off_y -= 5;
+    }
+    else if(keyCode === DOWN_ARROW) {
+        off_y += 5;
     }
 
     updateLocalPlayer();
