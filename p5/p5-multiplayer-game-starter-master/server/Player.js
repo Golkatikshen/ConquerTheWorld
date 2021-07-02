@@ -1,7 +1,5 @@
 class Player {
   constructor(id, name) {
-    this.x = getRandomInt(100, 400);
-    this.y = getRandomInt(100, 400);
     this.id = id;
     this.name = name;
 
@@ -11,7 +9,6 @@ class Player {
       b: Math.random() * 255,
     }
   }
-
 }
 
 function getRandomInt(min, max)
