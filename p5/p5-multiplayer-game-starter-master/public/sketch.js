@@ -1,17 +1,19 @@
 
 let off_x = 0, off_y = 0, zoom = 1;
 let current_region = 0;
-
+let gen_time = 0;
 
 function setup()
 {
 	createCanvas(windowWidth, windowHeight);
 	textSize(15);
-    noiseDetail(2, 0.85);
+    
 
     zoom = windowWidth/map_width;
 
-	worldInit(); // probabilmente bisognerà passare un seed dato dal server
+    let start = millis();
+	worldInit(42); // probabilmente bisognerà passare un seed dato dal server
+    gen_time = (millis()-start)/1000;
 }
 
 function draw()
@@ -32,6 +34,7 @@ function draw()
     textSize(20);
     fill(255, 0, 255);
     text((int)(frameRate()), 10, 35);
+    text("Gen time: " + gen_time, 10, 70);
 
 
     // movement screen with mouse close to edges

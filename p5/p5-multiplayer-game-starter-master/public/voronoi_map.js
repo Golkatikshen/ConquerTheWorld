@@ -10,10 +10,15 @@ let islands_points = [];
 let map_cells = [];
 let region_cells = [];
 
+let beach_edges = []; // expected [ [[x1,y1],[x2,y2]], []... ]
 
 
-function worldInit()
+function worldInit(seed)
 {
+    noiseDetail(2, 0.85);
+    noiseSeed(seed);
+    randomSeed(seed);
+
     islandsPointsInit();
     voronoiRegionsInit();
     voronoiMapInit();
@@ -53,6 +58,13 @@ function worldInit()
         map_image.endShape(CLOSE);
     }
 
+    //draw beaches
+    map_image.stroke(235, 231, 205);
+    map_image.strokeWeight(1);
+    for(beach_seg of beach_edges) {
+        map_image.line(beach_seg[0][0], beach_seg[0][1], beach_seg[1][0], beach_seg[1][1]);
+    }
+
     drawRegionsBorders();
 }
 
@@ -86,23 +98,6 @@ function drawRegionsBorders()
 
     for(let i=0; i<points_regions.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
-        
-        /*if(region_cells[i].is_land) {
-            fill(255, 0, 0);
-        }
-        else {
-            noFill();
-        }*/
-
-        /*if(region_cells[i].is_land) {
-            fill(222,243,246);
-        }
-        else if(region_cells[i].is_sea) {
-            fill(6, 66, 115);
-        }
-        else {
-            fill(29,162,216);
-        }*/
 
         map_image.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
@@ -158,11 +153,11 @@ function islandPointMinH(x, y)
 
 function islandsPointsInit()
 {
-    let n_islands = getRandomInt(8, 12);
+    let n_islands = int(random(8, 13));
 
     for(let i=0; i<n_islands; i++) {
-        let x = getRandomInt(250, map_width-250);
-        let y = getRandomInt(250, map_height-250);
+        let x = random(250, map_width-250);
+        let y = random(250, map_height-250);
         islands_points.push([x, y]);
     }
 }
@@ -193,6 +188,8 @@ function voronoiMapInit()
         }
         map_cells.push(new MapCell(is_land, is_sea, h));
     }
+
+    calcBeachEdges();
 }
 
 
@@ -279,6 +276,40 @@ function DFSfindSeaRegionCells(index_region)
 }
 
 
+function calcBeachEdges()
+{
+    for(let i=0; i<map_cells.length; i++) {
+        if(map_cells[i].is_land) {  // per ogni cella che è terra
+            for(n of voronoi_map.neighbors(i)) {
+                if(!map_cells[n].is_land) { // e per ogni vicino che non è terra
+                    // cercare edge in comune : che è spiaggia
+                    beach_edges.push(commonEdge(i, n));
+                }
+            }
+        }
+    }
+}
+
+
+function commonEdge(i, j)
+{
+    let edge = [];
+    let poly_i = voronoi_map.cellPolygon(i);
+    let poly_j = voronoi_map.cellPolygon(j);
+
+    for(let ii=0; ii<poly_i.length; ii++) {
+        for(let jj=0; jj<poly_j.length; jj++) {
+            if( almostEqual(poly_i[ii][0], poly_j[jj][0]) && 
+                almostEqual(poly_i[ii][1], poly_j[jj][1])) {
+                edge.push(poly_i[ii]);
+            }
+        }
+    }
+
+    return edge;
+}
+
+
 function genPoints(min_d, max_d)
 {
     var p = new PoissonDiskSampling({
@@ -286,9 +317,15 @@ function genPoints(min_d, max_d)
         minDistance: min_d,
         maxDistance: max_d,
         tries: 10
-    });
+    }, random01);
 
     return p.fill();
+}
+
+
+function random01()
+{
+    return random(1);
 }
 
 
@@ -297,4 +334,8 @@ function getRandomInt(min, max)
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
+const almostEqual = (num1, num2) => {
+    return Math.abs( num1 - num2 ) < 0.0000001;//Number.EPSILON;
 }
