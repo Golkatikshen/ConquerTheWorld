@@ -14,7 +14,7 @@
 </head>
 <body>
     <!-- p5js class full screen -->
-    <!-- <div id="contenu">
+    <div id="contenu">
         <div id="login_form" class="container">
             <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
                 <div class="border border-secondary border-5 rounded-3 p-4 mt-5">
@@ -31,8 +31,26 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div id="room_form" class="container">
+            <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
+                <div class="border border-secondary border-5 rounded-3 p-4 mt-5">
+                    <div class="d-grid gap-2">
+                        <label class="form-label">Nickname</label>
+                        <input class="form-control" id="nickname">
+                        <button type="submit" class="btn btn-success mt-3" onclick="nicknameLogin();">Enter</button>
+                    </div>
+                    <div class="text-center">
+                        <label class="form-label mt-4 mb-4">--------- or ---------</label>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary mb-3" onclick="guestLogin();">Enter as Guest</button>
+                    </div>
+                </div>
+            </div>
         </div> 
-    -->
+    
 
         <script src="clientManager.js"></script>
         <script src="constants.js"></script>

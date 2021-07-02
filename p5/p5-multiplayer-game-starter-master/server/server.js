@@ -26,6 +26,7 @@ let io = socket(server);
 // ###### BEG SERVER VARS INIT ######
 
 let players = [];
+let rooms = [];
 let guest_counter = 0;
 
 // ###### END SERVER VARS INIT ######
