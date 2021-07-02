@@ -37,18 +37,7 @@ function worldInit()
         //map_image.fill(255*hv);
 
         if(map_cells[i].is_land) {
-            if(map_cells[i].h == 4) { // snow
-                map_image.fill(200);
-            }
-            if(map_cells[i].h == 3) { // mountains
-                map_image.fill(60, 37, 21);
-            }
-            else if(map_cells[i].h == 2) { // colline
-                map_image.fill(85, 65, 36);
-            }
-            else if(map_cells[i].h == 1) { // pianura
-                map_image.fill(71, 218, 116);
-            }
+            fillLand(map_cells[i].h);
         } 
         else if(map_cells[i].is_sea) {
             map_image.noFill();
@@ -63,14 +52,37 @@ function worldInit()
         }
         map_image.endShape(CLOSE);
     }
+
+    drawRegionsBorders();
+}
+
+function fillLand(c)
+{
+    switch(c) {
+        case land_biome.DESERT:
+            map_image.fill(254, 249, 131);
+            break;
+        case land_biome.PLAIN:
+            map_image.fill(71, 218, 116);
+            break;
+        case land_biome.MOUNTAIN:
+            map_image.fill(60, 37, 21);
+            break;
+        case land_biome.FOREST:
+            map_image.fill(35, 144, 79);
+            break;
+        case land_biome.HILL:
+            map_image.fill(85, 65, 36);
+            break;
+    }
 }
 
 
-function drawRegions()
+function drawRegionsBorders()
 {
-    noFill();
-    stroke(0, 0, 0, 100);
-    strokeWeight(1);
+    map_image.noFill();
+    map_image.stroke(0, 0, 0, 20);
+    map_image.strokeWeight(1);
 
     for(let i=0; i<points_regions.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
@@ -92,12 +104,37 @@ function drawRegions()
             fill(29,162,216);
         }*/
 
-        beginShape();
+        map_image.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
-            vertex(conv_poly[j][0], conv_poly[j][1]);
+            map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
         }
-        endShape(CLOSE);
+        map_image.endShape(CLOSE);
     }
+}
+
+
+function calCurrentRegion()
+{
+    for(let i=0; i<points_regions.length; i++) {
+        if(voronoi_regions.contains(i, (mouseX+off_x)/zoom, (mouseY+off_y)/zoom)) {
+            current_region = i;
+            break;
+        }
+    }
+}
+
+
+function drawRegionHovered()
+{
+    let conv_poly = voronoi_regions.cellPolygon(current_region);
+
+    fill(255, 20);
+    noStroke();
+    beginShape();
+    for(let j=0; j<conv_poly.length; j++) {
+        vertex((conv_poly[j][0]*zoom)-off_x, (conv_poly[j][1]*zoom)-off_y);
+    }
+    endShape(CLOSE);
 }
 
 
@@ -203,19 +240,25 @@ function voronoiRegionsInit()
 
 function getHeight(point) // [x, y]
 {
-    let h = noise(69+point[0]*0.005, 420+point[1]*0.005);
+    //let A = noise(69+point[0]*0.008, 123+point[1]*0.008);
+    //let B = noise(420+point[0]*0.008, 456+point[1]*0.008);
+    let A = noise(point[0]*0.01, point[1]*0.01);
+    let B = noise(point[0]*0.008, point[1]*0.008);
    
-    if(h > 0.85) { // snow
-        return 4;
+    if(A < 0.6 && B < 0.3) {
+        return land_biome.DESERT;
     }
-    if(h > 0.7) { // montagna
-        return 3;
+    else if(A < 0.6 && B >= 0.3) {
+        return land_biome.PLAIN;
     }
-    else if(h > 0.6) { // collina
-        return 2;
+    else if(A > 0.7 && B < 0.4) {
+        return land_biome.MOUNTAIN;
     }
-    else { // pianura
-        return 1;
+    else if(A >= 0.6 && B < 0.5) {
+        return land_biome.HILL;
+    }
+    else {
+        return land_biome.FOREST;
     }
 }
 

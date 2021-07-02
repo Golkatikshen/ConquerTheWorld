@@ -1,5 +1,6 @@
 
 let off_x = 0, off_y = 0, zoom = 1;
+let current_region = 0;
 
 
 function setup()
@@ -17,7 +18,7 @@ function draw()
 {
     background(6, 66, 115);
     image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
-    //drawRegions();
+    drawRegionHovered();
 
     if(connected) {
         for(let i=0; i<players.length; i++) {
@@ -74,12 +75,18 @@ function keyPressed()
 }
 
 
+function mouseMoved()
+{
+    calCurrentRegion();
+}
+
+
 let z_t = 0; // zoom times
 function mouseWheel(event)
 {
     let old_zoom = zoom;
 
-    if(event.delta < 0 && z_t > -5) {
+    if(event.delta < 0 && z_t > -10) {
         zoom += 0.1;
         z_t --;
     }
@@ -88,9 +95,9 @@ function mouseWheel(event)
         z_t ++;
     }
 
-    let delta_zoom = zoom - old_zoom;
-    off_x += (mouseX)*delta_zoom;
-    off_y += (mouseY)*delta_zoom;
+    let factor = zoom/old_zoom;
+    off_x += (mouseX+off_x)*(factor-1);
+    off_y += (mouseY+off_y)*(factor-1);
 
     off_x = max(off_x, 0);
     off_y = max(off_y, 0);
