@@ -8,51 +8,54 @@ function setup()
 	createCanvas(windowWidth, windowHeight);
 	textSize(15);
     
-
-    zoom = windowWidth/map_width;
-
-    let start = millis();
-	worldInit(42); // probabilmente bisognerà passare un seed dato dal server
-    gen_time = (millis()-start)/1000;
+    zoom = windowWidth/map_width;    
 }
 
 function draw()
 {
-    background(6, 66, 115);
-    image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
-    drawRegionHovered();
+    if(connected)
+    {
+        if(!world_generated)
+        {
+            world_generated = true;
 
-    if(connected) {
-        for(let i=0; i<players.length; i++) {
-            if(players[i].id !== local_player.id) {
-                players[i].draw();
+            let start = millis();
+            worldInit(42); // probabilmente bisognerà passare un seed dato dal server
+            gen_time = (millis()-start)/1000;
+        }
+        else
+        {
+            background(6, 66, 115);
+            image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+            drawRegionHovered();
+
+            textSize(20);
+            fill(255, 0, 255);
+            text((int)(frameRate()), 10, 35);
+            text("Gen time: " + gen_time, 10, 70);
+
+            // movement screen with mouse close to edges
+            if(mouseX < 50) {
+                off_x -= 5*zoom;
+                off_x = max(off_x, 0);
+            }
+            if(windowWidth - mouseX < 50) {
+                off_x += 5*zoom;
+                off_x = min(off_x, map_width*zoom-windowWidth);
+            }
+            if(mouseY < 50) {
+                off_y -= 5*zoom;
+                off_y = max(off_y, 0);
+            }
+            if(windowHeight - mouseY < 50) {
+                off_y += 5*zoom;
+                off_y = min(off_y, map_height*zoom-windowHeight);
             }
         }
-        local_player.draw();
     }
-
-    textSize(20);
-    fill(255, 0, 255);
-    text((int)(frameRate()), 10, 35);
-    text("Gen time: " + gen_time, 10, 70);
-
-
-    // movement screen with mouse close to edges
-    if(mouseX < 50) {
-        off_x -= 5*zoom;
-        off_x = max(off_x, 0);
-    }
-    if(windowWidth - mouseX < 50) {
-        off_x += 5*zoom;
-        off_x = min(off_x, map_width*zoom-windowWidth);
-    }
-    if(mouseY < 50) {
-        off_y -= 5*zoom;
-        off_y = max(off_y, 0);
-    }
-    if(windowHeight - mouseY < 50) {
-        off_y += 5*zoom;
-        off_y = min(off_y, map_height*zoom-windowHeight);
+    else
+    {
+        background(200);
     }
 }
 

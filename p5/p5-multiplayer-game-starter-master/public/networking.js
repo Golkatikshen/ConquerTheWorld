@@ -2,14 +2,26 @@
 //const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
 const socket = io.connect('http://localhost:3000');
 let connected = false;
+let world_generated = false;
 let players = [];
 let local_player;
 
 socket.on("heartbeat", players => updatePlayers(players));
 
-socket.on("start", player => spawnPlayer(player));
+socket.on("instantiate_player", player => instantiatePlayer(player));
+
+socket.on("login_OK", () => hideForm("login_form"));
 
 
+
+function instantiatePlayer(player_data)
+{
+    local_player = new Player(player_data);
+    connected = true;
+}
+
+
+/*
 //setInterval(updateLocalPlayer, 10);
 function updateLocalPlayer()
 {
@@ -23,11 +35,7 @@ function updateLocalPlayer()
 }
 
 
-function spawnPlayer(player_data)
-{
-    local_player = new Player(player_data);
-    connected = true;
-}
+
 
 
 function updatePlayers(serverPlayers)
@@ -106,4 +114,4 @@ function playerExists(playerFromServer)
 function removePlayer(playerId)
 {
     players = players.filter(player => player.id !== playerId);
-}
+}*/

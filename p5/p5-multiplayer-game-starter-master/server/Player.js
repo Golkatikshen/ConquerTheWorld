@@ -2,6 +2,7 @@ class Player {
   constructor(id, name) {
     this.id = id;
     this.name = name;
+    this.room_name = "";
 
     this.rgb = {
       r: Math.random() * 255,

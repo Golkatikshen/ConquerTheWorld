@@ -46,13 +46,16 @@ io.sockets.on("connection", socket => {
 
   socket.on("nick_login", name => {
     let p = new Player(socket.id, name);
-    socket.emit("start", p);
+    // DA CAMBIARE PER GESTIRE DOPPI NOMI
+    socket.emit("login_OK");
+    socket.emit("instantiate_player", p);
     players.push(p);
   });
 
   socket.on("guest_login", name => {
     let p = new Player(socket.id, "Guest_" + guest_counter);
-    socket.emit("start", p);
+    socket.emit("login_OK");
+    socket.emit("instantiate_player", p);
     players.push(p);
     guest_counter ++;
   });
