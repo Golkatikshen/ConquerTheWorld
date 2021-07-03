@@ -6,4 +6,4 @@ class Room {
     }
 }
 
-module.exports = Player;
+module.exports = Room;

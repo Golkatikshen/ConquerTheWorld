@@ -97,7 +97,7 @@ io.sockets.on("connection", socket => {
 
 
 
-// ##### UTILITY FUNCS #####
+// ##### UTILITY AND NET FUNCS #####
 
 
 function addPlayerToRoom(room_name, player_id, owner)
@@ -108,6 +108,8 @@ function addPlayerToRoom(room_name, player_id, owner)
     player.owner = owner;
     player.room_name = room_name; // ridondante, ma dovrebbe semplificare la vita più avanti
     room.players.push(player);
+
+    player.socket.emit("update_room_infos", owner, room_name);
 }
 
 function genSeed()

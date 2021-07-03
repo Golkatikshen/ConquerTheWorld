@@ -61,8 +61,7 @@ function draw()
 
 function keyPressed()
 {
-
-    updateLocalPlayer();
+    //updateLocalPlayer();
 }
 
 
