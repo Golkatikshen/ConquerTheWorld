@@ -46,32 +46,40 @@ io.sockets.on("connection", socket => {
     console.log("New connection: " + socket.id);
 
     socket.on("nick_login", name => {
-        let p = new Player(socket.id, name, socket);
+        console.log("nick_login");
+        let p = new Player(socket.id, name);
         players.push(p);        
 
         socket.emit("instantiate_player", p);
         socket.emit("login_OK");
+
+        p.socket = socket;
     });
 
     socket.on("guest_login", name => {
-        let p = new Player(socket.id, "Guest_" + guest_counter, socket);
+        console.log("guest_login");
+        let p = new Player(socket.id, "Guest_" + guest_counter);
         players.push(p);
         guest_counter ++;
 
         socket.emit("instantiate_player", p);
         socket.emit("login_OK");
+
+        p.socket = socket;
     });
 
 
     socket.on("create_room", (room_name) => {
+        console.log("create_room");
         let new_room = new Room(room_name, genSeed());
-        let status = addPlayerToRoom(room_name, socket.id, true);
         rooms.push(new_room);
+        let status = addPlayerToRoom(room_name, socket.id, true);
 
         socket.emit("room_OK");
     });
 
     socket.on("join_room", (room_name) => {
+        console.log("join_room");
         let status = addPlayerToRoom(room_name, socket.id, false);
 
         socket.emit("room_OK");
@@ -79,14 +87,16 @@ io.sockets.on("connection", socket => {
 
 
     socket.on("update", data => {
-        for (let i = 0; i < players.length; i++) {
+        console.log("update");
+        /*for (let i = 0; i < players.length; i++) {
             if(players[i].id == socket.id) {
 
             }
-        }
+        }*/
     });
 
     socket.on("disconnect", () => {
+        console.log("disconnect");
         console.log("Disconnected: " + socket.id);
         io.sockets.emit("disconnect", socket.id);
         players = players.filter(player => player.id !== socket.id);
@@ -110,6 +120,8 @@ function addPlayerToRoom(room_name, player_id, owner)
     room.players.push(player);
 
     player.socket.emit("update_room_infos", owner, room_name);
+
+    return true; // TO DO: ritornare falso se stanza non esiste
 }
 
 function genSeed()

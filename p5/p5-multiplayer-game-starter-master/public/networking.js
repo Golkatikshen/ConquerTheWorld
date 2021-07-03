@@ -10,7 +10,7 @@ let local_player;
 
 socket.on("instantiate_player", player => instantiatePlayer(player));
 
-socket.on("login_OK", () => hideForm("login_form"));
+socket.on("login_OK", () => loginOk());
 
 socket.on("room_OK", () => roomOk());
 
@@ -20,7 +20,7 @@ socket.on("update_room_infos", (owner, room_name) => updateRoomInfos(owner, room
 function instantiatePlayer(player_data)
 {
     local_player = new Player(player_data);
-    connected = true;
+    //connected = true;
 }
 
 function updateRoomInfos(owner, room_name)
@@ -29,10 +29,17 @@ function updateRoomInfos(owner, room_name)
     local_player.room_name = room_name;
 }
 
+function loginOk()
+{
+    hideElement("login_form");
+    unhideElement("room_form");
+}
+
 function roomOk() // quando la stanza è pronta, varie procedure di setup lobby:
 {
     buttonReadyStartUnhide();
-    hideForm("room_form");
+    hideElement("room_form");
+    unhideElement("lobby_form");
 }
 
 /*

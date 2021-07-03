@@ -1,7 +1,7 @@
 class Player {
-  constructor(id, name, socket) {
+  constructor(id, name) {
     this.id = id;
-    this.socket = socket;
+    this.socket = null;
     this.name = name;
     this.room_name = ""; // default val, no meaning at the moment of construction
     this.owner = false; // default val, no meaning at the moment of construction

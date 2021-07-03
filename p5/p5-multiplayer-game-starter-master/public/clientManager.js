@@ -24,12 +24,10 @@ function joinRoom()
 
 function buttonReadyStartUnhide()
 {
-    if(local_player.owner) {
-        document.getElementById("start").hidden = false;
-    }
-    else {
-        document.getElementById("ready").hidden = false;
-    }
+    if(local_player.owner) 
+        unhideElement("start");
+    else 
+        unhideElement("ready");
 }
 
 function addPlayerToLobbyList(player)
@@ -47,7 +45,12 @@ function removePlayerFromLobbyList(player_id)
 
 }
 
-function hideForm(form)
+function hideElement(element)
 {
-    document.getElementById(form).hidden = true;
+    document.getElementById(element).hidden = true;
+}
+
+function unhideElement(element)
+{
+    document.getElementById(element).hidden = false;
 }
