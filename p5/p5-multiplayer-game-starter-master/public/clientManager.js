@@ -22,27 +22,61 @@ function joinRoom()
     socket.emit("join_room", room_name);
 }
 
-function buttonReadyStartUnhide()
+
+function clickReady()
 {
-    if(local_player.owner) 
-        unhideElement("start");
-    else 
-        unhideElement("ready");
+    socket.emit("toggle_ready");
 }
 
-function addPlayerToLobbyList(player)
+function updateLobbyList()
 {
-
+    document.getElementById("players_list").innerHTML = "";
+    for(p of players) {
+        let li = document.createElement("li");
+        text = document.createTextNode(p.name);
+        li.appendChild(text);
+        let att = "list-group-item";
+        if(p.ready) {
+            att += " bg-success";
+        }
+        li.setAttribute("class", att);
+        document.getElementById("players_list").appendChild(li);
+    }
 }
 
-function playerReady(player_id)
+function addPlayersList(players_list)
 {
+    players = players_list;
+    document.getElementById("lobby_name").innerHTML = "Lobby: " + players[0].room_name;
 
+    // TODO: forse bisogna sostituire il local player con quello in player_list
+    local_player = players.find(e => e.id === local_player.id);
+
+    updateLobbyList();
 }
 
-function removePlayerFromLobbyList(player_id)
+function addPlayer(player)
 {
+    players.push(player);
+    updateLobbyList();
+}
 
+function playerReady(player_id, r)
+{
+    let p = players.find(e => e.id === player_id);
+    p.ready = r;
+    updateLobbyList();
+}
+
+function removePlayer(player_id)
+{
+    for(let i=0; i<players.length; i++) {
+        if(players[i].id === player_id) {
+            players.splice(i, 1);
+            break;
+        }
+    }
+    updateLobbyList();
 }
 
 function hideElement(element)

@@ -52,11 +52,9 @@ io.sockets.on("connection", socket => {
 
         socket.emit("instantiate_player", p);
         socket.emit("login_OK");
-
-        p.socket = socket;
     });
 
-    socket.on("guest_login", name => {
+    socket.on("guest_login", () => {
         console.log("guest_login");
         let p = new Player(socket.id, "Guest_" + guest_counter);
         players.push(p);
@@ -64,8 +62,6 @@ io.sockets.on("connection", socket => {
 
         socket.emit("instantiate_player", p);
         socket.emit("login_OK");
-
-        p.socket = socket;
     });
 
 
@@ -73,16 +69,33 @@ io.sockets.on("connection", socket => {
         console.log("create_room");
         let new_room = new Room(room_name, genSeed());
         rooms.push(new_room);
-        let status = addPlayerToRoom(room_name, socket.id, true);
+        let status = addPlayerToRoom(room_name, socket.id);
 
+        socket.join(room_name);
+        // invia la lista dei giocatori attualmente nella stanza (solo 1, dato
+        // che è appena stata creata)
+        socket.emit("players_list", getRoomPlayersList(room_name));
         socket.emit("room_OK");
     });
 
     socket.on("join_room", (room_name) => {
         console.log("join_room");
-        let status = addPlayerToRoom(room_name, socket.id, false);
+        let status = addPlayerToRoom(room_name, socket.id);
 
+        socket.join(room_name);
+        // invia la lista dei giocatori attualmente nella stanza
+        socket.emit("players_list", getRoomPlayersList(room_name));
+        // comunica a tutti quelli già dentro che un altro giocatore è arrivato
+        socket.to(room_name).emit("add_player", getPlayer(socket.id));
         socket.emit("room_OK");
+    });
+
+
+    socket.on("toggle_ready", () => {
+        console.log("toggle_ready", socket.id);
+        let p = getPlayer(socket.id);
+        p.ready = !p.ready;
+        io.in(p.room_name).emit("ready_player", p.id, p.ready);
     });
 
 
@@ -96,9 +109,15 @@ io.sockets.on("connection", socket => {
     });
 
     socket.on("disconnect", () => {
-        console.log("disconnect");
         console.log("Disconnected: " + socket.id);
         io.sockets.emit("disconnect", socket.id);
+        let p = getPlayer(socket.id);
+        let room_name = p.room_name;
+        let room = getRoom(room_name);
+
+        socket.to(room_name).emit("remove_player", p.id);
+
+        room.players = room.players.filter(player => player.id !== socket.id);
         players = players.filter(player => player.id !== socket.id);
     });
 });
@@ -110,16 +129,29 @@ io.sockets.on("connection", socket => {
 // ##### UTILITY AND NET FUNCS #####
 
 
-function addPlayerToRoom(room_name, player_id, owner)
+function getRoom(room_name)
+{
+    return rooms.find(e => e.name === room_name);
+}
+
+function getPlayer(player_id)
+{
+    return players.find(e => e.id === player_id);
+}
+
+function getRoomPlayersList(room_name)
+{
+    let room = rooms.find(e => e.name === room_name);
+    return room.players;
+}
+
+function addPlayerToRoom(room_name, player_id)
 {
     let player = players.find(e => e.id === player_id);
     let room = rooms.find(e => e.name === room_name);
 
-    player.owner = owner;
     player.room_name = room_name; // ridondante, ma dovrebbe semplificare la vita più avanti
     room.players.push(player);
-
-    player.socket.emit("update_room_infos", owner, room_name);
 
     return true; // TO DO: ritornare falso se stanza non esiste
 }

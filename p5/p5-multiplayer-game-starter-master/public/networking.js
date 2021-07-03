@@ -9,12 +9,13 @@ let local_player;
 //socket.on("heartbeat", players => updatePlayers(players));
 
 socket.on("instantiate_player", player => instantiatePlayer(player));
-
 socket.on("login_OK", () => loginOk());
 
+socket.on("players_list", players_list => addPlayersList(players_list));
+socket.on("add_player", player => addPlayer(player));
+socket.on("remove_player", player_id => removePlayer(player_id));
+socket.on("ready_player", (player_id, r) => playerReady(player_id, r));
 socket.on("room_OK", () => roomOk());
-
-socket.on("update_room_infos", (owner, room_name) => updateRoomInfos(owner, room_name));
 
 
 function instantiatePlayer(player_data)
@@ -23,11 +24,6 @@ function instantiatePlayer(player_data)
     //connected = true;
 }
 
-function updateRoomInfos(owner, room_name)
-{
-    local_player.owner = owner;
-    local_player.room_name = room_name;
-}
 
 function loginOk()
 {
@@ -37,7 +33,7 @@ function loginOk()
 
 function roomOk() // quando la stanza è pronta, varie procedure di setup lobby:
 {
-    buttonReadyStartUnhide();
+    unhideElement("ready");
     hideElement("room_form");
     unhideElement("lobby_form");
 }
