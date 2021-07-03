@@ -8,7 +8,7 @@ function setup()
 	createCanvas(windowWidth, windowHeight);
 	textSize(15);
     
-    zoom = windowWidth/map_width;    
+    zoom = windowWidth/map_width;
 }
 
 function draw()
@@ -20,7 +20,7 @@ function draw()
             world_generated = true;
 
             let start = millis();
-            worldInit(42); // probabilmente bisognerà passare un seed dato dal server
+            worldInit(43); // probabilmente bisognerà passare un seed dato dal server
             gen_time = (millis()-start)/1000;
         }
         else

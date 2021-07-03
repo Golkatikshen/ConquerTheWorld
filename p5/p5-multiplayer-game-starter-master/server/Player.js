@@ -1,8 +1,10 @@
 class Player {
-  constructor(id, name) {
+  constructor(id, name, socket) {
     this.id = id;
+    this.socket = socket;
     this.name = name;
-    this.room_name = "";
+    this.room_name = ""; // default val, no meaning at the moment of construction
+    this.owner = false; // default val, no meaning at the moment of construction
 
     this.rgb = {
       r: Math.random() * 255,

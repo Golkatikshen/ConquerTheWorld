@@ -6,11 +6,13 @@ let world_generated = false;
 let players = [];
 let local_player;
 
-socket.on("heartbeat", players => updatePlayers(players));
+//socket.on("heartbeat", players => updatePlayers(players));
 
 socket.on("instantiate_player", player => instantiatePlayer(player));
 
 socket.on("login_OK", () => hideForm("login_form"));
+
+socket.on("room_OK", () => hideForm("room_form"));
 
 
 

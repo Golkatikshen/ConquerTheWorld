@@ -239,19 +239,21 @@ function getHeight(point) // [x, y]
 {
     //let A = noise(69+point[0]*0.008, 123+point[1]*0.008);
     //let B = noise(420+point[0]*0.008, 456+point[1]*0.008);
-    let A = noise(point[0]*0.01, point[1]*0.01);
-    let B = noise(point[0]*0.008, point[1]*0.008);
+    let A = noise(point[0]*0.01, point[1]*0.01); // altezza channel
+    A -= islandPointMinH(point[0], point[1]);
+    A = max(0, A);
+    let B = noise(point[0]*0.008, point[1]*0.008); // diff channel
    
-    if(A < 0.6 && B < 0.3) {
+    if(A < 0.25 && B < 0.3) {
         return land_biome.DESERT;
     }
-    else if(A < 0.6 && B >= 0.3) {
+    else if(A < 0.25 && B >= 0.3) {
         return land_biome.PLAIN;
     }
-    else if(A > 0.7 && B < 0.4) {
+    else if(A > 0.4 && B < 0.4) {
         return land_biome.MOUNTAIN;
     }
-    else if(A >= 0.6 && B < 0.5) {
+    else if(A >= 0.3 && B < 0.5) {
         return land_biome.HILL;
     }
     else {
