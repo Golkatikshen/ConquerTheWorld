@@ -125,16 +125,22 @@ io.sockets.on("connection", socket => {
         console.log("Disconnected: " + socket.id);
         io.sockets.emit("disconnect", socket.id);
         let p = getPlayer(socket.id);
-        let room_name = p.room_name;
-        let room = getRoom(room_name);
+        if(p) // check se il giocatore effettivamente esiste
+        {
+            let room_name = p.room_name;
+            let room = getRoom(room_name);
 
-        socket.to(room_name).emit("remove_player", p.id);
-
-        room.players = room.players.filter(player => player.id !== socket.id);
-        players = players.filter(player => player.id !== socket.id);
-
-        if(checkAllReadyInRoom(room_name)) {
-            io.in(room_name).emit("start_map_gen", room.seed);
+            if(room) // check se era almeno entrato in una stanza
+            {
+                socket.to(room_name).emit("remove_player", p.id);
+                room.players = room.players.filter(player => player.id !== socket.id);
+                
+                if(checkAllReadyInRoom(room_name)) {
+                    io.in(room_name).emit("start_map_gen", room.seed);
+                }
+            }
+            
+            players = players.filter(player => player.id !== socket.id);
         }
     });
 });
