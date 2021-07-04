@@ -4,6 +4,7 @@ class Player {
     this.name = name;
     this.room_name = ""; // default val, no meaning at the moment of construction
     this.ready = false; // default val, no meaning at the moment of construction
+    this.gen_done = false;
 
     this.rgb = {
       r: Math.random() * 255,

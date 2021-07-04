@@ -1,7 +1,6 @@
 
 //const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
 const socket = io.connect('http://localhost:3000');
-let connected = false;
 let world_generated = false;
 let players = [];
 let local_player;
@@ -17,13 +16,20 @@ socket.on("remove_player", player_id => removePlayer(player_id));
 socket.on("ready_player", (player_id, r) => playerReady(player_id, r));
 socket.on("room_OK", () => roomOk());
 
+socket.on("start_map_gen", seed => startMapGeneration(seed));
+socket.on("start_game", () => startGame());
+
 
 function instantiatePlayer(player_data)
 {
-    local_player = new Player(player_data);
-    //connected = true;
+    local_player = new Player(player_data); // forse inutile, da rivedere
 }
 
+function startGame()
+{
+    // hide("waiting for othe players...")
+    start_game = true;
+}
 
 function loginOk()
 {

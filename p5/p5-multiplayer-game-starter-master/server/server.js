@@ -96,6 +96,19 @@ io.sockets.on("connection", socket => {
         let p = getPlayer(socket.id);
         p.ready = !p.ready;
         io.in(p.room_name).emit("ready_player", p.id, p.ready);
+
+        if(checkAllReadyInRoom(p.room_name)) {
+            io.in(p.room_name).emit("start_map_gen", getRoom(p.room_name).seed);
+        }
+    });
+
+
+    socket.on("gen_done", () => {
+        let p = getPlayer(socket.id);
+        p.gen_done = true;
+        if(checkAllGenDoneInRoom(p.room_name)) {
+            io.in(p.room_name).emit("start_game");
+        }
     });
 
 
@@ -119,6 +132,10 @@ io.sockets.on("connection", socket => {
 
         room.players = room.players.filter(player => player.id !== socket.id);
         players = players.filter(player => player.id !== socket.id);
+
+        if(checkAllReadyInRoom(room_name)) {
+            io.in(room_name).emit("start_map_gen", room.seed);
+        }
     });
 });
 
@@ -128,6 +145,32 @@ io.sockets.on("connection", socket => {
 
 // ##### UTILITY AND NET FUNCS #####
 
+
+function checkAllGenDoneInRoom(room_name)
+{
+    let room = getRoom(room_name);
+
+    for(let i=0; i<room.players.length; i++) {
+        if(!room.players[i].gen_done) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function checkAllReadyInRoom(room_name)
+{
+    let room = getRoom(room_name);
+
+    for(let i=0; i<room.players.length; i++) {
+        if(!room.players[i].ready) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 function getRoom(room_name)
 {

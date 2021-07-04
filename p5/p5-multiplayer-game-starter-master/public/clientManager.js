@@ -33,8 +33,8 @@ function updateLobbyList()
     document.getElementById("players_list").innerHTML = "";
     for(p of players) {
         let li = document.createElement("li");
-        text = document.createTextNode(p.name);
-        li.appendChild(text);
+        let name = document.createTextNode(p.name);
+        li.appendChild(name);
         let att = "list-group-item";
         if(p.ready) {
             att += " bg-success";
