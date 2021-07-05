@@ -17,6 +17,7 @@ socket.on("ready_player", (player_id, r) => playerReady(player_id, r));
 socket.on("room_OK", () => roomOk());
 
 socket.on("start_map_gen", seed => startMapGeneration(seed));
+socket.on("request_regions_data", () => sendRegionsData());
 socket.on("start_game", () => startGame());
 
 
@@ -25,9 +26,16 @@ function instantiatePlayer(player_data)
     local_player = new Player(player_data); // forse inutile, da rivedere
 }
 
+function sendRegionsData()
+{
+    socket.emit("regions_data", points_regions, region_cells);
+    console.log(voronoi_regions.cellPolygon(100));
+}
+
 function startGame()
 {
-    // hide("waiting for othe players...")
+    hideElement("waiting_players");
+    hideElement("messages");
     start_game = true;
 }
 

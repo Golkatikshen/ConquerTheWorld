@@ -6,7 +6,8 @@ let start_game = false;
 async function startMapGeneration(seed)
 {
     hideElement("lobby_form");
-    // unhide("generating...")
+    unhideElement("messages");
+    unhideElement("generating");
 
     // generazione asincrona del mondo
     setTimeout( function(seed) {
@@ -14,8 +15,8 @@ async function startMapGeneration(seed)
         worldInit(seed);
         gen_time = (millis()-start)/1000;
 
-        // hide("generating..")
+        hideElement("generating");
+        unhideElement("waiting_players");
         socket.emit("gen_done");
-        // unhide("waiting for other players.")
     }, 100);
 }

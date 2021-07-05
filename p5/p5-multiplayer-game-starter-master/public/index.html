@@ -17,7 +17,7 @@
 
     
     <div id="contenu">
-        <!--<div id="login_form" class="container">
+        <div id="login_form" class="container">
             <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
                 <div class="border border-secondary border-5 rounded-3 p-4 mt-5" style="box-shadow: 10px 5px 5px rgb(61, 61, 61); background-color: rgb(228, 228, 228);">
                     <div class="d-grid gap-2">
@@ -70,12 +70,13 @@
                 </div>
             </div>
         </div>
-        -->
+        
 
-        <div id="generating" class="container text-center">
+        <div id="messages" class="container text-center" hidden>
             <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
                 <div class="border border-secondary border-5 rounded-3 p-4 col-4">
-                    <label class="form-label mt-1" id="lobby_name">Generating world map...</label>
+                    <label id="generating" class="form-label mt-1" hidden>Generating world map ...</label>
+                    <label id="waiting_players" class="form-label mt-1" hidden>Waiting for other players ...</label>
                 </div>
             </div>
         </div>

@@ -1,5 +1,8 @@
+
+
 class Player {
-  constructor(id, name) {
+  constructor(id, name)
+  {
     this.id = id;
     this.name = name;
     this.room_name = ""; // default val, no meaning at the moment of construction

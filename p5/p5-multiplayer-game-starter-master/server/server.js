@@ -2,6 +2,7 @@
 
 const express = require("express");
 const socket = require('socket.io');
+const d3_delaunay = require('d3-delaunay');
 const app = express();
 let Player = require("./Player");
 let Room = require("./Room");
@@ -106,9 +107,26 @@ io.sockets.on("connection", socket => {
     socket.on("gen_done", () => {
         let p = getPlayer(socket.id);
         p.gen_done = true;
+
+        let room = getRoom(p.room_name);
+        if(!room.voronoi_regions) {
+            console.log("map data requested");
+            socket.emit("request_regions_data");
+        }
+
         if(checkAllGenDoneInRoom(p.room_name)) {
             io.in(p.room_name).emit("start_game");
         }
+    });
+
+    socket.on("regions_data", (points, cells) => {
+        let p = getPlayer(socket.id);
+        let room = getRoom(p.room_name);
+        room.points_regions = points;
+        room.region_cells = cells;
+        room.genVoronoi();
+        console.log(voronoi);
+        console.log("map data received");
     });
 
 
