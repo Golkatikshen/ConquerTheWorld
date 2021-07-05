@@ -29,7 +29,6 @@ function instantiatePlayer(player_data)
 function sendRegionsData()
 {
     socket.emit("regions_data", points_regions, region_cells);
-    console.log(voronoi_regions.cellPolygon(100));
 }
 
 function startGame()

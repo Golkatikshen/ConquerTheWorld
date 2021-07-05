@@ -131,7 +131,6 @@ io.sockets.on("connection", socket => {
         room.points_regions = points;
         room.region_cells = cells;
         room.genVoronoi();
-        console.log(voronoi);
         console.log("map data received");
     });
 

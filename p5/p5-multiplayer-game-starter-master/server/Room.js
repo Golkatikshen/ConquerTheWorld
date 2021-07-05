@@ -1,6 +1,6 @@
+import {Delaunay} from "d3-delaunay";
 
-
-class Room {
+export class Room {
     constructor(name, seed) {
         this.name = name;
         this.seed = seed;
@@ -13,12 +13,12 @@ class Room {
 
     genVoronoi()
     {
-        let delaunay = Delaunay.from(points_regions);
+        let delaunay = Delaunay.from(this.points_regions);
         // check CONSTANT FILE
         let map_width = 1500;
         let map_height = 1200;
-        voronoi_regions = delaunay.voronoi([0, 0, map_width, map_height]); 
+        this.voronoi_regions = delaunay.voronoi([0, 0, map_width, map_height]); 
     }
 }
 
-module.exports = Room;
+//module.exports = Room;

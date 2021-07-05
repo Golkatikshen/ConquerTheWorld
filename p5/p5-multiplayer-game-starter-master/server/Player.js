@@ -1,6 +1,6 @@
 
 
-class Player {
+export class Player {
   constructor(id, name)
   {
     this.id = id;
@@ -24,4 +24,4 @@ function getRandomInt(min, max)
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
-module.exports = Player;
+//module.exports = Player;
