@@ -49,7 +49,7 @@ function updateGame()
 {
     for(let i=0; i<rooms.length; i++)
     {
-        if(rooms[i].game_started) {
+        if(rooms[i].game_started && rooms[i].region_cells) {
             // QUI CI VORRANNO RESOLUTIONS DI CONFLITTI
             io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
         }
