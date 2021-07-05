@@ -18,7 +18,7 @@ async function startMapGeneration(seed)
         hideElement("generating");
         unhideElement("waiting_players");
         socket.emit("gen_done");
-    }, 100);
+    }, 100, seed);
 }
 
 

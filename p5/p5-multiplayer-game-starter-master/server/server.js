@@ -112,11 +112,7 @@ io.sockets.on("connection", socket => {
         io.in(p.room_name).emit("ready_player", p.id, p.ready);
 
         if(checkAllReadyInRoom(p.room_name)) {
-            let room = getRoom(p.room_name);
-            for(let i=0; i<room.players.length; i++) {
-                io.to(room.players[i].id).emit("set_igid", i);
-            }
-            io.in(p.room_name).emit("start_map_gen", getRoom(p.room_name).seed);
+            startMapGenAndSendIGIDs(p.room_name);
         }
     });
 
@@ -174,8 +170,8 @@ io.sockets.on("connection", socket => {
                 socket.to(room_name).emit("remove_player", p.id);
                 room.players = room.players.filter(player => player.id !== socket.id);
                 
-                if(checkAllReadyInRoom(room_name)) {
-                    io.in(room_name).emit("start_map_gen", room.seed);
+                if(checkAllReadyInRoom(room_name) && !room.game_started) {
+                    startMapGenAndSendIGIDs(room_name);
                 }
             }
             
@@ -190,6 +186,15 @@ io.sockets.on("connection", socket => {
 
 // ##### UTILITY AND NET FUNCS #####
 
+
+function startMapGenAndSendIGIDs(room_name)
+{
+    let room = getRoom(room_name);
+    for(let i=0; i<room.players.length; i++) {
+        io.to(room.players[i].id).emit("set_igid", i);
+    }
+    io.in(room_name).emit("start_map_gen", room.seed);
+}
 
 function checkAllGenDoneInRoom(room_name)
 {

@@ -15,6 +15,7 @@ let beach_edges = []; // expected [ [[x1,y1],[x2,y2]], []... ]
 
 function worldInit(seed)
 {
+    console.log(seed);
     noiseDetail(2, 0.85);
     noiseSeed(seed);
     randomSeed(seed);
