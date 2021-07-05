@@ -15,6 +15,7 @@ function draw()
     {
         background(6, 66, 115);
         image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+        
         drawRegionHovered();
 
         textSize(20);
