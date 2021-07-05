@@ -1,3 +1,4 @@
+
 class Room {
     constructor(name, seed) {
         this.name = name;
@@ -11,7 +12,7 @@ class Room {
 
     genVoronoi()
     {
-        let delaunay = d3_delaunay.Delaunay.from(points_regions);
+        let delaunay = Delaunay.from(points_regions);
         // check CONSTANT FILE
         let map_width = 1500;
         let map_height = 1200;

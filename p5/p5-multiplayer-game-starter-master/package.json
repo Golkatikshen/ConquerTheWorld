@@ -1,7 +1,7 @@
 {
-  "name": "boing",
+  "name": "conquer-the-world",
   "version": "1.0.0",
-  "description": "fun game this",
+  "description": "summer project",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
