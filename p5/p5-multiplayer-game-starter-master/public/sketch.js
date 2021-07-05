@@ -11,11 +11,11 @@ function setup()
 
 function draw()
 {
-    if(start_game)
+    if(game_started)
     {
         background(6, 66, 115);
         image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
-        
+        drawRegionsConquered();
         drawRegionHovered();
 
         textSize(20);
@@ -47,9 +47,14 @@ function draw()
     }
 }
 
-function keyPressed()
+function mouseClicked()
 {
-    //updateLocalPlayer();
+    console.log("mouse pressed");
+    if(mouseButton == LEFT) {
+        conquestAttempt();
+    }
+
+    return false;
 }
 
 

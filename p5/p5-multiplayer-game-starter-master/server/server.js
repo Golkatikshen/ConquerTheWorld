@@ -44,14 +44,14 @@ let guest_counter = 0;
 
 // ###### BEG SERVER-CLINET HANDLING ######
 
-setInterval(updateGame, 500);
+setInterval(updateGame, 1000);
 function updateGame()
 {
     for(let i=0; i<rooms.length; i++)
     {
-        if(rooms.game_started) {
+        if(rooms[i].game_started) {
             // QUI CI VORRANNO RESOLUTIONS DI CONFLITTI
-            io.in(rooms[i].name).emit("heartbeat", rooms.region_cells);
+            io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
         }
     }
 }
@@ -142,7 +142,6 @@ io.sockets.on("connection", socket => {
         room.points_regions = points;
         room.region_cells = cells;
         room.genVoronoi();
-        console.log(room.region_cells[0]);
         console.log("map data received");
     });
 

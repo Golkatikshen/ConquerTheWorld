@@ -27,6 +27,7 @@ socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
 
 function updateRegionCells(updated_region_cells)
 {
+    console.log("hb received");
     region_cells = updated_region_cells;
 }
 
@@ -50,7 +51,7 @@ function startGame()
 {
     hideElement("waiting_players");
     hideElement("messages");
-    start_game = true;
+    game_started = true;
 }
 
 function loginOk()

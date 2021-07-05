@@ -1,7 +1,7 @@
 
 let current_region = 0;
 let gen_time = 0;
-let start_game = false;
+let game_started = false;
 
 async function startMapGeneration(seed)
 {
@@ -32,7 +32,6 @@ function calCurrentRegion()
     }
 }
 
-
 function drawRegionHovered()
 {
     fill(255, 20);
@@ -40,12 +39,13 @@ function drawRegionHovered()
     drawRegion(current_region)
 }
 
-function drawRegionConquered()
+function drawRegionsConquered()
 {
     noStroke();
-    for(let i=0; i<region_cells; i++) {
+    for(let i=0; i<region_cells.length; i++) {
         if(i != current_region) {
             if(region_cells[i].igid_owner !== -1) {
+                console.log("draw conquered")
                 fill(getColorFromIGID(region_cells[i].igid_owner));
                 drawRegion(i);
             }
@@ -62,4 +62,12 @@ function drawRegion(index_region)
         vertex((conv_poly[j][0]*zoom)-off_x, (conv_poly[j][1]*zoom)-off_y);
     }
     endShape(CLOSE);
+}
+
+
+function conquestAttempt()
+{
+    if(game_started) {
+        socket.emit("conquest_attempt", local_player.igid, current_region);
+    }   
 }
