@@ -8,12 +8,7 @@ export class Player {
     this.room_name = ""; // default val, no meaning at the moment of construction
     this.ready = false; // default val, no meaning at the moment of construction
     this.gen_done = false;
-
-    this.rgb = {
-      r: Math.random() * 255,
-      g: Math.random() * 255,
-      b: Math.random() * 255,
-    }
+    this.igid = -1; // in game id (0,1,2,...,n_max)
   }
 }
 

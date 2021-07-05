@@ -5,5 +5,6 @@ class RegionCell { // mostly gameplay support
         // DFS in voronoiRegionsInit troverà il mare a partire dalla cella in alto a sinistra
         this.visited = false;
         this.h = 0;
+        this.igid_owner = -1;
     }
 }

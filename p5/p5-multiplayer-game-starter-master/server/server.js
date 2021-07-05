@@ -105,6 +105,10 @@ io.sockets.on("connection", socket => {
         io.in(p.room_name).emit("ready_player", p.id, p.ready);
 
         if(checkAllReadyInRoom(p.room_name)) {
+            let room = getRoom(p.room_name);
+            for(let i=0; i<room.players.length; i++) {
+                io.to(room.players[i].id).emit("set_igid", i);
+            }
             io.in(p.room_name).emit("start_map_gen", getRoom(p.room_name).seed);
         }
     });
@@ -131,6 +135,7 @@ io.sockets.on("connection", socket => {
         room.points_regions = points;
         room.region_cells = cells;
         room.genVoronoi();
+        console.log(room.region_cells[0]);
         console.log("map data received");
     });
 

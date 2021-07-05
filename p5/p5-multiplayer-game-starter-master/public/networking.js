@@ -18,6 +18,7 @@ socket.on("room_OK", () => roomOk());
 
 socket.on("start_map_gen", seed => startMapGeneration(seed));
 socket.on("request_regions_data", () => sendRegionsData());
+socket.on("set_igid", igid => setIGID(igid));
 socket.on("start_game", () => startGame());
 
 
@@ -29,6 +30,11 @@ function instantiatePlayer(player_data)
 function sendRegionsData()
 {
     socket.emit("regions_data", points_regions, region_cells);
+}
+
+function setIGID(igid)
+{
+    local_player.igid = igid;
 }
 
 function startGame()

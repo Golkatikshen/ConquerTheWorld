@@ -2,8 +2,7 @@ class Player {
   constructor(player) {
     this.id = player.id;
     this.name = player.name;
-    
-    this.rgb = player.rgb;
+    this.igid = -1;
   }
 
 
