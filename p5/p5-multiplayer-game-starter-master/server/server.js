@@ -1,12 +1,17 @@
 // ###### BEG SERVER INIT ######
 
 
-const express = require("express");
-const socket = require('socket.io');
+//const express = require("express");
+import express from 'express';
+//const socket = require('socket.io');
+import socket from 'socket.io';
 const app = express();
-let Player = require("./Player");
-let Room = require("./Room");
+//let Player = require("./Player");
+import {Player} from "./Player.js";
+//let Room = require("./Room");
+import {Room} from "./Room.js";
 // const d3d = require("d3-delaunay");
+
 
 let server = app.listen(process.env.PORT || 3000, listen);
 console.log('The server is now running at http://localhost:3000');
