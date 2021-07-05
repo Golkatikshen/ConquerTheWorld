@@ -20,3 +20,46 @@ async function startMapGeneration(seed)
         socket.emit("gen_done");
     }, 100);
 }
+
+
+function calCurrentRegion()
+{
+    for(let i=0; i<points_regions.length; i++) {
+        if(voronoi_regions.contains(i, (mouseX+off_x)/zoom, (mouseY+off_y)/zoom)) {
+            current_region = i;
+            break;
+        }
+    }
+}
+
+
+function drawRegionHovered()
+{
+    fill(255, 20);
+    noStroke();
+    drawRegion(current_region)
+}
+
+function drawRegionConquered()
+{
+    noStroke();
+    for(let i=0; i<region_cells; i++) {
+        if(i != current_region) {
+            if(region_cells[i].igid_owner !== -1) {
+                fill(getColorFromIGID(region_cells[i].igid_owner));
+                drawRegion(i);
+            }
+        }
+    }
+}
+
+function drawRegion(index_region)
+{
+    let conv_poly = voronoi_regions.cellPolygon(index_region);
+
+    beginShape();
+    for(let j=0; j<conv_poly.length; j++) {
+        vertex((conv_poly[j][0]*zoom)-off_x, (conv_poly[j][1]*zoom)-off_y);
+    }
+    endShape(CLOSE);
+}

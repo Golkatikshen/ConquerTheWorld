@@ -44,10 +44,17 @@ let guest_counter = 0;
 
 // ###### BEG SERVER-CLINET HANDLING ######
 
-/*setInterval(updateGame, 50);
-function updateGame() {
-  io.sockets.emit("heartbeat", players);
-}*/
+setInterval(updateGame, 500);
+function updateGame()
+{
+    for(let i=0; i<rooms.length; i++)
+    {
+        if(rooms.game_started) {
+            // QUI CI VORRANNO RESOLUTIONS DI CONFLITTI
+            io.in(rooms[i].name).emit("heartbeat", rooms.region_cells);
+        }
+    }
+}
 
 io.sockets.on("connection", socket => {
     console.log("New connection: " + socket.id);
@@ -125,13 +132,13 @@ io.sockets.on("connection", socket => {
         }
 
         if(checkAllGenDoneInRoom(p.room_name)) {
+            room.game_started = true;
             io.in(p.room_name).emit("start_game");
         }
     });
 
     socket.on("regions_data", (points, cells) => {
-        let p = getPlayer(socket.id);
-        let room = getRoom(p.room_name);
+        let room = getRoomFromPlayer(socket.id);
         room.points_regions = points;
         room.region_cells = cells;
         room.genVoronoi();
@@ -139,6 +146,11 @@ io.sockets.on("connection", socket => {
         console.log("map data received");
     });
 
+
+    socket.on("conquest_attempt", (igid, index_cell) => {
+        let room = getRoomFromPlayer(socket.id);
+        room.region_cells[index_cell].igid_owner = igid;
+    });
 
     socket.on("update", data => {
         console.log("update");
@@ -204,6 +216,12 @@ function checkAllReadyInRoom(room_name)
     }
 
     return true;
+}
+
+function getRoomFromPlayer(player_id)
+{
+    let p = getPlayer(player_id);
+    return rooms.find(e => e.name === p.room_name);
 }
 
 function getRoom(room_name)

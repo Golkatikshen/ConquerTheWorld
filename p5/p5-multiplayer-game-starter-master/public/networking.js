@@ -21,6 +21,14 @@ socket.on("request_regions_data", () => sendRegionsData());
 socket.on("set_igid", igid => setIGID(igid));
 socket.on("start_game", () => startGame());
 
+socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
+
+
+
+function updateRegionCells(updated_region_cells)
+{
+    region_cells = updated_region_cells;
+}
 
 function instantiatePlayer(player_data)
 {
@@ -34,6 +42,7 @@ function sendRegionsData()
 
 function setIGID(igid)
 {
+    // In game id (0,1,2,...)
     local_player.igid = igid;
 }
 

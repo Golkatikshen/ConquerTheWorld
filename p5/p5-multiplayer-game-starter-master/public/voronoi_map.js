@@ -108,31 +108,6 @@ function drawRegionsBorders()
 }
 
 
-function calCurrentRegion()
-{
-    for(let i=0; i<points_regions.length; i++) {
-        if(voronoi_regions.contains(i, (mouseX+off_x)/zoom, (mouseY+off_y)/zoom)) {
-            current_region = i;
-            break;
-        }
-    }
-}
-
-
-function drawRegionHovered()
-{
-    let conv_poly = voronoi_regions.cellPolygon(current_region);
-
-    fill(255, 20);
-    noStroke();
-    beginShape();
-    for(let j=0; j<conv_poly.length; j++) {
-        vertex((conv_poly[j][0]*zoom)-off_x, (conv_poly[j][1]*zoom)-off_y);
-    }
-    endShape(CLOSE);
-}
-
-
 function islandPointMinH(x, y)
 {
     let min_dist = map_width*2;
