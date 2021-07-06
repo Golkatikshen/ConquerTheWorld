@@ -134,10 +134,12 @@ function updateImageBorders()
     borders_image = createGraphics(map_width, map_height);
     borders_image.image(map_image, 0, 0, map_width, map_height);
 
-    borders_image.noStroke();
+    borders_image.noFill();
+    borders_image.strokeWeight(2);
     for(let i=0; i<region_cells.length; i++) {
         if(region_cells[i].igid_owner !== -1) {
-            borders_image.fill(getColorFromIGID(region_cells[i].igid_owner)+"77");
+            //borders_image.fill(getColorFromIGID(region_cells[i].igid_owner)+"55");
+            borders_image.stroke(getColorFromIGID(region_cells[i].igid_owner)+"cc");
             
             let conv_poly = voronoi_regions.cellPolygon(i);
 
