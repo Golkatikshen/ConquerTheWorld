@@ -2,6 +2,7 @@ class Player {
   constructor(player) {
     this.id = player.id;
     this.name = player.name;
+    this.room_name = player.room_name;
     this.ready = player.ready;
     this.igid = -1;
     this.g_borders = new g.Path();

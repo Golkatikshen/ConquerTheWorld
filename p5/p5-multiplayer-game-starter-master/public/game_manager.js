@@ -4,6 +4,7 @@ let gen_time = 0;
 let game_started = false;
 
 let g_regions = [];
+let borders_image;
 
 async function startMapGeneration(seed)
 {
@@ -15,7 +16,8 @@ async function startMapGeneration(seed)
     setTimeout( function(seed) {
         let start = millis();
         worldInit(seed);
-        calcGRegions();
+        //calcGRegions();
+        updateImageBorders();
         gen_time = (millis()-start)/1000;
 
         hideElement("generating");
@@ -97,11 +99,12 @@ function conquestAttempt()
 
 function updateRegionCells(updated_region_cells)
 {
+    let borders_changed = false;
     // update g_borders inside players
     for(let i=0; i<region_cells.length; i++) {
         if(region_cells[i].igid_owner !== updated_region_cells[i].igid_owner) {
-            // sto codice mi fa schifo, cambiare, modularizzare
-            let old_owner, new_owner;
+            borders_changed = true;
+            /*let old_owner, new_owner;
             for(let j=0; j<players.length; j++) {
                 if(players[j].igid === region_cells[i].igid_owner) {
                     old_owner = players[j];
@@ -114,9 +117,35 @@ function updateRegionCells(updated_region_cells)
             if(old_owner) // se era effettivamente di qualcuno
                 old_owner.removeRegion(g_regions[i]);
             if(new_owner) // se l'ha presa un giocatore (forse utile per eventuale disconnessione)
-                new_owner.addRegion(g_regions[i]);
+                new_owner.addRegion(g_regions[i]);*/
         }
     }
 
     region_cells = updated_region_cells;
+    if(borders_changed)
+        updateImageBorders();
+}
+
+
+function updateImageBorders()
+{
+    console.log("eccoci");
+
+    borders_image = createGraphics(map_width, map_height);
+    borders_image.image(map_image, 0, 0, map_width, map_height);
+
+    borders_image.noStroke();
+    for(let i=0; i<region_cells.length; i++) {
+        if(region_cells[i].igid_owner !== -1) {
+            borders_image.fill(getColorFromIGID(region_cells[i].igid_owner)+"77");
+            
+            let conv_poly = voronoi_regions.cellPolygon(i);
+
+            borders_image.beginShape();
+            for(let j=0; j<conv_poly.length; j++) {
+                borders_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+            }
+            borders_image.endShape(CLOSE);
+        }
+    }
 }

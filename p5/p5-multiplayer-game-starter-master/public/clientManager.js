@@ -61,7 +61,7 @@ function addPlayersList(players_list)
 
 function addPlayer(player)
 {
-    players.push(player);
+    players.push(new Player(player));
     updateLobbyList();
 }
 

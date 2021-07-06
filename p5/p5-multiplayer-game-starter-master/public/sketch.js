@@ -14,7 +14,7 @@ function draw()
     if(game_started)
     {
         background(6, 66, 115);
-        image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+        image(borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         //drawRegionsConquered();
         for(let i=0; i<players.length; i++) {
             players[i].display();
