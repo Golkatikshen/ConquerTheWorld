@@ -16,6 +16,10 @@ function draw()
         background(6, 66, 115);
         image(map_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         drawRegionsConquered();
+        /*for(let i=0; i<players.length; i++) {
+            console.log(players[i]);
+            players[i].display();
+        }*/
         drawRegionHovered();
 
         textSize(20);
@@ -49,7 +53,6 @@ function draw()
 
 function mouseClicked()
 {
-    console.log("mouse pressed");
     if(mouseButton == LEFT) {
         conquestAttempt();
     }

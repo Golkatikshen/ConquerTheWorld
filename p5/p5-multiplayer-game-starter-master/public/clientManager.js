@@ -46,7 +46,11 @@ function updateLobbyList()
 
 function addPlayersList(players_list)
 {
-    players = players_list;
+    players = [];
+    for(let i=0; i<players_list.length; i++) {
+        players.push(new Player(players_list[i]));
+    }
+    
     document.getElementById("lobby_name").innerHTML = "Lobby: " + players[0].room_name;
 
     // TODO: forse bisogna sostituire il local player con quello in player_list

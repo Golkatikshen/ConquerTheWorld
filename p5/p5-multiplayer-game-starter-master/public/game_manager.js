@@ -62,7 +62,6 @@ function drawRegionsConquered()
     for(let i=0; i<region_cells.length; i++) {
         if(i != current_region) {
             if(region_cells[i].igid_owner !== -1) {
-                console.log("draw conquered")
                 fill(getColorFromIGID(region_cells[i].igid_owner));
                 drawRegion(i);
             }
@@ -89,7 +88,29 @@ function conquestAttempt()
     }   
 }
 
+
 function updateRegionCells(updated_region_cells)
 {
+    // update g_borders inside players
+    for(let i=0; i<region_cells.length; i++) {
+        if(region_cells[i].igid_owner !== updated_region_cells[i].igid_owner) {
+            // sto codice mi fa schifo, cambiare, modularizzare
+            let old_owner, new_owner;
+            for(let j=0; j<players.length; j++) {
+                if(players[j].igid === region_cells[i].igid_owner) {
+                    old_owner = players[j];
+                }
+                else if(players[j].igid === updated_region_cells[i].igid_owner) {
+                    new_owner = players[j];
+                }
+            }
+
+            if(old_owner) // se era effettivamente di qualcuno
+                old_owner.removeRegion(g_regions[i]);
+            if(new_owner) // se l'ha presa un giocatore (forse utile per eventuale disconnessione)
+                new_owner.addRegion(g_regions[i]);
+        }
+    }
+
     region_cells = updated_region_cells;
 }
