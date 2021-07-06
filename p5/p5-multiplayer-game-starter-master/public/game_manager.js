@@ -3,7 +3,6 @@ let current_region = 0;
 let gen_time = 0;
 let game_started = false;
 
-let g_regions = [];
 let borders_image;
 
 async function startMapGeneration(seed)
@@ -16,7 +15,6 @@ async function startMapGeneration(seed)
     setTimeout( function(seed) {
         let start = millis();
         worldInit(seed);
-        //calcGRegions();
         updateImageBorders();
         gen_time = (millis()-start)/1000;
 
@@ -24,26 +22,6 @@ async function startMapGeneration(seed)
         unhideElement("waiting_players");
         socket.emit("gen_done");
     }, 100, seed);
-}
-
-function calcGRegions()
-{
-    for(let i=0; i<region_cells.length; i++) {
-        let conv_poly = voronoi_regions.cellPolygon(i);
-        let path = new g.Path();
-        let cx = conv_poly[0][0], cy = conv_poly[0][1];
-        path.moveTo(conv_poly[0][0], conv_poly[0][1])
-        for(let j=1; j<conv_poly.length; j++) {
-            cx += conv_poly[j][0];
-            cy += conv_poly[j][1];
-            path.lineTo(conv_poly[j][0], conv_poly[j][1]);
-        }
-        cx /= conv_poly.length;
-        cy /= conv_poly.length;
-        path.closePath();
-        path = g.scale(path, {x:1.05, y:1.05}, {x:cx, y:cy});
-        g_regions.push(path);
-    }
 }
 
 
@@ -100,24 +78,9 @@ function conquestAttempt()
 function updateRegionCells(updated_region_cells)
 {
     let borders_changed = false;
-    // update g_borders inside players
     for(let i=0; i<region_cells.length; i++) {
         if(region_cells[i].igid_owner !== updated_region_cells[i].igid_owner) {
             borders_changed = true;
-            /*let old_owner, new_owner;
-            for(let j=0; j<players.length; j++) {
-                if(players[j].igid === region_cells[i].igid_owner) {
-                    old_owner = players[j];
-                }
-                else if(players[j].igid === updated_region_cells[i].igid_owner) {
-                    new_owner = players[j];
-                }
-            }
-
-            if(old_owner) // se era effettivamente di qualcuno
-                old_owner.removeRegion(g_regions[i]);
-            if(new_owner) // se l'ha presa un giocatore (forse utile per eventuale disconnessione)
-                new_owner.addRegion(g_regions[i]);*/
         }
     }
 

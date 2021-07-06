@@ -14,11 +14,8 @@ function draw()
     if(game_started)
     {
         background(6, 66, 115);
+        // borders_image ha map_image come background e i borders
         image(borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
-        //drawRegionsConquered();
-        for(let i=0; i<players.length; i++) {
-            players[i].display();
-        }
         drawRegionHovered();
 
         textSize(20);
