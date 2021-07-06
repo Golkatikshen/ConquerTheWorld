@@ -5,6 +5,7 @@ class Player {
     this.ready = player.ready;
     this.igid = -1;
     this.g_borders = new g.Path();
+    
   }
 
   display()
@@ -13,12 +14,14 @@ class Player {
     fill(255);
     textAlign(CENTER, CENTER);
     text(this.name, this.x, this.y);*/
-    push();
-    translate(off_x, off_y);
-    this.g_borders.fill = 'white';
-    this.g_borders.stroke = 'black';
-    this.g_borders.draw(drawingContext);
-    pop();
+    //push();
+    let gb = g.scale(this.g_borders, zoom);
+    gb = g.translate(gb, {x:-off_x, y:-off_y});
+    gb.fill = getColorFromIGID(this.igid)+"22";
+    gb.stroke = getColorFromIGID(this.igid)+"cc";
+    gb.strokeWidth = 3;
+    gb.draw(drawingContext);
+    //pop();
   }
 
   addRegion(g_region)

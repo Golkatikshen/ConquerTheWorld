@@ -29,11 +29,17 @@ function calcGRegions()
     for(let i=0; i<region_cells.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
         let path = new g.Path();
+        let cx = conv_poly[0][0], cy = conv_poly[0][1];
         path.moveTo(conv_poly[0][0], conv_poly[0][1])
         for(let j=1; j<conv_poly.length; j++) {
+            cx += conv_poly[j][0];
+            cy += conv_poly[j][1];
             path.lineTo(conv_poly[j][0], conv_poly[j][1]);
         }
+        cx /= conv_poly.length;
+        cy /= conv_poly.length;
         path.closePath();
+        path = g.scale(path, {x:1.05, y:1.05}, {x:cx, y:cy});
         g_regions.push(path);
     }
 }
