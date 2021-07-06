@@ -25,12 +25,6 @@ socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
 
 
 
-function updateRegionCells(updated_region_cells)
-{
-    console.log("hb received");
-    region_cells = updated_region_cells;
-}
-
 function instantiatePlayer(player_data)
 {
     local_player = new Player(player_data); // forse inutile, da rivedere

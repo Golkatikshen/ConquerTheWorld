@@ -3,6 +3,8 @@ let current_region = 0;
 let gen_time = 0;
 let game_started = false;
 
+let g_regions = [];
+
 async function startMapGeneration(seed)
 {
     hideElement("lobby_form");
@@ -13,12 +15,27 @@ async function startMapGeneration(seed)
     setTimeout( function(seed) {
         let start = millis();
         worldInit(seed);
+        calcGRegions();
         gen_time = (millis()-start)/1000;
 
         hideElement("generating");
         unhideElement("waiting_players");
         socket.emit("gen_done");
     }, 100, seed);
+}
+
+function calcGRegions()
+{
+    for(let i=0; i<region_cells.length; i++) {
+        let conv_poly = voronoi_regions.cellPolygon(i);
+        let path = new g.Path();
+        path.moveTo(conv_poly[0][0], conv_poly[0][1])
+        for(let j=1; j<conv_poly.length; j++) {
+            path.lineTo(conv_poly[j][0], conv_poly[j][1]);
+        }
+        path.closePath();
+        g_regions.push(path);
+    }
 }
 
 
@@ -70,4 +87,9 @@ function conquestAttempt()
     if(game_started) {
         socket.emit("conquest_attempt", local_player.igid, current_region);
     }   
+}
+
+function updateRegionCells(updated_region_cells)
+{
+    region_cells = updated_region_cells;
 }
