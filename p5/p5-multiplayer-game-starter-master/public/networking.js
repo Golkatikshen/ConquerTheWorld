@@ -45,6 +45,7 @@ function startGame()
 {
     hideElement("waiting_players");
     hideElement("messages");
+    hideElement("game_title");
     game_started = true;
 }
 

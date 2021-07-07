@@ -18,11 +18,17 @@
 
     
     <div id="contenu">
+        <div id="game_title" class="container">
+            <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                <label class="form-label" style="color:rgb(88, 61, 34); font-size: 60px; text-shadow: 10px 10px 10px rgb(36, 147, 188);"><b>IMPERIVM</b></label>
+            </div>
+        </div>
+
         <div id="login_form" class="container">
-            <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
-                <div class="border border-secondary border-5 rounded-3 p-4 mt-5" style="box-shadow: 10px 5px 5px rgb(61, 61, 61); background-color: rgb(228, 228, 228);">
+            <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
+                <div class="border border-secondary border-3 rounded-3 p-4 mt-5" style="box-shadow: 10px 10px 10px rgb(36, 147, 188); background-color: rgb(204, 153, 101);">
                     <div class="d-grid gap-2">
-                        <label class="form-label">Nickname</label>
+                        <label class="form-label" style="color:rgb(88, 61, 34)"><b>Nickname</b></label>
                         <input class="form-control" id="nickname">
                         <button type="submit" class="btn btn-success mt-3" onclick="nicknameLogin();">Enter</button>
                     </div>
@@ -38,8 +44,8 @@
         
         
         <div id="room_form" class="container" hidden>
-            <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
-                <div class="border border-secondary border-5 rounded-3 p-4 mt-5">
+            <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
+                <div class="border border-secondary border-5 rounded-3 p-4 mt-5" style="box-shadow: 10px 10px 10px rgb(36, 147, 188); background-color: rgb(204, 153, 101);">
                     <div class="d-grid gap-2">
                         <label class="form-label">Room Name</label>
                         <input class="form-control" id="room_name">
@@ -57,8 +63,8 @@
         </div>
 
         <div id="lobby_form" class="container" hidden>
-            <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
-                <div class="border border-secondary border-5 rounded-3 p-4 mt-5 col-4">
+            <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
+                <div class="border border-secondary border-5 rounded-3 p-4 mt-5 col-4" style="box-shadow: 10px 10px 10px rgb(36, 147, 188); background-color: rgb(204, 153, 101);">
                     <div class="d-grid gap-2">
                         <label class="form-label" id="lobby_name">Lobby</label>
 
@@ -74,8 +80,8 @@
         
 
         <div id="messages" class="container text-center" hidden>
-            <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
-                <div class="border border-secondary border-5 rounded-3 p-4 col-4">
+            <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
+                <div class="border border-secondary border-5 rounded-3 p-4 col-4" style="box-shadow: 10px 10px 10px rgb(36, 147, 188); background-color: rgb(204, 153, 101);">
                     <label id="generating" class="form-label mt-1" hidden>Generating world map ...</label>
                     <label id="waiting_players" class="form-label mt-1" hidden>Waiting for other players ...</label>
                 </div>
