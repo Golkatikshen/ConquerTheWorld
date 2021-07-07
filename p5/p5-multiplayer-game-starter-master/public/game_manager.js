@@ -3,7 +3,8 @@ let current_region = 0;
 let gen_time = 0;
 let game_started = false;
 
-let borders_image;
+let physical_borders_image;
+let political_borders_image;
 
 async function startMapGeneration(seed)
 {
@@ -15,7 +16,7 @@ async function startMapGeneration(seed)
     setTimeout( function(seed) {
         let start = millis();
         worldInit(seed);
-        updateImageBorders();
+        updateBordersImages();
         gen_time = (millis()-start)/1000;
 
         hideElement("generating");
@@ -85,32 +86,38 @@ function updateRegionCells(updated_region_cells)
     }
 
     region_cells = updated_region_cells;
-    if(borders_changed)
-        updateImageBorders();
+    if(borders_changed) {
+        updateBordersImages();
+    }
 }
 
 
-function updateImageBorders()
+function updateBordersImages()
 {
-    console.log("eccoci");
+    physical_borders_image = createGraphics(map_width, map_height);
+    physical_borders_image.image(physical_map_image, 0, 0, map_width, map_height);
+    political_borders_image = createGraphics(map_width, map_height);
+    political_borders_image.image(political_map_image, 0, 0, map_width, map_height);
 
-    borders_image = createGraphics(map_width, map_height);
-    borders_image.image(map_image, 0, 0, map_width, map_height);
-
-    borders_image.noFill();
-    borders_image.strokeWeight(2);
+    physical_borders_image.noFill();
+    physical_borders_image.strokeWeight(2);
+    political_borders_image.noFill();
+    political_borders_image.noStroke();
     for(let i=0; i<region_cells.length; i++) {
         if(region_cells[i].igid_owner !== -1) {
-            //borders_image.fill(getColorFromIGID(region_cells[i].igid_owner)+"55");
-            borders_image.stroke(getColorFromIGID(region_cells[i].igid_owner)+"cc");
-            
+            physical_borders_image.stroke(getColorFromIGID(region_cells[i].igid_owner)+"cc");
+            political_borders_image.fill(getColorFromIGID(region_cells[i].igid_owner)+"cc");
+
             let conv_poly = voronoi_regions.cellPolygon(i);
 
-            borders_image.beginShape();
+            physical_borders_image.beginShape();
+            political_borders_image.beginShape();
             for(let j=0; j<conv_poly.length; j++) {
-                borders_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+                physical_borders_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+                political_borders_image.vertex(conv_poly[j][0], conv_poly[j][1]);
             }
-            borders_image.endShape(CLOSE);
+            physical_borders_image.endShape(CLOSE);
+            political_borders_image.endShape(CLOSE);
         }
     }
 }

@@ -1,5 +1,6 @@
 
 let off_x = 0, off_y = 0, zoom = 1;
+let political_mode = false;
 
 function setup()
 {
@@ -15,7 +16,10 @@ function draw()
     {
         background(6, 66, 115);
         // borders_image ha map_image come background e i borders
-        image(borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+        if(political_mode)
+            image(political_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+        else
+            image(physical_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         drawRegionHovered();
 
         textSize(20);
@@ -54,6 +58,13 @@ function mouseClicked()
     }
 
     return false;
+}
+
+function keyPressed()
+{
+    if(key == 'm' || key == 'M') {
+        political_mode = !political_mode;
+    }
 }
 
 

@@ -2,7 +2,8 @@
 let delaunay;
 let points_map = [];
 let voronoi_map;
-let map_image;
+let physical_map_image;
+let political_map_image;
 let points_regions = [];
 let voronoi_regions;
 let islands_points = [];
@@ -25,10 +26,10 @@ function worldInit(seed)
     voronoiMapInit();
 
 
-    map_image = createGraphics(map_width, map_height);
+    physical_map_image = createGraphics(map_width, map_height);
 
-    map_image.background(6, 66, 115);
-    map_image.noStroke();
+    physical_map_image.background(6, 66, 115);
+    physical_map_image.noStroke();
     for(let i=0; i<points_map.length; i++) {
         let conv_poly = voronoi_map.cellPolygon(i);
 
@@ -42,69 +43,91 @@ function worldInit(seed)
         //let hv = islandPointMinH(points_map[i][0], points_map[i][1]);
         //map_image.fill(255*hv);
 
-        if(map_cells[i].is_land) {
-            fillLand(map_cells[i].h);
-        } 
-        else if(map_cells[i].is_sea) {
-            map_image.noFill();
+        if(map_cells[i].is_sea) { // ignora gen mare
+            continue;
         }
+        else if(map_cells[i].is_land) {
+            fillLand(physical_map_image, map_cells[i].h);
+        } 
         else {
-            map_image.fill(29,162,216);
+            physical_map_image.fill(29,162,216);
         }
 
-        map_image.beginShape();
+        physical_map_image.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
-            map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+            physical_map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
         }
-        map_image.endShape(CLOSE);
+        physical_map_image.endShape(CLOSE);
     }
 
     //draw beaches
-    map_image.stroke(235, 231, 205);
-    map_image.strokeWeight(1);
+    physical_map_image.stroke(235, 231, 205);
+    physical_map_image.strokeWeight(1);
     for(beach_seg of beach_edges) {
-        map_image.line(beach_seg[0][0], beach_seg[0][1], beach_seg[1][0], beach_seg[1][1]);
+        physical_map_image.line(beach_seg[0][0], beach_seg[0][1], beach_seg[1][0], beach_seg[1][1]);
     }
 
-    drawRegionsBorders();
+    drawRegionsBorders(physical_map_image);
+
+
+    // POLITICAL GEN
+    political_map_image = createGraphics(map_width, map_height);
+
+    political_map_image.background(200);
+    political_map_image.noStroke();
+    for(let i=0; i<points_map.length; i++) {
+        let conv_poly = voronoi_map.cellPolygon(i);
+
+        if(map_cells[i].is_land) {
+            political_map_image.fill(75);
+
+            political_map_image.beginShape();
+            for(let j=0; j<conv_poly.length; j++) {
+                political_map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+            }
+            political_map_image.endShape(CLOSE);
+        } 
+    }
+
+    drawRegionsBorders(political_map_image);
 }
 
-function fillLand(c)
+function fillLand(map, c)
 {
     switch(c) {
         case land_biome.DESERT:
-            map_image.fill(254, 249, 131);
+            map.fill(254, 249, 131);
             break;
         case land_biome.PLAIN:
-            map_image.fill(71, 218, 116);
+            map.fill(71, 218, 116);
             break;
         case land_biome.MOUNTAIN:
-            map_image.fill(60, 37, 21);
+            map.fill(60, 37, 21);
             break;
         case land_biome.FOREST:
-            map_image.fill(35, 144, 79);
+            map.fill(35, 144, 79);
             break;
         case land_biome.HILL:
-            map_image.fill(85, 65, 36);
+            map.fill(85, 65, 36);
             break;
     }
 }
 
 
-function drawRegionsBorders()
+function drawRegionsBorders(map)
 {
-    map_image.noFill();
-    map_image.stroke(0, 0, 0, 20);
-    map_image.strokeWeight(1);
+    map.noFill();
+    map.stroke(0, 0, 0, 20);
+    map.strokeWeight(1);
 
     for(let i=0; i<points_regions.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
 
-        map_image.beginShape();
+        map.beginShape();
         for(let j=0; j<conv_poly.length; j++) {
-            map_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+            map.vertex(conv_poly[j][0], conv_poly[j][1]);
         }
-        map_image.endShape(CLOSE);
+        map.endShape(CLOSE);
     }
 }
 
