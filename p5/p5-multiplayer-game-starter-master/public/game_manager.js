@@ -71,7 +71,9 @@ function drawRegion(index_region)
 function conquestAttempt()
 {
     if(game_started) {
-        socket.emit("conquest_attempt", local_player.igid, current_region);
+        if(region_cells[current_region].is_land) {
+            socket.emit("conquest_attempt", local_player.igid, current_region);
+        }
     }   
 }
 

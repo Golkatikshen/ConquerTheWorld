@@ -1,5 +1,6 @@
 
 let off_x = 0, off_y = 0, zoom = 1;
+let z_t = 0; // zoom times
 let political_mode = false;
 
 function setup()
@@ -22,10 +23,11 @@ function draw()
             image(physical_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         drawRegionHovered();
 
-        textSize(20);
-        fill(255, 0, 255);
-        text(int(frameRate()), 10, 35);
-        text("Gen time: " + gen_time, 10, 70);
+        fill(255, 255, 0);
+        text("FPS: " + int(frameRate()), 10, 20);
+        text("Gen time: " + nf(gen_time, 0, 2) + " seconds", 10, 40);
+        text("Region biome: " + regionBiomeToString(region_cells[current_region]), 10, 60);
+        
 
         // movement screen with mouse close to edges
         if(mouseX < 50) {
@@ -74,7 +76,7 @@ function mouseMoved()
 }
 
 
-let z_t = 0; // zoom times
+
 function mouseWheel(event)
 {
     let old_zoom = zoom;
@@ -101,4 +103,6 @@ function mouseWheel(event)
 function windowResized()
 {
     resizeCanvas(windowWidth, windowHeight);
+    zoom = windowWidth/map_width;
+    z_t = 0;
 }
