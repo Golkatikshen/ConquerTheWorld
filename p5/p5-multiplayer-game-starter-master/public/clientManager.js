@@ -51,6 +51,7 @@ function addPlayersList(players_list)
         players.push(new Player(players_list[i]));
     }
     
+    console.log(players);
     document.getElementById("lobby_name").innerHTML = "Lobby: " + players[0].room_name;
 
     // TODO: forse bisogna sostituire il local player con quello in player_list
@@ -106,7 +107,7 @@ function showErrorMessage(em)
         hideElement("already_started");
 
     if(em == 2)
-        unhideElement("doesnt_exists");
+        unhideElement("doesnt_exist");
     else
-        hideElement("doesnt_exists");
+        hideElement("doesnt_exist");
 }

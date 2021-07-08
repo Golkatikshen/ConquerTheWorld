@@ -81,27 +81,44 @@ io.sockets.on("connection", socket => {
 
     socket.on("create_room", (room_name) => {
         console.log("create_room");
-        let new_room = new Room(room_name, genSeed());
-        rooms.push(new_room);
-        let status = addPlayerToRoom(room_name, socket.id);
+        let room = getRoom(room_name);
+        if(!room) {
+            let new_room = new Room(room_name, genSeed());
+            rooms.push(new_room);
+            addPlayerToRoom(new_room, socket.id);
 
-        socket.join(room_name);
-        // invia la lista dei giocatori attualmente nella stanza (solo 1, dato
-        // che è appena stata creata)
-        socket.emit("players_list", getRoomPlayersList(room_name));
-        socket.emit("room_OK");
+            socket.join(room_name);
+            // invia la lista dei giocatori attualmente nella stanza (solo 1, dato
+            // che è appena stata creata)
+            socket.emit("players_list", getRoomPlayersList(room_name));
+            socket.emit("room_OK");
+        }
+        else {
+            socket.emit("room_name_already_taken");
+        }
     });
 
     socket.on("join_room", (room_name) => {
         console.log("join_room");
-        let status = addPlayerToRoom(room_name, socket.id);
+        let room = getRoom(room_name);
+        if(room) {
+            if(!room.game_started) {
+                addPlayerToRoom(room, socket.id);
 
-        socket.join(room_name);
-        // invia la lista dei giocatori attualmente nella stanza
-        socket.emit("players_list", getRoomPlayersList(room_name));
-        // comunica a tutti quelli già dentro che un altro giocatore è arrivato
-        socket.to(room_name).emit("add_player", getPlayer(socket.id));
-        socket.emit("room_OK");
+                socket.join(room_name);
+                // invia la lista dei giocatori attualmente nella stanza
+                socket.emit("players_list", getRoomPlayersList(room_name));
+                // comunica a tutti quelli già dentro che un altro giocatore è arrivato
+                socket.to(room_name).emit("add_player", getPlayer(socket.id));
+                socket.emit("room_OK");
+            }
+            else {
+                socket.emit("room_game_already_started");
+            }
+        }
+        else {
+            socket.emit("room_name_doesnt_exist");
+        }
     });
 
 
@@ -244,15 +261,12 @@ function getRoomPlayersList(room_name)
     return room.players;
 }
 
-function addPlayerToRoom(room_name, player_id)
+function addPlayerToRoom(room, player_id)
 {
-    let player = players.find(e => e.id === player_id);
-    let room = rooms.find(e => e.name === room_name);
+    let player = getPlayer(player_id);
 
-    player.room_name = room_name; // ridondante, ma dovrebbe semplificare la vita più avanti
+    player.room_name = room.name; // ridondante, ma dovrebbe semplificare la vita più avanti
     room.players.push(player);
-
-    return true; // TO DO: ritornare falso se stanza non esiste
 }
 
 function genSeed()
