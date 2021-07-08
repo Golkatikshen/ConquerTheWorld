@@ -2,7 +2,7 @@
 const map_width = 1500;
 const map_height = 1200;
 
-const land_biome = { // bioma name e altezza
+const land_biome = { // biome name e altezza
 	PLAIN: 0,
 	DESERT: 1,
 	HILL: 2,
@@ -10,7 +10,8 @@ const land_biome = { // bioma name e altezza
     MOUNTAIN: 4,
 }
 
-// https://www.schemecolor.com/rainbow-inside.php
+// palette menu:	https://www.schemecolor.com/blue-green-brown-2.php
+// palette players:	https://www.schemecolor.com/rainbow-inside.php
 function getColorFromIGID(igid)
 {
 	switch(igid)
