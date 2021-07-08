@@ -107,19 +107,40 @@ function updateBordersImages()
     political_borders_image.noStroke();
     for(let i=0; i<region_cells.length; i++) {
         if(region_cells[i].igid_owner !== -1) {
-            physical_borders_image.stroke(getColorFromIGID(region_cells[i].igid_owner)+"cc");
-            political_borders_image.fill(getColorFromIGID(region_cells[i].igid_owner)+"cc");
 
             let conv_poly = voronoi_regions.cellPolygon(i);
 
-            physical_borders_image.beginShape();
-            political_borders_image.beginShape();
+            // calc centroid polygon
+            let cx = 0, cy = 0;
             for(let j=0; j<conv_poly.length; j++) {
-                physical_borders_image.vertex(conv_poly[j][0], conv_poly[j][1]);
-                political_borders_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+                cx += conv_poly[j][0];
+                cy += conv_poly[j][1];
+            }
+            cx /= conv_poly.length;
+            cy /= conv_poly.length;
+
+            physical_borders_image.stroke(getColorFromIGID(region_cells[i].igid_owner)+"cc");
+            physical_borders_image.beginShape();
+            for(let j=0; j<conv_poly.length; j++) {
+                scaled_point = scaleVector(conv_poly[j], [cx, cy], 0.925);
+                physical_borders_image.vertex(scaled_point[0], scaled_point[1]);
             }
             physical_borders_image.endShape(CLOSE);
+
+
+            political_borders_image.fill(getColorFromIGID(region_cells[i].igid_owner)+"cc");
+            political_borders_image.beginShape();
+            for(let j=0; j<conv_poly.length; j++) {
+                political_borders_image.vertex(conv_poly[j][0], conv_poly[j][1]);
+            }
             political_borders_image.endShape(CLOSE);
         }
     }
+}
+
+function scaleVector(v, cp, scale)
+{
+    let x = (v[0]-cp[0])*scale + cp[0];
+    let y = (v[1]-cp[1])*scale + cp[1];
+    return [x, y];
 }

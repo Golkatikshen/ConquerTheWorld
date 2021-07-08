@@ -21,11 +21,11 @@ function getColorFromIGID(igid)
 			return "#8958D3"; //color(137, 88, 211);
 		case 2:
 			return "#16B9E1"; //color(22, 185, 225);
+		//case 0:
+		//	return "#58DE7B"; //color(88, 222, 123); il verde non si vede
 		case 3:
-			return "#58DE7B"; //color(88, 222, 123);
-		case 4:
 			return "#F0D864"; //color(240, 216, 100);
-		case 5:
+		case 4:
 			return "#FF8057"; //color(255, 128, 87);
 		default:
 			return "#000000"; //color(0);

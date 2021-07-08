@@ -102,7 +102,7 @@ io.sockets.on("connection", socket => {
         console.log("join_room");
         let room = getRoom(room_name);
         if(room) {
-            if(!room.game_started) {
+            if(!room.game_started && room.players.length < 5) {
                 addPlayerToRoom(room, socket.id);
 
                 socket.join(room_name);
