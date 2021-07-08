@@ -187,6 +187,10 @@ io.sockets.on("connection", socket => {
                 socket.to(room_name).emit("remove_player", p.id);
                 room.players = room.players.filter(player => player.id !== socket.id);
                 
+                if(room.players.length == 0) {
+                    removeRoom(room_name);
+                }
+
                 if(checkAllReadyInRoom(room_name) && !room.game_started) {
                     startMapGenAndSendIGIDs(room_name);
                 }
@@ -203,6 +207,16 @@ io.sockets.on("connection", socket => {
 
 // ##### UTILITY AND NET FUNCS #####
 
+
+function removeRoom(room_name)
+{    
+    for(let i=0; i<rooms.length; i++) {
+        if(rooms[i].name === room_name) {
+            rooms.splice(i, 1);
+            break;
+        }
+    }
+}
 
 function startMapGenAndSendIGIDs(room_name)
 {
@@ -229,6 +243,9 @@ function checkAllGenDoneInRoom(room_name)
 function checkAllReadyInRoom(room_name)
 {
     let room = getRoom(room_name);
+    if(!room) {
+        return false;
+    }
 
     for(let i=0; i<room.players.length; i++) {
         if(!room.players[i].ready) {
