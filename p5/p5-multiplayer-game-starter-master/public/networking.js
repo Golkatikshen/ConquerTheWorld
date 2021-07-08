@@ -16,6 +16,10 @@ socket.on("remove_player", player_id => removePlayer(player_id));
 socket.on("ready_player", (player_id, r) => playerReady(player_id, r));
 socket.on("room_OK", () => roomOk());
 
+socket.on("room_name_already_taken", () => roomNameAlreadyTaken());
+socket.on("room_name_doesnt_exists", () => roomNameDoesntExists());
+socket.on("room_game_already_started", () => roomGameAlreadyStarted());
+
 socket.on("start_map_gen", seed => startMapGeneration(seed));
 socket.on("request_regions_data", () => sendRegionsData());
 socket.on("set_igid", igid => setIGID(igid));
