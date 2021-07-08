@@ -92,3 +92,21 @@ function unhideElement(element)
 {
     document.getElementById(element).hidden = false;
 }
+
+function showErrorMessage(em)
+{
+    if(em == 0)
+        unhideElement("already_taken");
+    else
+        hideElement("already_taken");
+    
+    if(em == 1)
+        unhideElement("already_started");
+    else
+        hideElement("already_started");
+
+    if(em == 2)
+        unhideElement("doesnt_exists");
+    else
+        hideElement("doesnt_exists");
+}

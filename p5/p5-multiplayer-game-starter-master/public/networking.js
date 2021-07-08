@@ -17,8 +17,8 @@ socket.on("ready_player", (player_id, r) => playerReady(player_id, r));
 socket.on("room_OK", () => roomOk());
 
 socket.on("room_name_already_taken", () => roomNameAlreadyTaken());
-socket.on("room_name_doesnt_exists", () => roomNameDoesntExists());
 socket.on("room_game_already_started", () => roomGameAlreadyStarted());
+socket.on("room_name_doesnt_exists", () => roomNameDoesntExists());
 
 socket.on("start_map_gen", seed => startMapGeneration(seed));
 socket.on("request_regions_data", () => sendRegionsData());
@@ -65,6 +65,23 @@ function roomOk() // quando la stanza è pronta, varie procedure di setup lobby:
     hideElement("room_form");
     unhideElement("lobby_form");
 }
+
+function roomNameAlreadyTaken()
+{
+    showErrorMessage(0);
+}
+
+function roomGameAlreadyStarted()
+{
+    showErrorMessage(1);
+}
+
+
+function roomNameDoesntExists()
+{
+    showErrorMessage(2);
+}
+
 
 /*
 //setInterval(updateLocalPlayer, 10);
