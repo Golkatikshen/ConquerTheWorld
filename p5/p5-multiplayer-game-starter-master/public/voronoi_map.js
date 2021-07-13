@@ -211,6 +211,8 @@ function voronoiRegionsInit()
         region_cells.push(new RegionCell(is_land));
     }
 
+    calcRegionCentroids();
+
 
     //trova la cell più in alto a sinistra
     let most_top_left_index = 0;
@@ -308,6 +310,25 @@ function commonEdge(i, j)
     }
 
     return edge;
+}
+
+
+function calcRegionCentroids()
+{
+    for(let i=0; i<region_cells.length; i++) {
+        let conv_poly = voronoi_regions.cellPolygon(i);
+
+        // calc centroid polygon
+        let cx = 0, cy = 0;
+        for(let j=0; j<conv_poly.length; j++) {
+            cx += conv_poly[j][0];
+            cy += conv_poly[j][1];
+        }
+        cx /= conv_poly.length;
+        cy /= conv_poly.length;
+
+        region_cells[i].centroid = [cx, cy];
+    }
 }
 
 

@@ -23,10 +23,17 @@ function draw()
             image(physical_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         drawRegionHovered();
 
+        for(const r of region_cells) {
+            if(r instanceof RegionCell) {
+                r.display();
+            }
+        }
+        
+
         fill(255, 255, 0);
         text("FPS: " + int(frameRate()), 10, 20);
         text("Gen time: " + nf(gen_time, 0, 2) + " seconds", 10, 40);
-        text("Region biome: " + regionBiomeToString(region_cells[current_region]), 10, 60);
+        text("Region biome (" + current_region + "): " + regionBiomeToString(region_cells[current_region]), 10, 60);
         
 
         // movement screen with mouse close to edges
