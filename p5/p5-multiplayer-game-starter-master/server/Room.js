@@ -7,6 +7,7 @@ export class Room {
         this.game_started = false;
         this.players = [];
 
+        this.data_requested = false;
         this.points_regions = null;
         this.voronoi_regions = null;
         this.region_cells = null;

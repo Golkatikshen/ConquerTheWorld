@@ -54,7 +54,7 @@ function addPlayersList(players_list)
     console.log(players);
     document.getElementById("lobby_name").innerHTML = "Lobby: " + players[0].room_name;
 
-    // TODO: forse bisogna sostituire il local player con quello in player_list
+    // DONE: forse bisogna sostituire il local player con quello in player_list
     local_player = players.find(e => e.id === local_player.id);
 
     updateLobbyList();

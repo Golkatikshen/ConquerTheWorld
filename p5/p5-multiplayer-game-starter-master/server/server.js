@@ -139,7 +139,8 @@ io.sockets.on("connection", socket => {
         p.gen_done = true;
 
         let room = getRoom(p.room_name);
-        if(!room.voronoi_regions) {
+        if(!room.data_requested) {
+            room.data_requested = true;
             console.log("map data requested");
             socket.emit("request_regions_data");
         }

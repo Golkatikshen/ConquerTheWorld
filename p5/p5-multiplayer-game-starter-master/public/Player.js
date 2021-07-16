@@ -5,6 +5,7 @@ class Player {
     this.room_name = player.room_name;
     this.ready = player.ready;
     this.igid = -1;
+    this.capital = player.capital;
   }
 
   display()

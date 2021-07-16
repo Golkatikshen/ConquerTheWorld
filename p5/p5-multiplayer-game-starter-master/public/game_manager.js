@@ -70,15 +70,6 @@ function drawRegion(index_region)
 }
 
 
-function conquestAttempt()
-{
-    if(game_started) {
-        if(region_cells[current_region].is_land) {
-            socket.emit("conquest_attempt", local_player.igid, current_region);
-        }
-    }   
-}
-
 
 function updateRegionCells(updated_region_cells)
 {
@@ -147,4 +138,20 @@ function updateRegionsOverlay()
         r.displayUnits(regions_overlay);
     }
     //regions_overlay.textAlign(LEFT, TOP);
+}
+
+
+
+
+// ################
+// NETWORK COMMANDS
+// ################
+
+function conquestAttempt()
+{
+    if(game_started) {
+        if(region_cells[current_region].is_land) {
+            socket.emit("conquest_attempt", local_player.igid, current_region);
+        }
+    }   
 }
