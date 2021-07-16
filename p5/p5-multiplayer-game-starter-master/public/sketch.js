@@ -21,13 +21,10 @@ function draw()
             image(political_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         else
             image(physical_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+        image(regions_overlay, -off_x, -off_y, map_width*zoom, map_height*zoom);
         drawRegionHovered();
 
-        for(const r of region_cells) {
-            if(r instanceof RegionCell) {
-                r.display();
-            }
-        }
+        
         
 
         fill(255, 255, 0);

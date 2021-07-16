@@ -5,6 +5,7 @@ let game_started = false;
 
 let physical_borders_image;
 let political_borders_image;
+let regions_overlay;
 
 async function startMapGeneration(seed)
 {
@@ -17,6 +18,7 @@ async function startMapGeneration(seed)
         let start = millis();
         worldInit(seed);
         updateBordersImages();
+        updateRegionsOverlay();
         gen_time = (millis()-start)/1000;
 
         hideElement("generating");
@@ -95,6 +97,8 @@ function updateRegionCells(updated_region_cells)
     if(borders_changed) {
         updateBordersImages();
     }
+
+    updateRegionsOverlay();
 }
 
 
@@ -132,9 +136,15 @@ function updateBordersImages()
     }
 }
 
-function scaleVector(v, cp, scale)
+
+function updateRegionsOverlay()
 {
-    let x = (v[0]-cp[0])*scale + cp[0];
-    let y = (v[1]-cp[1])*scale + cp[1];
-    return [x, y];
+    regions_overlay = createGraphics(map_width, map_height);
+
+    regions_overlay.textAlign(CENTER, CENTER);
+    regions_overlay.fill(0);
+    for(const r of region_cells) {
+        r.displayUnits(regions_overlay);
+    }
+    //regions_overlay.textAlign(LEFT, TOP);
 }

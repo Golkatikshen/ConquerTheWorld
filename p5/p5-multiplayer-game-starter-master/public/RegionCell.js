@@ -10,15 +10,13 @@ class RegionCell // mostly gameplay support
         this.h = 0; // land biome
 
         this.igid_owner = -1;
-        this.units = 1;
+        this.units = 0;
         this.is_capital = false;
     }
 
-    display()
+    displayUnits(ctx)
     {
-        textAlign(CENTER, CENTER);
-        fill(0);
-        text(this.units, this.centroid[0], this.centroid[1]);
-        //textAlign(LEFT, TOP);
+        if(this.units > 0)
+            ctx.text(this.units, this.centroid[0], this.centroid[1]);
     }
 }
