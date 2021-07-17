@@ -43,8 +43,15 @@ function setIGID(igid)
     local_player.igid = igid;
 }
 
-function startGame()
+function startGame(capitals)
 {
+    for(let i=0; i<players.length; i++) {
+        players[i].capital = capitals[players[i].id];
+        region_cells[capitals[players[i].id]].is_capital = true;
+    }
+
+    console.log(local_player);
+
     hideElement("waiting_players");
     hideElement("messages");
     hideElement("game_title");

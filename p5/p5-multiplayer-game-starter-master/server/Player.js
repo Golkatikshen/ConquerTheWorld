@@ -1,7 +1,7 @@
 
 
 export class Player {
-  constructor(id, name, capital)
+  constructor(id, name)
   {
     this.id = id;
     this.name = name;
@@ -9,7 +9,7 @@ export class Player {
     this.ready = false; // default val, no meaning at the moment of construction
     this.gen_done = false;
     this.igid = -1; // in game id (0,1,2,...,n_max)
-    this.capital = capital; // index of the region where the capital of this player is located
+    this.capital = -1; // index of the region where the capital of this player is located
   }
 }
 

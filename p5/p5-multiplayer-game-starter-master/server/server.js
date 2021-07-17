@@ -166,14 +166,14 @@ io.sockets.on("connection", socket => {
         room.region_cells[index_cell].igid_owner = igid;
     });
 
-    socket.on("update", data => {
+    /*socket.on("update", data => {
         console.log("update");
-        /*for (let i = 0; i < players.length; i++) {
+        for (let i = 0; i < players.length; i++) {
             if(players[i].id == socket.id) {
 
             }
-        }*/
-    });
+        }
+    });*/
 
     socket.on("disconnect", () => {
         console.log("Disconnected: " + socket.id);

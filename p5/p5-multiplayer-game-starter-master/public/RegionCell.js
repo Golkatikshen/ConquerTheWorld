@@ -19,4 +19,10 @@ class RegionCell // mostly gameplay support
         if(this.units > 0)
             ctx.text(this.units, this.centroid[0], this.centroid[1]);
     }
+
+    displayCapital(ctx)
+    {
+        if(this.is_capital)
+            ctx.text("C", this.centroid[0], this.centroid[1]-10);
+    }
 }
