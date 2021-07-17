@@ -317,15 +317,22 @@ function calcRegionCentroids()
 {
     for(let i=0; i<region_cells.length; i++) {
         let conv_poly = voronoi_regions.cellPolygon(i);
+        conv_poly.push(conv_poly[0]);
 
         // calc centroid polygon
-        let cx = 0, cy = 0;
-        for(let j=0; j<conv_poly.length; j++) {
-            cx += conv_poly[j][0];
-            cy += conv_poly[j][1];
+        let A = 0;
+        for(let j=0; j<conv_poly.length-1; j++) {
+            A += (conv_poly[j][0]*conv_poly[j+1][1]-conv_poly[j+1][0]*conv_poly[j][1]);
         }
-        cx /= conv_poly.length;
-        cy /= conv_poly.length;
+        A /= 2;
+
+        let cx = 0, cy = 0;
+        for(let j=0; j<conv_poly.length-1; j++) {
+            cx += (conv_poly[j][0]+conv_poly[j+1][0])*(conv_poly[j][0]*conv_poly[j+1][1]-conv_poly[j+1][0]*conv_poly[j][1]);
+            cy += (conv_poly[j][1]+conv_poly[j+1][1])*(conv_poly[j][0]*conv_poly[j+1][1]-conv_poly[j+1][0]*conv_poly[j][1]);
+        }
+        cx /= 6*A;
+        cy /= 6*A;
 
         region_cells[i].centroid = [cx, cy];
     }

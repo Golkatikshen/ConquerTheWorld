@@ -44,13 +44,13 @@ let guest_counter = 0;
 
 // ###### BEG SERVER-CLINET HANDLING ######
 
-setInterval(updateGame, 1000);
+setInterval(updateGame, 5000);
 function updateGame()
 {
     for(let i=0; i<rooms.length; i++)
     {
         if(rooms[i].game_started && rooms[i].region_cells) {
-            // QUI CI VORRANNO RESOLUTIONS DI CONFLITTI
+            // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
             io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
         }
     }
@@ -237,7 +237,6 @@ function genCapitals(room)
         room.players[i].capital = c;
         room.region_cells[c].is_capital = true;
         room.region_cells[c].igid_owner = room.players[i].igid;
-        console.log(room.players[i].igid);
         room.region_cells[c].units = 3;
 
         land_indexes.splice(index, 1);
