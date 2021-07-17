@@ -1,11 +1,15 @@
 
-let current_region = 0;
+let current_region = 0; // hovering
 let gen_time = 0;
 let game_started = false;
 
 let physical_borders_image;
 let political_borders_image;
 let regions_overlay;
+
+let actions_queue = [];
+let selected_region = -1;
+
 
 async function startMapGeneration(seed)
 {
@@ -43,6 +47,15 @@ function drawRegionHovered()
     fill(255, 20);
     noStroke();
     drawRegion(current_region)
+}
+
+function drawRegionSelected()
+{
+    if(selected_region !== -1) {
+        fill(255, 255, 0, 20);
+        noStroke();
+        drawRegion(selected_region);
+    }
 }
 
 function drawRegionsConquered()
@@ -149,11 +162,12 @@ function updateRegionsOverlay()
 // NETWORK COMMANDS
 // ################
 
-function conquestAttempt()
+/*function conquestAttempt()
 {
     if(game_started) {
         if(region_cells[current_region].is_land) {
             socket.emit("conquest_attempt", local_player.igid, current_region);
         }
     }   
-}
+}*/
+

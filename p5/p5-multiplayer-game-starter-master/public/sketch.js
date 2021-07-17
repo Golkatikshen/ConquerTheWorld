@@ -23,8 +23,7 @@ function draw()
             image(physical_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         image(regions_overlay, -off_x, -off_y, map_width*zoom, map_height*zoom);
         drawRegionHovered();
-
-        
+        drawRegionSelected();
         
 
         fill(255, 255, 0);
@@ -59,8 +58,17 @@ function draw()
 
 function mouseClicked()
 {
-    if(mouseButton == LEFT) {
-        conquestAttempt();
+    if(game_started)
+    {
+        if(mouseButton == LEFT) {
+            if(currentInSelectedAdjacents(selected_region, current_region)) {
+                moveUnits(selected_region, current_region);
+                selected_region = -1; // deselect region
+            }
+            else {
+                selected_region = setSelectedRegion(current_region);
+            }
+        }
     }
 
     return false;

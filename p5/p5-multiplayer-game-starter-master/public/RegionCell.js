@@ -12,6 +12,8 @@ class RegionCell // mostly gameplay support
         this.igid_owner = -1;
         this.units = 0;
         this.is_capital = false;
+
+        this.move_here_from = [];
     }
 
     displayUnits(ctx)
