@@ -46,11 +46,15 @@ function setIGID(igid)
 function startGame(capitals)
 {
     for(let i=0; i<players.length; i++) {
-        players[i].capital = capitals[players[i].id];
-        region_cells[capitals[players[i].id]].is_capital = true;
+        let c = capitals[players[i].id];
+        players[i].capital = c;
+        region_cells[c].is_capital = true;
+        region_cells[c].igid_owner = players[i].igid;
+        console.log(players[i].igid);
+        region_cells[c].units = 3;
     }
 
-    console.log(local_player);
+    updateBordersImages();
 
     hideElement("waiting_players");
     hideElement("messages");

@@ -129,6 +129,7 @@ io.sockets.on("connection", socket => {
         io.in(p.room_name).emit("ready_player", p.id, p.ready);
 
         if(checkAllReadyInRoom(p.room_name)) {
+            let room = getRoom(p.room_name);
             room.game_starting = true;
             startMapGenAndSendIGIDs(p.room_name);
         }
@@ -146,9 +147,9 @@ io.sockets.on("connection", socket => {
             socket.emit("request_regions_data");
         }
 
-        if(checkAllGenDoneInRoom(p.room_name)) {
-            room.game_started = true;
+        if(checkAllGenDoneInRoom(p.room_name) && room.region_cells) {
             io.in(p.room_name).emit("start_game", genCapitals(room));
+            room.game_started = true;
         }
     });
 
@@ -158,6 +159,11 @@ io.sockets.on("connection", socket => {
         room.region_cells = cells;
         room.genVoronoi();
         console.log("map data received");
+
+        if(checkAllGenDoneInRoom(room.name)) {
+            io.in(room.name).emit("start_game", genCapitals(room));
+            room.game_started = true;
+        }
     });
 
 
@@ -214,7 +220,7 @@ io.sockets.on("connection", socket => {
 // will correspond at the places where each player will have the Capital
 function genCapitals(room)
 {
-    land_indexes = [];
+    let land_indexes = [];
     for(let i=0; i<room.region_cells.length; i++) {
         if(room.region_cells[i].is_land) {
             land_indexes.push(i);
@@ -222,10 +228,18 @@ function genCapitals(room)
     }
 
     let pl_cap_dict = {};
-    for(let i=0; i<room.region_cells.length; i++) {
+    for(let i=0; i<room.players.length; i++) {
         let index = Math.floor(Math.random()*land_indexes.length);
-        room.players[i].capital = land_indexes[index];
-        pl_cap_dict[room.players[i].id] = land_indexes[index];
+        let c = land_indexes[index];
+
+        pl_cap_dict[room.players[i].id] = c;
+
+        room.players[i].capital = c;
+        room.region_cells[c].is_capital = true;
+        room.region_cells[c].igid_owner = room.players[i].igid;
+        console.log(room.players[i].igid);
+        room.region_cells[c].units = 3;
+
         land_indexes.splice(index, 1);
     }
 
@@ -246,6 +260,7 @@ function startMapGenAndSendIGIDs(room_name)
 {
     let room = getRoom(room_name);
     for(let i=0; i<room.players.length; i++) {
+        room.players[i].igid = i;
         io.to(room.players[i].id).emit("set_igid", i);
     }
     io.in(room_name).emit("start_map_gen", room.seed);
