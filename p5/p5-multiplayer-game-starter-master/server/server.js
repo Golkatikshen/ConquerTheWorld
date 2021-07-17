@@ -51,6 +51,10 @@ function updateGame()
     {
         if(rooms[i].game_started && rooms[i].region_cells) {
             // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
+            for(let j=0; j<rooms[i].region_cells.length; j++) {
+                
+            }
+
             io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
         }
     }
@@ -167,10 +171,15 @@ io.sockets.on("connection", socket => {
     });
 
 
-    socket.on("conquest_attempt", (igid, index_cell) => {
+    socket.on("move_units", (from_reg, to_reg) => {
+        let room = getRoomFromPlayer(socket.id);
+        room.region_cells[to_reg].move_here_from.push(from_reg);
+    });
+
+    /*socket.on("conquest_attempt", (igid, index_cell) => {
         let room = getRoomFromPlayer(socket.id);
         room.region_cells[index_cell].igid_owner = igid;
-    });
+    });*/
 
     /*socket.on("update", data => {
         console.log("update");

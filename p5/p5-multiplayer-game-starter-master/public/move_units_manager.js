@@ -11,7 +11,8 @@ function currentInSelectedAdjacents(sel_reg, cur_reg)
 
 function setSelectedRegion(cur_reg)
 {
-    if(region_cells[cur_reg].igid_owner === local_player.igid) {
+    if(region_cells[cur_reg].igid_owner === local_player.igid &&
+       region_cells[cur_reg].units > 0) {
         return cur_reg;
     }
     else {
@@ -19,9 +20,7 @@ function setSelectedRegion(cur_reg)
     }
 }
 
-function moveUnits(sel_reg, cur_reg)
+function moveUnits(from_reg, to_reg)
 {
-    if(region_cells[current_region].is_land) {
-        socket.emit("conquest_attempt", local_player.igid, current_region);
-    }
+    socket.emit("move_units", from_reg, to_reg);
 }
