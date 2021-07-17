@@ -4,6 +4,7 @@ export class Room {
     constructor(name, seed) {
         this.name = name;
         this.seed = seed;
+        this.game_starting = false;
         this.game_started = false;
         this.players = [];
 

@@ -21,7 +21,7 @@ socket.on("room_name_doesnt_exist", () => roomNameDoesntExist());
 socket.on("start_map_gen", seed => startMapGeneration(seed));
 socket.on("request_regions_data", () => sendRegionsData());
 socket.on("set_igid", igid => setIGID(igid));
-socket.on("start_game", () => startGame());
+socket.on("start_game", capitals => startGame(capitals));
 
 socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
 

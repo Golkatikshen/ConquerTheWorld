@@ -102,7 +102,7 @@ io.sockets.on("connection", socket => {
         console.log("join_room");
         let room = getRoom(room_name);
         if(room) {
-            if(!room.game_started && room.players.length < 5) {
+            if(!room.game_starting && room.players.length < 5) {
                 addPlayerToRoom(room, socket.id);
 
                 socket.join(room_name);
@@ -129,6 +129,7 @@ io.sockets.on("connection", socket => {
         io.in(p.room_name).emit("ready_player", p.id, p.ready);
 
         if(checkAllReadyInRoom(p.room_name)) {
+            room.game_starting = true;
             startMapGenAndSendIGIDs(p.room_name);
         }
     });
@@ -147,7 +148,7 @@ io.sockets.on("connection", socket => {
 
         if(checkAllGenDoneInRoom(p.room_name)) {
             room.game_started = true;
-            io.in(p.room_name).emit("start_game");
+            io.in(p.room_name).emit("start_game", genCapitals(room));
         }
     });
 
@@ -192,7 +193,7 @@ io.sockets.on("connection", socket => {
                     removeRoom(room_name);
                 }
 
-                if(checkAllReadyInRoom(room_name) && !room.game_started) {
+                if(checkAllReadyInRoom(room_name) && !room.game_starting) {
                     startMapGenAndSendIGIDs(room_name);
                 }
             }
@@ -208,6 +209,28 @@ io.sockets.on("connection", socket => {
 
 // ##### UTILITY AND NET FUNCS #####
 
+
+// this function assigns randomly some indexes associated with land of the map, which
+// will correspond at the places where each player will have the Capital
+function genCapitals(room)
+{
+    land_indexes = [];
+    for(let i=0; i<room.region_cells.length; i++) {
+        if(room.region_cells[i].is_land) {
+            land_indexes.push(i);
+        }
+    }
+
+    let pl_cap_dict = {};
+    for(let i=0; i<room.region_cells.length; i++) {
+        let index = Math.floor(Math.random()*land_indexes.length);
+        room.players[i].capital = land_indexes[index];
+        pl_cap_dict[room.players[i].id] = land_indexes[index];
+        land_indexes.splice(index, 1);
+    }
+
+    return pl_cap_dict;
+}
 
 function removeRoom(room_name)
 {    
