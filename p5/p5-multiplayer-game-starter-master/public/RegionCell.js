@@ -9,7 +9,7 @@ class RegionCell // mostly gameplay support
         this.visited = false;
         this.h = 0; // land biome
 
-        this.igid_owner = -1;
+        this.igid_owner = -1; // -1 = di nessuno
         this.units = 0;
         this.is_capital = false;
 

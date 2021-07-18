@@ -52,13 +52,73 @@ function updateGame()
         if(rooms[i].game_started && rooms[i].region_cells) {
             // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
             for(let j=0; j<rooms[i].region_cells.length; j++) {
-                
+                // generazione unità ogni tick
+                if(rooms[i].region_cells[j].is_capital) {
+                    if(rooms[i].region_cells[j].units < 5) {
+                        rooms[i].region_cells[j].units += 1;
+                    }
+                }
+
+                resolveRegion(rooms[i], j);
             }
 
             io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
         }
     }
 }
+
+function resolveRegion(room, index)
+{
+    n_units_pp = {}; // number of units per player going for or already inside the region
+    
+    // inizializzazione dizionario
+    for(p of room.players) {
+        n_units_pp[p.igid] = 0;
+    }
+
+    // definizione dizionario delle forze militari dei contendenti
+    let region = room.region_cells[index];
+    for(let i=0; i<region.move_here_from.length; i++) {
+        let p_igid = room.region_cells[region.move_here_from[i]].igid_owner;
+        let n_units = room.region_cells[region.move_here_from[i]].units;
+
+        n_units_pp[p_igid] += n_units;
+    }
+
+    // le unità già dentro contribuiscono me quelle che attaccano o danno manforte
+    if(region.igid_owner !== -1) {
+        n_units_pp[region.igid_owner] += region.units;
+    }
+
+    // trovo il migliore e il secondo migliore
+    let max1 = 0, mem1, max2 = 0, mem2;
+    for(p of room.players) {
+        if(n_units_pp[p.igid] > max1) {
+            max1 = n_units_pp[p.igid];
+            mem1 = p.igid;
+
+            if(max1 > max2) {
+                max2 = max1;
+                mem1 = mem2;
+            }
+        }
+        else if(n_units_pp[p.igid] > max2) {
+            max2 = n_units_pp[p.igid];
+            mem2 = p.igid;
+        }
+    }
+
+    //il più forte conquista la regione
+    //e perde tante forze militari quante ne aveva il secondo più forte
+
+    //tutti gli altri perdono tutte le forze militari
+
+    //se avanzano forze militari (più di 5), vengono rimesse nelle regioni di proveniente
+    //percorrendo in senso inverso l'array move_here_from
+    //gestire bene la situazione di manforte
+}
+
+
 
 io.sockets.on("connection", socket => {
     console.log("New connection: " + socket.id);
