@@ -69,6 +69,12 @@ function updateGame()
 
 function resolveRegion(room, index)
 {
+    let region = room.region_cells[index];
+
+    if(region.move_here_from.length == 0)
+        return;
+    
+
     n_units_pp = {}; // number of units per player going for or already inside the region
     
     // inizializzazione dizionario
@@ -77,7 +83,7 @@ function resolveRegion(room, index)
     }
 
     // definizione dizionario delle forze militari dei contendenti
-    let region = room.region_cells[index];
+    
     for(let i=0; i<region.move_here_from.length; i++) {
         let p_igid = room.region_cells[region.move_here_from[i]].igid_owner;
         let n_units = room.region_cells[region.move_here_from[i]].units;
@@ -91,16 +97,14 @@ function resolveRegion(room, index)
     }
 
     // trovo il migliore e il secondo migliore
-    let max1 = 0, mem1, max2 = 0, mem2;
+    let max1 = -1, mem1 = -1, max2 = -1, mem2 = -1;
     for(p of room.players) {
         if(n_units_pp[p.igid] > max1) {
+            max2 = max1;
+            mem2 = mem1;
+
             max1 = n_units_pp[p.igid];
             mem1 = p.igid;
-
-            if(max1 > max2) {
-                max2 = max1;
-                mem1 = mem2;
-            }
         }
         else if(n_units_pp[p.igid] > max2) {
             max2 = n_units_pp[p.igid];
@@ -109,13 +113,31 @@ function resolveRegion(room, index)
     }
 
     //il più forte conquista la regione
+    region.igid_owner = mem1;
+
     //e perde tante forze militari quante ne aveva il secondo più forte
+    n_units_pp[mem1] -= max2;
 
     //tutti gli altri perdono tutte le forze militari
+    for(p of room.players) {
+        if(p.igid != mem1) {
+            n_units_pp[p.igid] = 0;
+        }
+    }
 
-    //se avanzano forze militari (più di 5), vengono rimesse nelle regioni di proveniente
-    //percorrendo in senso inverso l'array move_here_from
-    //gestire bene la situazione di manforte
+    //ridistribuzione nelle regioni forze militari
+    // se avanzano forze militari (più di 5), vengono rimesse nelle regioni di proveniente
+    // percorrendo in senso inverso l'array move_here_from
+    // gestire bene la situazione di manforte
+
+    region.units = Math.min(5, n_units_pp[mem1]);
+    n_units_pp[mem1] = Math.max(n_units_pp[mem1]-5, 0);
+
+    for(let i=region.move_here_from.length-1; i>=0; i--) {
+        let r = room.region_cells[region.move_here_from[i]];
+        r.units = Math.min(5, n_units_pp[r.igid_owner]);
+        n_units_pp[r.igid_owner] = Math.max(n_units_pp[r.igid_owner]-5, 0);
+    }
 }
 
 
