@@ -11,7 +11,7 @@ class RegionCell // mostly gameplay support
 
         this.igid_owner = -1; // -1 = di nessuno
         this.units = 0;
-        //this.next_igid_owner = -1;  //cellular automata behaviour
+        this.next_igid_owner = -1;  //cellular automata behaviour
         //this.next_units = 0;        //cellular automata behaviour
         this.moved_units = 0;
 

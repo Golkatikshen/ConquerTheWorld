@@ -53,9 +53,11 @@ function updateGame()
             // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
             for(let j=0; j<rooms[i].region_cells.length; j++) {
                 // muoviamo tutte le unità
-                if(rooms[i].region_cells[j].moving) {
-                    rooms[i].region_cells[j].moved_units = rooms[i].region_cells[j].units;
-                    rooms[i].region_cells[j].units = 0;
+                let r = rooms[i].region_cells[j];
+                r.next_igid_owner = r.igid_owner;
+                if(r.moving) {
+                    r.moved_units = r.units;
+                    r.units = 0;
                 }
             }
 
@@ -79,8 +81,10 @@ function updateGame()
 
                 //togliere possessione mare/laghi se non c'è nessuno sopra
                 if(r.units == 0 && !r.is_land) {
-                    r.igid_owner = -1;
+                    r.next_igid_owner = -1;
                 }
+
+                r.igid_owner = r.next_igid_owner;
             }
 
             io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
@@ -116,12 +120,12 @@ function resolveRegion(room, index)
 
     // le unità già dentro contribuiscono come quelle che attaccano o danno manforte
     // se non si stanno muovendo per andare da un'altra parte
-    if(region.igid_owner !== -1 && !region.moving) {
+    if(region.igid_owner !== -1 && !region.moving) { // ridondante, se si muovono => region.units = 0
         n_units_pp[region.igid_owner] += region.units;
     }
 
     // trovo il migliore e il secondo migliore
-    let max1 = 0, mem1 = -1, max2 = 0, mem2 = -1;
+    let max1 = -1, mem1 = -1, max2 = -1, mem2 = -1;
     for(let p of room.players) {
         if(n_units_pp[p.igid] > max1) {
             max2 = max1;
@@ -137,33 +141,23 @@ function resolveRegion(room, index)
     }
 
     //il più forte conquista la regione
-    //region.next_igid_owner = mem1;
     if(region.igid_owner != mem1)
         region.is_capital = false;
-    region.igid_owner = mem1;
+    //region.igid_owner = mem1;
+    region.next_igid_owner = mem1;
 
     //e perde tante forze militari quante ne aveva il secondo più forte
     n_units_pp[mem1] -= max2;
 
     //tutti gli altri perdono tutte le forze militari
-    for(let p of room.players) {
+    /*for(let p of room.players) {
         if(p.igid != mem1) {
             n_units_pp[p.igid] = 0;
         }
-    }
-
-    //ridistribuzione nelle regioni forze militari
-    // se avanzano forze militari (più di 5), vengono rimesse nelle regioni di proveniente
-    // percorrendo in senso inverso l'array move_here_from
-    // gestire bene la situazione di manforte
+    }*/
 
     //region.next_units = n_units_pp[mem1];
     region.units = n_units_pp[mem1];
-    /*for(let i=region.move_here_from.length-1; i>=0; i--) {
-        let r = room.region_cells[region.move_here_from[i]];
-        r.next_units = Math.min(5, n_units_pp[r.igid_owner]);
-        n_units_pp[r.igid_owner] = Math.max(n_units_pp[r.igid_owner]-5, 0);
-    }*/
 
     // reset array moves
     region.move_here_from = [];
