@@ -12,7 +12,8 @@ function currentInSelectedAdjacents(sel_reg, cur_reg)
 function setSelectedRegion(cur_reg)
 {
     if(region_cells[cur_reg].igid_owner === local_player.igid &&
-       region_cells[cur_reg].units > 0) {
+       region_cells[cur_reg].units > 0 &&
+       !region_cells[cur_reg].in_queue) {
         return cur_reg;
     }
     else {
@@ -23,5 +24,6 @@ function setSelectedRegion(cur_reg)
 function moveUnits(from_reg, to_reg)
 {
     actions_queue.push(new Action_MoveUnits(from_reg, to_reg));
+    region_cells[from_reg].in_queue = true;
     socket.emit("move_units", from_reg, to_reg);
 }

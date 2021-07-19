@@ -87,7 +87,8 @@ function drawRegion(index_region)
 function updateRegionCells(updated_region_cells)
 {
     actions_queue = [];
-    
+    selected_region = -1;
+
     let borders_changed = false;
     for(let i=0; i<region_cells.length; i++) {
         if(region_cells[i].igid_owner !== updated_region_cells[i].igid_owner) {
@@ -97,6 +98,7 @@ function updateRegionCells(updated_region_cells)
         // update of attributes
         region_cells[i].igid_owner = updated_region_cells[i].igid_owner;
         region_cells[i].units = updated_region_cells[i].units;
+        region_cells[i].in_queue = false;
     }
 
 

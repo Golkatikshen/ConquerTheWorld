@@ -30,6 +30,7 @@ function draw()
         }
         
 
+        noStroke();
         fill(255, 255, 0);
         text("FPS: " + int(frameRate()), 10, 20);
         text("Gen time: " + nf(gen_time, 0, 2) + " seconds", 10, 40);

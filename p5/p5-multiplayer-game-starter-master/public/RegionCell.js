@@ -14,6 +14,8 @@ class RegionCell // mostly gameplay support
         //this.next_igid_owner = -1;  //cellular automata behaviour
         //this.next_units = 0;        //cellular automata behaviour
         this.moved_units = 0;
+
+        this.in_queue = false;
         
         this.is_capital = false;
 

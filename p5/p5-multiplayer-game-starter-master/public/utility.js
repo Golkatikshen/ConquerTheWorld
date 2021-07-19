@@ -7,12 +7,14 @@ function scaleVector(v, cp, scale)
 
 function arrow(x1, y1, x2, y2)
 {
-    line(x1, y1, x2, y2);
-    pushMatrix();
-    translate(x2, y2);
+    stroke(20);
+    strokeWeight(3);
+    line(x1*zoom-off_x, y1*zoom-off_y, x2*zoom-off_x, y2*zoom-off_y);
+    push();
+    translate(x2*zoom-off_x, y2*zoom-off_y);
     let a = Math.atan2(x1-x2, y2-y1);
     rotate(a);
-    line(0, 0, -10, -10);
-    line(0, 0, 10, -10);
-    popMatrix();
+    line(0, 0, -5, -5);
+    line(0, 0, 5, -5);
+    pop();
 }
