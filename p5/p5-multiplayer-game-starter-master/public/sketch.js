@@ -24,6 +24,10 @@ function draw()
         image(regions_overlay, -off_x, -off_y, map_width*zoom, map_height*zoom);
         drawRegionHovered();
         drawRegionSelected();
+
+        for(let a of actions_queue) {
+            a.display();
+        }
         
 
         fill(255, 255, 0);

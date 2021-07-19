@@ -9,6 +9,8 @@ class Action_MoveUnits
 
     display()
     {
-        line(region_cells[from].centroid[0], region_cells[from].centroid[1], region_cells[to].centroid[0], region_cells[to].centroid[1]);
+        let f = region_cells[this.from];
+        let t = region_cells[this.to];
+        arrow(f.centroid[0], f.centroid[1], t.centroid[0], t.centroid[1]);
     }
 }

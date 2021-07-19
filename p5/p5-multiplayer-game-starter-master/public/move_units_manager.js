@@ -22,5 +22,6 @@ function setSelectedRegion(cur_reg)
 
 function moveUnits(from_reg, to_reg)
 {
+    actions_queue.push(new Action_MoveUnits(from_reg, to_reg));
     socket.emit("move_units", from_reg, to_reg);
 }

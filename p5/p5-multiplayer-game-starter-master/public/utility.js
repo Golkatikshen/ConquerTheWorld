@@ -4,3 +4,15 @@ function scaleVector(v, cp, scale)
     let y = (v[1]-cp[1])*scale + cp[1];
     return [x, y];
 }
+
+function arrow(x1, y1, x2, y2)
+{
+    line(x1, y1, x2, y2);
+    pushMatrix();
+    translate(x2, y2);
+    let a = Math.atan2(x1-x2, y2-y1);
+    rotate(a);
+    line(0, 0, -10, -10);
+    line(0, 0, 10, -10);
+    popMatrix();
+}

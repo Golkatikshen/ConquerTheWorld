@@ -52,7 +52,7 @@ function drawRegionHovered()
 function drawRegionSelected()
 {
     if(selected_region !== -1) {
-        fill(255, 255, 0, 20);
+        fill(255, 255, 0, 100);
         noStroke();
         drawRegion(selected_region);
     }
@@ -86,6 +86,8 @@ function drawRegion(index_region)
 
 function updateRegionCells(updated_region_cells)
 {
+    actions_queue = [];
+    
     let borders_changed = false;
     for(let i=0; i<region_cells.length; i++) {
         if(region_cells[i].igid_owner !== updated_region_cells[i].igid_owner) {
