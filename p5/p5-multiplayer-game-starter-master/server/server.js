@@ -72,9 +72,14 @@ function updateGame()
                 r.moved_units = 0;
                 r.moving = false;
 
-                // generazione unità ogni tick
+                // generazione unità ogni tick in capitale (in futuro anche edifici militari)
                 if(r.is_capital && r.units < 5) {
                     r.units += 1;
+                }
+
+                //togliere possessione mare/laghi se non c'è nessuno sopra
+                if(r.units == 0 && !r.is_land) {
+                    r.igid_owner = -1;
                 }
             }
 
