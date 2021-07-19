@@ -98,6 +98,7 @@ function updateRegionCells(updated_region_cells)
         // update of attributes
         region_cells[i].igid_owner = updated_region_cells[i].igid_owner;
         region_cells[i].units = updated_region_cells[i].units;
+        region_cells[i].is_capital = updated_region_cells[i].is_capital;
         region_cells[i].in_queue = false;
     }
 

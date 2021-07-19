@@ -138,6 +138,8 @@ function resolveRegion(room, index)
 
     //il più forte conquista la regione
     //region.next_igid_owner = mem1;
+    if(region.igid_owner != mem1)
+        region.is_capital = false;
     region.igid_owner = mem1;
 
     //e perde tante forze militari quante ne aveva il secondo più forte
