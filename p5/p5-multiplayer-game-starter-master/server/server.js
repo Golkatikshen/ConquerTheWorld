@@ -52,14 +52,30 @@ function updateGame()
         if(rooms[i].game_started && rooms[i].region_cells) {
             // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
             for(let j=0; j<rooms[i].region_cells.length; j++) {
-                // generazione unità ogni tick
-                if(rooms[i].region_cells[j].is_capital) {
-                    if(rooms[i].region_cells[j].units < 5) {
-                        rooms[i].region_cells[j].units += 1;
-                    }
+                // muoviamo tutte le unità
+                if(rooms[i].region_cells[j].moving) {
+                    rooms[i].region_cells[j].moved_units = rooms[i].region_cells[j].units;
+                    rooms[i].region_cells[j].units = 0;
                 }
+            }
 
+            // risolviamo i movimenti
+            for(let j=0; j<rooms[i].region_cells.length; j++) {
                 resolveRegion(rooms[i], j);
+            }
+
+            // update regions for next global state
+            for(let j=0; j<rooms[i].region_cells.length; j++) {
+                let r = rooms[i].region_cells[j];
+                //r.units = r.next_units;
+                //r.igid_owner = r.next_igid_owner;
+                r.moved_units = 0;
+                r.moving = false;
+
+                // generazione unità ogni tick
+                if(r.is_capital && r.units < 5) {
+                    r.units += 1;
+                }
             }
 
             io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
@@ -71,34 +87,37 @@ function resolveRegion(room, index)
 {
     let region = room.region_cells[index];
 
-    if(region.move_here_from.length == 0)
+    if(region.move_here_from.length === 0) {
+        //region.next_units = region.units;
+        //region.next_igid_owner = region.igid_owner;
         return;
+    }
     
 
-    n_units_pp = {}; // number of units per player going for or already inside the region
+    let n_units_pp = {}; // number of units per player going for or already inside the region
     
     // inizializzazione dizionario
-    for(p of room.players) {
+    for(let p of room.players) {
         n_units_pp[p.igid] = 0;
     }
 
     // definizione dizionario delle forze militari dei contendenti
-    
     for(let i=0; i<region.move_here_from.length; i++) {
         let p_igid = room.region_cells[region.move_here_from[i]].igid_owner;
-        let n_units = room.region_cells[region.move_here_from[i]].units;
+        let n_units = room.region_cells[region.move_here_from[i]].moved_units;
 
         n_units_pp[p_igid] += n_units;
     }
 
-    // le unità già dentro contribuiscono me quelle che attaccano o danno manforte
-    if(region.igid_owner !== -1) {
+    // le unità già dentro contribuiscono come quelle che attaccano o danno manforte
+    // se non si stanno muovendo per andare da un'altra parte
+    if(region.igid_owner !== -1 && !region.moving) {
         n_units_pp[region.igid_owner] += region.units;
     }
 
     // trovo il migliore e il secondo migliore
-    let max1 = -1, mem1 = -1, max2 = -1, mem2 = -1;
-    for(p of room.players) {
+    let max1 = 0, mem1 = -1, max2 = 0, mem2 = -1;
+    for(let p of room.players) {
         if(n_units_pp[p.igid] > max1) {
             max2 = max1;
             mem2 = mem1;
@@ -113,13 +132,14 @@ function resolveRegion(room, index)
     }
 
     //il più forte conquista la regione
+    //region.next_igid_owner = mem1;
     region.igid_owner = mem1;
 
     //e perde tante forze militari quante ne aveva il secondo più forte
     n_units_pp[mem1] -= max2;
 
     //tutti gli altri perdono tutte le forze militari
-    for(p of room.players) {
+    for(let p of room.players) {
         if(p.igid != mem1) {
             n_units_pp[p.igid] = 0;
         }
@@ -130,14 +150,16 @@ function resolveRegion(room, index)
     // percorrendo in senso inverso l'array move_here_from
     // gestire bene la situazione di manforte
 
-    region.units = Math.min(5, n_units_pp[mem1]);
-    n_units_pp[mem1] = Math.max(n_units_pp[mem1]-5, 0);
-
-    for(let i=region.move_here_from.length-1; i>=0; i--) {
+    //region.next_units = n_units_pp[mem1];
+    region.units = n_units_pp[mem1];
+    /*for(let i=region.move_here_from.length-1; i>=0; i--) {
         let r = room.region_cells[region.move_here_from[i]];
-        r.units = Math.min(5, n_units_pp[r.igid_owner]);
+        r.next_units = Math.min(5, n_units_pp[r.igid_owner]);
         n_units_pp[r.igid_owner] = Math.max(n_units_pp[r.igid_owner]-5, 0);
-    }
+    }*/
+
+    // reset array moves
+    region.move_here_from = [];
 }
 
 
@@ -256,6 +278,7 @@ io.sockets.on("connection", socket => {
     socket.on("move_units", (from_reg, to_reg) => {
         let room = getRoomFromPlayer(socket.id);
         room.region_cells[to_reg].move_here_from.push(from_reg);
+        room.region_cells[from_reg].moving = true;
     });
 
     /*socket.on("conquest_attempt", (igid, index_cell) => {
