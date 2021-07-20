@@ -7,4 +7,24 @@ canvas {
     display: block;
 }
 
+.resources{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 12%;
+    width: 25%;
+    border-radius: 25px;
+    background-color: rgba(112, 112, 112, 0.472);
+}
+
+.playersnamesandscores{
+    position: absolute;
+    top: calc(15px + 12%);
+    right: 5px;
+    height: 150px;
+    width: 200px;
+    border-radius: 25px;
+    background-color: rgba(112, 112, 112, 0.472);
+}
+
 #contenu { position:relative; z-index:2; }
