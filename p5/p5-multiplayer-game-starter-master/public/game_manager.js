@@ -13,6 +13,8 @@ let selected_region = -1;
 let turn_timer = 0;
 let actions_stopped = false;
 
+let total_land = 0;
+
 
 async function startMapGeneration(seed)
 {
@@ -26,6 +28,13 @@ async function startMapGeneration(seed)
         worldInit(seed);
         updateBordersImages();
         updateRegionsOverlay();
+
+        for(let i=0; i<region_cells.length; i++) {
+            if(region_cells[i].is_land) {
+                total_land ++;
+            }
+        }
+
         gen_time = (millis()-start)/1000;
 
         hideElement("generating");

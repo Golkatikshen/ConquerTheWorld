@@ -151,8 +151,9 @@ function resolveRegion(room, index)
     }
 
     //il più forte conquista la regione
-    if(region.igid_owner != mem1)
-        region.is_capital = false;
+    //if(region.igid_owner != mem1) // capire se vale la pena distruggere la capitale o meno
+    //    region.is_capital = false;
+
     //region.igid_owner = mem1;
     region.next_igid_owner = mem1;
 
