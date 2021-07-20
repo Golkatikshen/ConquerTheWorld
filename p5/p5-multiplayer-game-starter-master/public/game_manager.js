@@ -10,6 +10,9 @@ let regions_overlay;
 let actions_queue = [];
 let selected_region = -1;
 
+let turn_timer = 0;
+let actions_stopped = false;
+
 
 async function startMapGeneration(seed)
 {
@@ -83,11 +86,14 @@ function drawRegion(index_region)
 }
 
 
-
+// MAIN UPDATE FUNCTION
 function updateRegionCells(updated_region_cells)
 {
     actions_queue = [];
     selected_region = -1;
+    turn_timer = 5000; // milliseconds
+    actions_stopped = false;
+
 
     let borders_changed = false;
     for(let i=0; i<region_cells.length; i++) {

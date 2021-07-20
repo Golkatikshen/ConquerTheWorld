@@ -36,6 +36,14 @@ function draw()
         text("Gen time: " + nf(gen_time, 0, 2) + " seconds", 10, 40);
         text("Region biome (" + current_region + "): " + regionBiomeToString(region_cells[current_region]), 10, 60);
         
+        if(actions_stopped)
+            fill(255, 0, 0);
+        text("Timer: " + nf(turn_timer/1000, 0, 2) + " seconds", 10, 80);
+        turn_timer -= deltaTime;
+        if(turn_timer < 0) {
+            turn_timer = 0;
+        }
+
 
         // movement screen with mouse close to edges
         if(mouseX < 50) {
@@ -63,7 +71,7 @@ function draw()
 
 function mouseClicked()
 {
-    if(game_started)
+    if(game_started && !actions_stopped)
     {
         if(mouseButton == LEFT) {
             if(currentInSelectedAdjacents(selected_region, current_region)) {
@@ -83,6 +91,23 @@ function keyPressed()
 {
     if(key == 'm' || key == 'M') {
         political_mode = !political_mode;
+    }
+
+    if(key == 'a' || key == 'A') {
+        off_x -= 5*zoom;
+        off_x = max(off_x, 0);
+    }
+    if(key == 'd' || key == 'D') {
+        off_x += 5*zoom;
+        off_x = min(off_x, map_width*zoom-windowWidth);
+    }
+    if(key == 'w' || key == 'W') {
+        off_y -= 5*zoom;
+        off_y = max(off_y, 0);
+    }
+    if(key == 's' || key == 'S') {
+        off_y += 5*zoom;
+        off_y = min(off_y, map_height*zoom-windowHeight);
     }
 }
 

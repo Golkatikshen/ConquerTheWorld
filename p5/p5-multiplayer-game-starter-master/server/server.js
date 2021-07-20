@@ -44,51 +44,55 @@ let guest_counter = 0;
 
 // ###### BEG SERVER-CLINET HANDLING ######
 
-setInterval(updateGame, 5000);
+setInterval(updateGame, 6000); // 1 secondo extra per il break-time
 function updateGame()
 {
     for(let i=0; i<rooms.length; i++)
     {
-        if(rooms[i].game_started && rooms[i].region_cells) {
-            // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
-            for(let j=0; j<rooms[i].region_cells.length; j++) {
-                // muoviamo tutte le unità
-                let r = rooms[i].region_cells[j];
-                r.next_igid_owner = r.igid_owner;
-                if(r.moving) {
-                    r.moved_units = r.units;
-                    r.units = 0;
-                }
-            }
+        io.in(rooms[i].name).emit("stop_actions");
 
-            // risolviamo i movimenti
-            for(let j=0; j<rooms[i].region_cells.length; j++) {
-                resolveRegion(rooms[i], j);
-            }
-
-            // update regions for next global state
-            for(let j=0; j<rooms[i].region_cells.length; j++) {
-                let r = rooms[i].region_cells[j];
-                //r.units = r.next_units;
-                //r.igid_owner = r.next_igid_owner;
-                r.moved_units = 0;
-                r.moving = false;
-
-                // generazione unità ogni tick in capitale (in futuro anche edifici militari)
-                if(r.is_capital && r.units < 5) {
-                    r.units += 1;
+        setTimeout( function() {
+            if(rooms[i].game_started && rooms[i].region_cells) {
+                // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
+                for(let j=0; j<rooms[i].region_cells.length; j++) {
+                    // muoviamo tutte le unità
+                    let r = rooms[i].region_cells[j];
+                    r.next_igid_owner = r.igid_owner;
+                    if(r.moving) {
+                        r.moved_units = r.units;
+                        r.units = 0;
+                    }
                 }
 
-                //togliere possessione mare/laghi se non c'è nessuno sopra
-                if(r.units == 0 && !r.is_land) {
-                    r.next_igid_owner = -1;
+                // risolviamo i movimenti
+                for(let j=0; j<rooms[i].region_cells.length; j++) {
+                    resolveRegion(rooms[i], j);
                 }
 
-                r.igid_owner = r.next_igid_owner;
-            }
+                // update regions for next global state
+                for(let j=0; j<rooms[i].region_cells.length; j++) {
+                    let r = rooms[i].region_cells[j];
+                    //r.units = r.next_units;
+                    //r.igid_owner = r.next_igid_owner;
+                    r.moved_units = 0;
+                    r.moving = false;
 
-            io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
-        }
+                    // generazione unità ogni tick in capitale (in futuro anche edifici militari)
+                    if(r.is_capital && r.units < 5) {
+                        r.units += 1;
+                    }
+
+                    //togliere possessione mare/laghi se non c'è nessuno sopra
+                    if(r.units == 0 && !r.is_land) {
+                        r.next_igid_owner = -1;
+                    }
+
+                    r.igid_owner = r.next_igid_owner;
+                }
+
+                io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
+            }
+        }, 1000); // 1 secondo di pausa
     }
 }
 
@@ -147,7 +151,8 @@ function resolveRegion(room, index)
     region.next_igid_owner = mem1;
 
     //e perde tante forze militari quante ne aveva il secondo più forte
-    n_units_pp[mem1] -= max2;
+    if(mem2 != -1)
+        n_units_pp[mem1] -= max2;
 
     //tutti gli altri perdono tutte le forze militari
     /*for(let p of room.players) {

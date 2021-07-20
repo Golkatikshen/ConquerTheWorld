@@ -18,3 +18,11 @@ function arrow(x1, y1, x2, y2)
     line(0, 0, 5, -5);
     pop();
 }
+
+/*let tcurr = millis(), tpast;
+function deltaTime()
+{
+    tpast = tcurr;
+    tcurr = millis();
+    return tcurr - tpast;
+}*/
