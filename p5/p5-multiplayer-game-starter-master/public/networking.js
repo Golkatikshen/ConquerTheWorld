@@ -50,10 +50,10 @@ function startGame(capitals)
         players[i].capital = c;
         region_cells[c].is_capital = true;
         region_cells[c].igid_owner = players[i].igid;
-        region_cells[c].units = 3;
     }
 
     updateBordersImages();
+    updateRegionsOverlay();
 
     hideElement("waiting_players");
     hideElement("messages");

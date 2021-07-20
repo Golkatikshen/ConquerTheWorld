@@ -49,6 +49,12 @@ function updateGame()
 {
     for(let i=0; i<rooms.length; i++)
     {
+        if(rooms[i].players.length == 0) {
+            removeRoom(rooms[i].name);
+            i--; // da verificare che sia corretto
+            continue;
+        }
+
         io.in(rooms[i].name).emit("stop_actions");
 
         setTimeout( function() {
@@ -315,10 +321,6 @@ io.sockets.on("connection", socket => {
                 socket.to(room_name).emit("remove_player", p.id);
                 room.players = room.players.filter(player => player.id !== socket.id);
                 
-                if(room.players.length == 0) {
-                    removeRoom(room_name);
-                }
-
                 if(checkAllReadyInRoom(room_name) && !room.game_starting) {
                     startMapGenAndSendIGIDs(room_name);
                 }
@@ -357,7 +359,6 @@ function genCapitals(room)
         room.players[i].capital = c;
         room.region_cells[c].is_capital = true;
         room.region_cells[c].igid_owner = room.players[i].igid;
-        room.region_cells[c].units = 3;
 
         land_indexes.splice(index, 1);
     }
