@@ -2,6 +2,8 @@
 let off_x = 0, off_y = 0, zoom = 1;
 let z_t = 0; // zoom times
 let political_mode = false;
+let w_pressed = false, a_pressed = false, s_pressed = false, d_pressed = false;
+
 
 function setup()
 {
@@ -46,19 +48,19 @@ function draw()
 
 
         // movement screen with mouse close to edges
-        if(mouseX < 50) {
+        if(mouseX < 50 || a_pressed) {
             off_x -= 5*zoom;
             off_x = max(off_x, 0);
         }
-        if(windowWidth - mouseX < 50) {
+        if(windowWidth - mouseX < 50 || d_pressed) {
             off_x += 5*zoom;
             off_x = min(off_x, map_width*zoom-windowWidth);
         }
-        if(mouseY < 50) {
+        if(mouseY < 50 || w_pressed) {
             off_y -= 5*zoom;
             off_y = max(off_y, 0);
         }
-        if(windowHeight - mouseY < 50) {
+        if(windowHeight - mouseY < 50 || s_pressed) {
             off_y += 5*zoom;
             off_y = min(off_y, map_height*zoom-windowHeight);
         }
@@ -94,20 +96,32 @@ function keyPressed()
     }
 
     if(key == 'a' || key == 'A') {
-        off_x -= 5*zoom;
-        off_x = max(off_x, 0);
+        a_pressed = true;
     }
     if(key == 'd' || key == 'D') {
-        off_x += 5*zoom;
-        off_x = min(off_x, map_width*zoom-windowWidth);
+        d_pressed = true;
     }
     if(key == 'w' || key == 'W') {
-        off_y -= 5*zoom;
-        off_y = max(off_y, 0);
+        w_pressed = true;
     }
     if(key == 's' || key == 'S') {
-        off_y += 5*zoom;
-        off_y = min(off_y, map_height*zoom-windowHeight);
+        s_pressed = true;
+    }
+}
+
+function keyReleased()
+{
+    if(key == 'a' || key == 'A') {
+        a_pressed = false;
+    }
+    if(key == 'd' || key == 'D') {
+        d_pressed = false;
+    }
+    if(key == 'w' || key == 'W') {
+        w_pressed = false;
+    }
+    if(key == 's' || key == 'S') {
+        s_pressed = false;
     }
 }
 
