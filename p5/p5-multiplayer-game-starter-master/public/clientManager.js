@@ -84,6 +84,38 @@ function removePlayer(player_id)
     updateLobbyList();
 }
 
+
+
+function updatePlayersRankings()
+{
+    let rank = [];
+
+    for(let i=0; i<players.length; i++) {
+        rank.push([int(p_count[players[i].igid]/total_land*100), players[i].name, players[i].igid]);
+    }
+
+    for(let i=0; i<rank.length-1; i++) {
+        for(let j=i+1; j<rank.length; j++) {
+            if(rank[i][0] > rank[j][0]) {
+                let tmp = rank[i];
+                rank[i] = rank[j];
+                rank[j] = tmp;
+            }
+        }
+    }
+
+    for(let i=0; i<rank.length; i++) {
+        let p = document.getElementById("pnas"+i+"_id");
+        p.style.color = getColorFromIGID(rank[i][2]);
+        let c = p.childNodes;
+        console.log(c);
+        c[1].innerHTML = rank[i][0]+"%";
+        c[3].innerHTML = rank[i][1];
+    }
+}
+
+
+
 function hideElement(element)
 {
     document.getElementById(element).hidden = true;

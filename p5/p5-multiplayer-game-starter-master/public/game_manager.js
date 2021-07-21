@@ -14,6 +14,7 @@ let turn_timer = 0;
 let actions_stopped = false;
 
 let total_land = 0;
+let p_count = {}; // numero di caselle che ogni giocatore possiede calcolato in updateRegionsCells
 
 
 async function startMapGeneration(seed)
@@ -103,6 +104,9 @@ function updateRegionCells(updated_region_cells)
     turn_timer = 5000; // milliseconds
     actions_stopped = false;
 
+    for(let i=0; i<players.length; i++) {
+        p_count[players[i].igid] = 0;
+    }
 
     let borders_changed = false;
     for(let i=0; i<region_cells.length; i++) {
@@ -115,6 +119,8 @@ function updateRegionCells(updated_region_cells)
         region_cells[i].units = updated_region_cells[i].units;
         region_cells[i].is_capital = updated_region_cells[i].is_capital;
         region_cells[i].in_queue = false;
+
+        p_count[region_cells[i].igid_owner] ++;
     }
 
 
@@ -123,6 +129,7 @@ function updateRegionCells(updated_region_cells)
     }
 
     updateRegionsOverlay();
+    updatePlayersRankings();
 }
 
 
