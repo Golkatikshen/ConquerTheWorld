@@ -382,7 +382,7 @@ function startMapGenAndSendIGIDs(room_name)
     let room = getRoom(room_name);
     for(let i=0; i<room.players.length; i++) {
         room.players[i].igid = i;
-        io.to(room.players[i].id).emit("set_igid", i);
+        io.in(room_name).emit("set_igid", room.players[i].id, i);
     }
     io.in(room_name).emit("start_map_gen", room.seed);
 }

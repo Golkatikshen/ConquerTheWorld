@@ -96,7 +96,7 @@ function updatePlayersRankings()
 
     for(let i=0; i<rank.length-1; i++) {
         for(let j=i+1; j<rank.length; j++) {
-            if(rank[i][0] > rank[j][0]) {
+            if(rank[i][0] < rank[j][0]) {
                 let tmp = rank[i];
                 rank[i] = rank[j];
                 rank[j] = tmp;
@@ -108,7 +108,6 @@ function updatePlayersRankings()
         let p = document.getElementById("pnas"+i+"_id");
         p.style.color = getColorFromIGID(rank[i][2]);
         let c = p.childNodes;
-        console.log(c);
         c[1].innerHTML = rank[i][0]+"%";
         c[3].innerHTML = rank[i][1];
     }

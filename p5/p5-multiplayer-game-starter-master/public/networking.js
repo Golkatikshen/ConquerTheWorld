@@ -1,6 +1,6 @@
 
-//const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
+//const socket = io.connect('http://localhost:3000');
 let world_generated = false;
 let players = [];
 let local_player;
@@ -20,7 +20,7 @@ socket.on("room_name_doesnt_exist", () => roomNameDoesntExist());
 
 socket.on("start_map_gen", seed => startMapGeneration(seed));
 socket.on("request_regions_data", () => sendRegionsData());
-socket.on("set_igid", igid => setIGID(igid));
+socket.on("set_igid", (player_id, igid) => setIGID(player_id, igid));
 socket.on("start_game", capitals => startGame(capitals));
 
 socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
@@ -37,10 +37,17 @@ function sendRegionsData()
     socket.emit("regions_data", points_regions, region_cells);
 }
 
-function setIGID(igid)
+function setIGID(p_id, igid)
 {
     // In game id (0,1,2,...)
-    local_player.igid = igid;
+    for(let i=0; i<players.length; i++) {
+        if(players[i].id == p_id) {
+            players[i].igid = igid;
+            return;
+        }
+    }
+    
+    //local_player.igid = igid;
 }
 
 function startGame(capitals)
@@ -58,6 +65,12 @@ function startGame(capitals)
     hideElement("waiting_players");
     hideElement("messages");
     hideElement("game_title");
+
+    for(let i=0; i<players.length; i++) {
+        unhideElement("pnas"+i+"_id")
+    }
+    unhideElement("hud");
+
     game_started = true;
 }
 
