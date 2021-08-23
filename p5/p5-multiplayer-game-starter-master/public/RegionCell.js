@@ -32,6 +32,7 @@ class RegionCell // mostly gameplay support
     displayCapital(ctx)
     {
         if(this.is_capital)
-            ctx.text("C", this.centroid[0], this.centroid[1]-10);
+            ctx.image(capital_img, this.centroid[0]-capital_img.width/2, this.centroid[1]-capital_img.height/2);
+            //ctx.text("C", this.centroid[0], this.centroid[1]-10);
     }
 }

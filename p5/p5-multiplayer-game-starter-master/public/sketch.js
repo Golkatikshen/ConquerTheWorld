@@ -3,6 +3,7 @@ let off_x = 0, off_y = 0, zoom = 1;
 let z_t = 0; // zoom times
 let political_mode = false;
 let w_pressed = false, a_pressed = false, s_pressed = false, d_pressed = false;
+let mouse_on_hud = false;
 
 
 function setup()
@@ -24,13 +25,16 @@ function draw()
         else
             image(physical_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
         image(regions_overlay, -off_x, -off_y, map_width*zoom, map_height*zoom);
-        drawRegionHovered();
+        
+        if(!mouse_on_hud) {
+            drawRegionHovered();
+        }
         drawRegionSelected();
 
         for(let a of actions_queue) {
             a.display();
         }
-        
+
 
         noStroke();
         fill(255, 255, 0);
@@ -76,7 +80,7 @@ function draw()
 
 function mouseClicked()
 {
-    if(game_started && !actions_stopped)
+    if(game_started && !actions_stopped && !mouse_on_hud)
     {
         if(mouseButton == LEFT) {
             if(currentInSelectedAdjacents(selected_region, current_region)) {

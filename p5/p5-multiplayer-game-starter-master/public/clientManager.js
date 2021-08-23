@@ -114,6 +114,17 @@ function updatePlayersRankings()
 }
 
 
+function onMouseEnterHUD()
+{
+    mouse_on_hud = true;
+}
+
+function onMouseLeaveHUD()
+{
+    mouse_on_hud = false;
+}
+
+
 
 function hideElement(element)
 {

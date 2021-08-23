@@ -172,12 +172,13 @@ function updateRegionsOverlay()
 {
     regions_overlay = createGraphics(map_width, map_height);
 
-    regions_overlay.textSize(8);
+    regions_overlay.textSize(16);
+    regions_overlay.textFont(open_sans_extrabold);
     regions_overlay.textAlign(CENTER, CENTER);
     regions_overlay.fill(0);
     for(const r of region_cells) {
-        r.displayUnits(regions_overlay);
         r.displayCapital(regions_overlay);
+        r.displayUnits(regions_overlay);
     }
     //regions_overlay.textAlign(LEFT, TOP);
 }

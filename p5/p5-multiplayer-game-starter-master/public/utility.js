@@ -1,3 +1,13 @@
+
+let capital_img;
+let open_sans_extrabold;
+
+function preload()
+{
+	capital_img = loadImage('imgs/Stella.png');
+	open_sans_extrabold = loadFont('fonts/open-sans.extrabold.ttf');
+}
+
 function scaleVector(v, cp, scale)
 {
     let x = (v[0]-cp[0])*scale + cp[0];
