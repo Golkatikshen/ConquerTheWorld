@@ -55,124 +55,14 @@ function updateGame()
             continue;
         }
 
-        io.in(rooms[i].name).emit("stop_actions");
+        //io.in(rooms[i].name).emit("stop_actions");
 
-        setTimeout( function() {
+        /*setTimeout( function() {
             if(rooms[i].game_started && rooms[i].region_cells) {
-                // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
-                for(let j=0; j<rooms[i].region_cells.length; j++) {
-                    // muoviamo tutte le unità
-                    let r = rooms[i].region_cells[j];
-                    r.next_igid_owner = r.igid_owner;
-                    if(r.moving) {
-                        r.moved_units = r.units;
-                        r.units = 0;
-                    }
-                }
-
-                // risolviamo i movimenti
-                for(let j=0; j<rooms[i].region_cells.length; j++) {
-                    resolveRegion(rooms[i], j);
-                }
-
-                // update regions for next global state
-                for(let j=0; j<rooms[i].region_cells.length; j++) {
-                    let r = rooms[i].region_cells[j];
-                    //r.units = r.next_units;
-                    //r.igid_owner = r.next_igid_owner;
-                    r.moved_units = 0;
-                    r.moving = false;
-
-                    // generazione unità ogni tick in capitale (in futuro anche edifici militari)
-                    if(r.is_capital && r.units < 5) {
-                        r.units += 1;
-                    }
-
-                    //togliere possessione mare/laghi se non c'è nessuno sopra
-                    if(r.units == 0 && !r.is_land) {
-                        r.next_igid_owner = -1;
-                    }
-
-                    r.igid_owner = r.next_igid_owner;
-                }
-
-                io.in(rooms[i].name).emit("heartbeat", rooms[i].region_cells);
+                
             }
-        }, 1000); // 1 secondo di pausa
+        }, 1000); // 1 secondo di pausa*/
     }
-}
-
-function resolveRegion(room, index)
-{
-    let region = room.region_cells[index];
-
-    if(region.move_here_from.length === 0) {
-        //region.next_units = region.units;
-        //region.next_igid_owner = region.igid_owner;
-        return;
-    }
-    
-
-    let n_units_pp = {}; // number of units per player going for or already inside the region
-    
-    // inizializzazione dizionario
-    for(let p of room.players) {
-        n_units_pp[p.igid] = 0;
-    }
-
-    // definizione dizionario delle forze militari dei contendenti
-    for(let i=0; i<region.move_here_from.length; i++) {
-        let p_igid = room.region_cells[region.move_here_from[i]].igid_owner;
-        let n_units = room.region_cells[region.move_here_from[i]].moved_units;
-
-        n_units_pp[p_igid] += n_units;
-    }
-
-    // le unità già dentro contribuiscono come quelle che attaccano o danno manforte
-    // se non si stanno muovendo per andare da un'altra parte
-    if(region.igid_owner !== -1 && !region.moving) { // ridondante, se si muovono => region.units = 0
-        n_units_pp[region.igid_owner] += region.units;
-    }
-
-    // trovo il migliore e il secondo migliore
-    let max1 = -1, mem1 = -1, max2 = -1, mem2 = -1;
-    for(let p of room.players) {
-        if(n_units_pp[p.igid] > max1) {
-            max2 = max1;
-            mem2 = mem1;
-
-            max1 = n_units_pp[p.igid];
-            mem1 = p.igid;
-        }
-        else if(n_units_pp[p.igid] > max2) {
-            max2 = n_units_pp[p.igid];
-            mem2 = p.igid;
-        }
-    }
-
-    //il più forte conquista la regione
-    //if(region.igid_owner != mem1) // capire se vale la pena distruggere la capitale o meno
-    //    region.is_capital = false;
-
-    //region.igid_owner = mem1;
-    region.next_igid_owner = mem1;
-
-    //e perde tante forze militari quante ne aveva il secondo più forte
-    if(mem2 != -1)
-        n_units_pp[mem1] -= max2;
-
-    //tutti gli altri perdono tutte le forze militari
-    /*for(let p of room.players) {
-        if(p.igid != mem1) {
-            n_units_pp[p.igid] = 0;
-        }
-    }*/
-
-    //region.next_units = n_units_pp[mem1];
-    region.units = n_units_pp[mem1];
-
-    // reset array moves
-    region.move_here_from = [];
 }
 
 
@@ -294,6 +184,16 @@ io.sockets.on("connection", socket => {
         room.region_cells[from_reg].moving = true;
     });
 
+    socket.on("end_turn", () => {
+        let p = getPlayer(socket.id);
+        p.end_turn = true;
+        if(checkAllEndTurnInRoom(p.room_name)) {
+            let room = getRoom(p.room_name);
+            room.resolveWorld();
+            io.in(room.name).emit("heartbeat", room.region_cells);
+        }
+    });
+
     /*socket.on("conquest_attempt", (igid, index_cell) => {
         let room = getRoomFromPlayer(socket.id);
         room.region_cells[index_cell].igid_owner = igid;
@@ -385,6 +285,19 @@ function startMapGenAndSendIGIDs(room_name)
         io.in(room_name).emit("set_igid", room.players[i].id, i);
     }
     io.in(room_name).emit("start_map_gen", room.seed);
+}
+
+function checkAllEndTurnInRoom(room_name)
+{
+    let room = getRoom(room_name);
+
+    for(let i=0; i<room.players.length; i++) {
+        if(!room.players[i].end_turn) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function checkAllGenDoneInRoom(room_name)

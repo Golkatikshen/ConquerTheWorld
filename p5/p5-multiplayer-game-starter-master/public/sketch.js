@@ -43,6 +43,9 @@ function draw()
         text("Timer: " + nf(turn_timer/1000, 0, 2) + " seconds", 10, 80);
         turn_timer -= deltaTime;
         if(turn_timer < 0) {
+            if(!actions_stopped) {
+                stopActionsAndSendSignal();
+            }
             turn_timer = 0;
         }
 

@@ -24,7 +24,7 @@ socket.on("set_igid", (player_id, igid) => setIGID(player_id, igid));
 socket.on("start_game", capitals => startGame(capitals));
 
 socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
-socket.on("stop_actions", () => stopActions());
+//socket.on("stop_actions", () => stopActions());
 
 
 function instantiatePlayer(player_data)
@@ -104,10 +104,12 @@ function roomNameDoesntExist()
 }
 
 
-function stopActions()
+function stopActionsAndSendSignal()
 {
     actions_stopped = true;
     selected_region = -1;
+    
+    socket.emit("end_turn");
 }
 
 

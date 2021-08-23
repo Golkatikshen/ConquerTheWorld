@@ -22,6 +22,123 @@ export class Room {
         let map_height = 1200;
         this.voronoi_regions = delaunay.voronoi([0, 0, map_width, map_height]); 
     }
+
+    resolveWorld()
+    {
+        // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
+        for(let j=0; j<this.region_cells.length; j++) {
+            // muoviamo tutte le unità
+            let r = this.region_cells[j];
+            r.next_igid_owner = r.igid_owner;
+            if(r.moving) {
+                r.moved_units = r.units;
+                r.units = 0;
+            }
+        }
+
+        // risolviamo i movimenti
+        for(let j=0; j<this.region_cells.length; j++) {
+            this.resolveRegion(j);
+        }
+
+        // update regions for next global state
+        for(let j=0; j<this.region_cells.length; j++) {
+            let r = this.region_cells[j];
+            //r.units = r.next_units;
+            //r.igid_owner = r.next_igid_owner;
+            r.moved_units = 0;
+            r.moving = false;
+
+            // generazione unità ogni tick in capitale (in futuro anche edifici militari)
+            if(r.is_capital && r.units < 5) {
+                r.units += 1;
+            }
+
+            //togliere possessione mare/laghi se non c'è nessuno sopra
+            if(r.units == 0 && !r.is_land) {
+                r.next_igid_owner = -1;
+            }
+
+            r.igid_owner = r.next_igid_owner;
+        }
+
+        for(let i=0; i<this.players.length; i++) {
+            this.players[i].end_turn = false;
+        }
+    }
+
+    resolveRegion(index)
+    {
+        let region = this.region_cells[index];
+
+        if(region.move_here_from.length === 0) {
+            //region.next_units = region.units;
+            //region.next_igid_owner = region.igid_owner;
+            return;
+        }
+        
+
+        let n_units_pp = {}; // number of units per player going for or already inside the region
+        
+        // inizializzazione dizionario
+        for(let p of this.players) {
+            n_units_pp[p.igid] = 0;
+        }
+
+        // definizione dizionario delle forze militari dei contendenti
+        for(let i=0; i<region.move_here_from.length; i++) {
+            let p_igid = this.region_cells[region.move_here_from[i]].igid_owner;
+            let n_units = this.region_cells[region.move_here_from[i]].moved_units;
+
+            n_units_pp[p_igid] += n_units;
+        }
+
+        // le unità già dentro contribuiscono come quelle che attaccano o danno manforte
+        // se non si stanno muovendo per andare da un'altra parte
+        if(region.igid_owner !== -1 && !region.moving) { // ridondante, se si muovono => region.units = 0
+            n_units_pp[region.igid_owner] += region.units;
+        }
+
+        // trovo il migliore e il secondo migliore
+        let max1 = -1, mem1 = -1, max2 = -1, mem2 = -1;
+        for(let p of this.players) {
+            if(n_units_pp[p.igid] > max1) {
+                max2 = max1;
+                mem2 = mem1;
+
+                max1 = n_units_pp[p.igid];
+                mem1 = p.igid;
+            }
+            else if(n_units_pp[p.igid] > max2) {
+                max2 = n_units_pp[p.igid];
+                mem2 = p.igid;
+            }
+        }
+
+        //il più forte conquista la regione
+        //if(region.igid_owner != mem1) // capire se vale la pena distruggere la capitale o meno
+        //    region.is_capital = false;
+
+        //region.igid_owner = mem1;
+        region.next_igid_owner = mem1;
+
+        //e perde tante forze militari quante ne aveva il secondo più forte
+        if(mem2 != -1)
+            n_units_pp[mem1] -= max2;
+
+        //tutti gli altri perdono tutte le forze militari
+        /*for(let p of room.players) {
+            if(p.igid != mem1) {
+                n_units_pp[p.igid] = 0;
+            }
+        }*/
+
+        //region.next_units = n_units_pp[mem1];
+        region.units = n_units_pp[mem1];
+
+        // reset array moves
+        region.move_here_from = [];
+    }
 }
 
 //module.exports = Room;
