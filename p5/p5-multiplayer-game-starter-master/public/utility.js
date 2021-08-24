@@ -1,10 +1,17 @@
 
 let capital_img;
+let accampamento_img;
+let legno_img;
+let rocce_img;
+let pane_img;
 let open_sans_extrabold;
 
 function preload()
 {
 	capital_img = loadImage('imgs/Stella.png');
+	legno_img = loadImage('imgs/Legno.png');
+	rocce_img = loadImage('imgs/Rocce.png');
+	pane_img = loadImage('imgs/Pane.png');
 	open_sans_extrabold = loadFont('fonts/open-sans.extrabold.ttf');
 }
 

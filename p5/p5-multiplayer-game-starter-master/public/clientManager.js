@@ -126,6 +126,22 @@ function onMouseLeaveHUD()
 
 
 
+function clickMartello()
+{
+
+}
+
+function clickStrada()
+{
+
+}
+
+function clickAccampamento()
+{
+    
+}
+
+
 function hideElement(element)
 {
     document.getElementById(element).hidden = true;

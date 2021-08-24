@@ -177,6 +177,7 @@ function updateRegionsOverlay()
     regions_overlay.textAlign(CENTER, CENTER);
     regions_overlay.fill(0);
     for(const r of region_cells) {
+        r.displayProduction(regions_overlay)
         r.displayCapital(regions_overlay);
         r.displayUnits(regions_overlay);
     }

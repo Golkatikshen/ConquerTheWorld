@@ -10,6 +10,7 @@ function setup()
 {
 	createCanvas(windowWidth, windowHeight);
 	textSize(15);
+    noSmooth();
     
     zoom = windowWidth/map_width;
 }
