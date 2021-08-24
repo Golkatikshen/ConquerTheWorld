@@ -56,6 +56,7 @@ function draw()
 
 
         // movement screen with mouse close to edges
+        /*
         if(mouseX < 50 || a_pressed) {
             off_x -= 5*zoom;
             off_x = max(off_x, 0);
@@ -71,7 +72,7 @@ function draw()
         if(windowHeight - mouseY < 50 || s_pressed) {
             off_y += 5*zoom;
             off_y = min(off_y, map_height*zoom-windowHeight);
-        }
+        }*/
     }
     else
     {

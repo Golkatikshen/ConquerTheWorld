@@ -113,6 +113,14 @@ function updatePlayersRankings()
     }
 }
 
+function updateResourcesHTML()
+{
+    document.getElementById("label_denaro").innerHTML = denaro;
+    document.getElementById("label_pane").innerHTML = pane;
+    document.getElementById("label_legno").innerHTML = legno;
+    document.getElementById("label_rocce").innerHTML = rocce;
+}
+
 
 function onMouseEnterHUD()
 {
@@ -128,17 +136,41 @@ function onMouseLeaveHUD()
 
 function clickMartello()
 {
+    let sr = region_cells[selected_region];
+    if(selected_region != -1) {
+        if(sr.is_land) {
+            if(sr.h == 0 && sr.units >= 1) { // fattoria
+                sr.is_producing = true;
+                sr.units -= 1;
+                socket.emit("pay_units", selected_region, 1);
+            }
 
+            if(sr.h == 2 && sr.units >= 1 && legno >= 5) { // miniera
+                sr.is_producing = true;
+                sr.units -= 1;
+                legno -= 5;
+                socket.emit("pay_units", selected_region, 1);
+            }
+
+            if(sr.h == 3 && sr.units >= 2) { // falegnameria
+                sr.is_producing = true;
+                sr.units -= 2;
+                socket.emit("pay_units", selected_region, 2);
+            }
+        }
+    }
+
+    updateResourcesHTML();
 }
 
 function clickStrada()
 {
-
+    // TODO
 }
 
 function clickAccampamento()
 {
-    
+    // TODO
 }
 
 
