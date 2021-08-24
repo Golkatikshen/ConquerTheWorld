@@ -34,7 +34,7 @@ class RegionCell // mostly gameplay support
     displayCapital(ctx)
     {
         if(this.is_capital) {
-            ctx.tint(getColorFromIGID(local_player.igid));
+            ctx.tint(getColorFromIGID(this.igid_owner));
             ctx.image(capital_img, this.centroid[0]-capital_img.width/2, this.centroid[1]-capital_img.height/2);
             ctx.noTint();
             //ctx.text("C", this.centroid[0], this.centroid[1]-10);

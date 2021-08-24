@@ -151,6 +151,14 @@ function updateRegionCells(updated_region_cells)
     rocce += miniere;
     denaro += p_count[local_player.igid];
 
+
+    // check game lost
+    // se la capitale del giocatore, non è più capitale
+    if(!region_cells[local_player.capital].is_capital) { 
+        gameOver();
+    }
+
+    // graphics updates
     if(borders_changed) {
         updateBordersImages();
     }
@@ -158,6 +166,12 @@ function updateRegionCells(updated_region_cells)
     updateRegionsOverlay();
     updatePlayersRankings();
     updateResourcesHTML();
+}
+
+
+function gameOver()
+{
+    // TO DO
 }
 
 
@@ -211,7 +225,6 @@ function updateRegionsOverlay()
     }
     //regions_overlay.textAlign(LEFT, TOP);
 }
-
 
 
 
