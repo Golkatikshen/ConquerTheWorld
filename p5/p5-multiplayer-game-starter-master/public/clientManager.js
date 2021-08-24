@@ -136,6 +136,9 @@ function onMouseLeaveHUD()
 
 function clickMartello()
 {
+    if(game_lost)
+        return false;
+        
     let sr = region_cells[selected_region];
     if(selected_region != -1) {
         if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
@@ -175,11 +178,17 @@ function clickMartello()
 
 function clickStrada()
 {
+    if(game_lost)
+        return;
+
     // TODO
 }
 
 function clickAccampamento()
 {
+    if(game_lost)
+        return;
+
     let sr = region_cells[selected_region];
     if(selected_region != -1) {
         if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {

@@ -172,6 +172,9 @@ function updateRegionCells(updated_region_cells)
 function gameOver()
 {
     // TO DO
+    hideElement("actions_btns");
+    unhideElement("gamelost_msg");
+    game_lost = true;
 }
 
 

@@ -124,7 +124,7 @@
             </div>
 
             <div id="actions" class="actions" onmouseenter="onMouseEnterHUD();" onmouseleave="onMouseLeaveHUD();">
-                <div class="row mx-auto h-100">
+                <div  id="actions_btns" class="row mx-auto h-100">
                     <div class="col-sm text-center my-auto">
                         <img class="imgbutton" src="imgs/action_martello.png" style="transform: scale(1.6);" onclick="clickMartello();">
                     </div>
@@ -134,6 +134,12 @@
                     <div class="col-sm text-center my-auto">
                         <img class="imgbutton" src="imgs/action_accampamento.png" style="transform: scale(1.6);" onclick="clickAccampamento();">
                     </div>
+                </div>
+
+                <div id="gamelost_msg" class="h-100" hidden>
+                    <p class="py-auto" style="text-align: center; font-size: 250%;">
+                        <b>YOU LOST!</b>
+                    </p>
                 </div>
             </div>
     

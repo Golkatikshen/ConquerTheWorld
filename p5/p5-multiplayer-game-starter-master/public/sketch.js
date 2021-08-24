@@ -82,6 +82,9 @@ function draw()
 
 function mouseClicked()
 {
+    if(game_lost)
+        return false;
+        
     if(game_started && !actions_stopped && !mouse_on_hud)
     {
         if(mouseButton == LEFT) {
