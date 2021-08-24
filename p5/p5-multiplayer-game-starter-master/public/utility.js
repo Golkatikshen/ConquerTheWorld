@@ -12,6 +12,7 @@ function preload()
 	legno_img = loadImage('imgs/Legno.png');
 	rocce_img = loadImage('imgs/Rocce.png');
 	pane_img = loadImage('imgs/Pane.png');
+	accampamento_img = loadImage('imgs/accampamento.png');
 	open_sans_extrabold = loadFont('fonts/open-sans.extrabold.ttf');
 }
 

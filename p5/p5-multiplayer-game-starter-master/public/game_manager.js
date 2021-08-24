@@ -2,6 +2,7 @@
 let current_region = 0; // hovering
 let gen_time = 0;
 let game_started = false;
+let game_lost = false;
 
 let physical_borders_image;
 let political_borders_image;
@@ -35,6 +36,7 @@ async function startMapGeneration(seed)
         worldInit(seed);
         updateBordersImages();
         updateRegionsOverlay();
+        updateResourcesHTML();
 
         for(let i=0; i<region_cells.length; i++) {
             if(region_cells[i].is_land) {
@@ -109,6 +111,10 @@ function updateRegionCells(updated_region_cells)
     selected_region = -1;
     turn_timer = 5000; // milliseconds
     actions_stopped = false;
+    let fattorie = 0;
+    let falegnamerie = 0;
+    let miniere = 0;
+
 
     for(let i=0; i<players.length; i++) {
         p_count[players[i].igid] = 0;
@@ -124,11 +130,26 @@ function updateRegionCells(updated_region_cells)
         region_cells[i].igid_owner = updated_region_cells[i].igid_owner;
         region_cells[i].units = updated_region_cells[i].units;
         region_cells[i].is_capital = updated_region_cells[i].is_capital;
+        region_cells[i].is_producing = updated_region_cells[i].is_producing;
         region_cells[i].in_queue = false;
 
-        p_count[region_cells[i].igid_owner] ++;
+        p_count[region_cells[i].igid_owner] ++; // conteggio percentuale
+
+        // conteggio strutture local player
+        if(region_cells[i].igid_owner == local_player.igid && region_cells[i].is_producing) {
+            if(region_cells[i].h == 0)
+                fattorie ++;
+            if(region_cells[i].h == 2)
+                miniere ++;
+            if(region_cells[i].h == 3)
+                falegnamerie ++;
+        }
     }
 
+    pane += fattorie;
+    legno += falegnamerie;
+    rocce += miniere;
+    denaro += p_count[local_player.igid];
 
     if(borders_changed) {
         updateBordersImages();
@@ -136,6 +157,7 @@ function updateRegionCells(updated_region_cells)
 
     updateRegionsOverlay();
     updatePlayersRankings();
+    updateResourcesHTML();
 }
 
 
@@ -183,7 +205,7 @@ function updateRegionsOverlay()
     regions_overlay.textAlign(CENTER, CENTER);
     regions_overlay.fill(0);
     for(const r of region_cells) {
-        r.displayProduction(regions_overlay)
+        r.displayProdOrAccamp(regions_overlay)
         r.displayCapital(regions_overlay);
         r.displayUnits(regions_overlay);
     }

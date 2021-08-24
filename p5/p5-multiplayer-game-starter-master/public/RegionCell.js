@@ -19,6 +19,7 @@ class RegionCell // mostly gameplay support
         
         this.is_capital = false;
         this.is_producing = false;
+        this.is_accampamento = false;
 
         this.move_here_from = [];   // server side only (on client there is action queue for visualization)
         this.moving = false;
@@ -40,7 +41,7 @@ class RegionCell // mostly gameplay support
         }       
     }
 
-    displayProduction(ctx)
+    displayProdOrAccamp(ctx)
     {
         if(this.is_producing)
         {
@@ -53,6 +54,11 @@ class RegionCell // mostly gameplay support
             else if(this.h == 3) { // forests
                 ctx.image(legno_img, this.centroid[0]-legno_img.width/2, this.centroid[1]-legno_img.height/2);
             }
+        }
+
+        if(this.is_accampamento)
+        {
+            ctx.image(accampamento_img, this.centroid[0]-accampamento_img.width/2, this.centroid[1]-accampamento_img.height/2);
         }
     }
 }

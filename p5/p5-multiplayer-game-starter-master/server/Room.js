@@ -50,7 +50,7 @@ export class Room {
             r.moving = false;
 
             // generazione unità ogni tick in capitale (in futuro anche edifici militari)
-            if(r.is_capital && r.units < 5) {
+            if((r.is_capital || r.is_accampamento) && r.units < 5) {
                 r.units += 1;
             }
 

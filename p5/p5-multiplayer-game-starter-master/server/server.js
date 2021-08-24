@@ -184,8 +184,15 @@ io.sockets.on("connection", socket => {
         room.region_cells[from_reg].moving = true;
     });
 
-    socket.on("pay_units", (reg, cost) => {
+    socket.on("pay_units_struct", (reg, cost) => {
         let room = getRoomFromPlayer(socket.id);
+        room.region_cells[reg].is_producing = true;
+        room.region_cells[reg].units -= cost;
+    });
+
+    socket.on("pay_units_accamp", (reg, cost) => {
+        let room = getRoomFromPlayer(socket.id);
+        room.region_cells[reg].is_accampamento = true;
         room.region_cells[reg].units -= cost;
     });
 

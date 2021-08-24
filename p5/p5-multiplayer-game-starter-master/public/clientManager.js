@@ -138,30 +138,34 @@ function clickMartello()
 {
     let sr = region_cells[selected_region];
     if(selected_region != -1) {
-        if(!sr.is_capital && !sr.is_producing && sr.is_land) {
-            sr.is_producing = true;
+        if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
+            let payed = false;
 
             if(sr.h == 0 && sr.units >= 1) { // fattoria
                 sr.units -= 1;
-                pane += 1;
-                socket.emit("pay_units", selected_region, 1);
+                socket.emit("pay_units_struct", selected_region, 1);
+                payed = true;
             }
 
             if(sr.h == 2 && sr.units >= 1 && legno >= 5) { // miniera
                 sr.units -= 1;
                 legno -= 5;
-                rocce += 1;
-                socket.emit("pay_units", selected_region, 1);
+                socket.emit("pay_units_struct", selected_region, 1);
+                payed = true;
             }
 
             if(sr.h == 3 && sr.units >= 2) { // falegnameria
                 sr.units -= 2;
-                legno += 1;
-                socket.emit("pay_units", selected_region, 2);
+                socket.emit("pay_units_struct", selected_region, 2);
+                payed = true;
             }
 
-            sr.displayProduction(regions_overlay)
-            sr.displayUnits(regions_overlay);
+            if(payed) {
+                sr.is_producing = true;
+                regions_overlay.tint(255, 160);
+                sr.displayProdOrAccamp(regions_overlay)
+                regions_overlay.noTint();
+            }
         }
     }
 
@@ -176,7 +180,21 @@ function clickStrada()
 
 function clickAccampamento()
 {
-    // TODO
+    let sr = region_cells[selected_region];
+    if(selected_region != -1) {
+        if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
+            if(denaro >= 200 && legno >= 10 && sr.units >= 5) {
+                denaro -= 200;
+                legno -= 10;
+                sr.units -= 5;
+                socket.emit("pay_units_accamp", selected_region, 5);
+                sr.is_accampamento = true;
+                regions_overlay.tint(255, 160);
+                sr.displayProdOrAccamp(regions_overlay)
+                regions_overlay.noTint();
+            }
+        }
+    }
 }
 
 
