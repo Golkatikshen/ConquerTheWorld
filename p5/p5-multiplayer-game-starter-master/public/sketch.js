@@ -56,23 +56,23 @@ function draw()
 
 
         // movement screen with mouse close to edges
-        /*
-        if(mouseX < 50 || a_pressed) {
+        
+        if(/*mouseX < 50 ||*/ a_pressed) {
             off_x -= 5*zoom;
             off_x = max(off_x, 0);
         }
-        if(windowWidth - mouseX < 50 || d_pressed) {
+        if(/*windowWidth - mouseX < 50 ||*/ d_pressed) {
             off_x += 5*zoom;
             off_x = min(off_x, map_width*zoom-windowWidth);
         }
-        if(mouseY < 50 || w_pressed) {
+        if(/*mouseY < 50 ||*/ w_pressed) {
             off_y -= 5*zoom;
             off_y = max(off_y, 0);
         }
-        if(windowHeight - mouseY < 50 || s_pressed) {
+        if(/*windowHeight - mouseY < 50 ||*/ s_pressed) {
             off_y += 5*zoom;
             off_y = min(off_y, map_height*zoom-windowHeight);
-        }*/
+        }
     }
     else
     {

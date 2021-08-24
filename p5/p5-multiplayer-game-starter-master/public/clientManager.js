@@ -138,28 +138,34 @@ function clickMartello()
 {
     let sr = region_cells[selected_region];
     if(selected_region != -1) {
-        if(sr.is_land) {
+        if(!sr.is_capital && !sr.is_producing && sr.is_land) {
+            sr.is_producing = true;
+
             if(sr.h == 0 && sr.units >= 1) { // fattoria
-                sr.is_producing = true;
                 sr.units -= 1;
+                pane += 1;
                 socket.emit("pay_units", selected_region, 1);
             }
 
             if(sr.h == 2 && sr.units >= 1 && legno >= 5) { // miniera
-                sr.is_producing = true;
                 sr.units -= 1;
                 legno -= 5;
+                rocce += 1;
                 socket.emit("pay_units", selected_region, 1);
             }
 
             if(sr.h == 3 && sr.units >= 2) { // falegnameria
-                sr.is_producing = true;
                 sr.units -= 2;
+                legno += 1;
                 socket.emit("pay_units", selected_region, 2);
             }
+
+            sr.displayProduction(regions_overlay)
+            sr.displayUnits(regions_overlay);
         }
     }
 
+    selected_region = -1;
     updateResourcesHTML();
 }
 
