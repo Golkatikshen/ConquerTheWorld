@@ -121,6 +121,12 @@ function updateResourcesHTML()
     document.getElementById("label_rocce").innerHTML = rocce;
 }
 
+function winMessage(winner)
+{
+    document.getElementById("win_msg").innerHTML = "<b>"+winner+" is the KING!</b>"
+    unhideElement("win_msg");
+}
+
 
 function onMouseEnterHUD()
 {
