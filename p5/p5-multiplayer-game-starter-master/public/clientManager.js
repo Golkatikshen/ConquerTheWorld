@@ -92,7 +92,7 @@ function updatePlayersRankings()
 
     // calcolo percentuale
     for(let i=0; i<players.length; i++) {
-        rank.push([int(p_count[players[i].igid]/total_land*100), players[i].name, players[i].igid]);
+        rank.push([Math.round(p_count[players[i].igid]/total_land*100), players[i].name, players[i].igid]);
     }
 
     // ordinamento classifica
