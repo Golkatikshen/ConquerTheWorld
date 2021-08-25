@@ -196,6 +196,22 @@ io.sockets.on("connection", socket => {
         room.region_cells[reg].units -= cost;
     });
 
+    socket.on("me_defeated", () => {
+        let p = getPlayer(socket.id);
+        let room = getRoomFromPlayer(socket.id);
+        p.defeated = true;
+        io.in(room.name).emit("player_defeated", p.igid);
+
+        let w = thereIsWinner(room);
+        if(w) {
+            io.in(room.name).emit("player_winner", w.igid);
+        }
+
+        if(isDraw(room)) {
+            io.in(room.name).emit("draw_game");
+        }
+    });
+
     socket.on("end_turn", () => {
         let p = getPlayer(socket.id);
         p.end_turn = true;

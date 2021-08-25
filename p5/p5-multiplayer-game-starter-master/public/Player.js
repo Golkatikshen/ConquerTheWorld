@@ -6,6 +6,7 @@ class Player {
     this.ready = player.ready;
     this.igid = -1;
     this.capital = player.capital;
+    this.defeated = false; // capital lost = defeated
   }
 
   display()

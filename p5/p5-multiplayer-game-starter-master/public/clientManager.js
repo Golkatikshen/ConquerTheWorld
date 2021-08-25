@@ -142,7 +142,7 @@ function onMouseLeaveHUD()
 
 function clickMartello()
 {
-    if(game_lost)
+    if(stop_game)
         return false;
         
     let sr = region_cells[selected_region];
@@ -184,7 +184,7 @@ function clickMartello()
 
 function clickStrada()
 {
-    if(game_lost)
+    if(stop_game)
         return;
 
     // TODO
@@ -192,7 +192,7 @@ function clickStrada()
 
 function clickAccampamento()
 {
-    if(game_lost)
+    if(stop_game)
         return;
 
     let sr = region_cells[selected_region];

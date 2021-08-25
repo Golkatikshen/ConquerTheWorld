@@ -82,7 +82,7 @@ function draw()
 
 function mouseClicked()
 {
-    if(game_lost)
+    if(stop_game)
         return false;
         
     if(game_started && !actions_stopped && !mouse_on_hud)

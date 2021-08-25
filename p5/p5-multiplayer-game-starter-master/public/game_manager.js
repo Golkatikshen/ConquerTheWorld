@@ -2,7 +2,7 @@
 let current_region = 0; // hovering
 let gen_time = 0;
 let game_started = false;
-let game_lost = false;
+let stop_game = false;
 
 let physical_borders_image;
 let political_borders_image;
@@ -174,7 +174,8 @@ function gameOver()
     // TO DO
     hideElement("actions_btns");
     unhideElement("gamelost_msg");
-    game_lost = true;
+    stop_game = true;
+    socket.emit("defeated");
 }
 
 

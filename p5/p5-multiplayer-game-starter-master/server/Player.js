@@ -11,6 +11,8 @@ export class Player {
     this.end_turn = false;
     this.igid = -1; // in game id (0,1,2,...,n_max)
     this.capital = -1; // index of the region where the capital of this player is located
+
+    this.defeated = false; // capital lost = defeated
   }
 }
 

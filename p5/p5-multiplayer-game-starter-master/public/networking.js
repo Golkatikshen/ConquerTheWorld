@@ -25,6 +25,9 @@ socket.on("start_game", capitals => startGame(capitals));
 
 socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
 //socket.on("stop_actions", () => stopActions());
+socket.on("player_defeated", p_igid => playerDefeated(p_igid));
+socket.on("player_winner", p_igid => playerWinner(p_igid));
+socket.on("draw_game", () => drawGame());
 
 
 function instantiatePlayer(player_data)
@@ -111,6 +114,27 @@ function stopActionsAndSendSignal()
 
     socket.emit("end_turn");
 }
+
+
+function playerDefeated(p_igid)
+{
+    let pd = players.find(p => p.igid == p_igid);
+    pd.defeated = true;
+    // TO DO : RENDERE NOME PLAYER GRIGIO DOPO SCONFITTA
+}
+
+function playerWinner(p_igid)
+{
+    let w = players.find(p => p.igid == p_igid);
+    stop_game = true;
+    winMessage(w.name);
+}
+
+function drawGame()
+{
+
+}
+
 
 
 /*
