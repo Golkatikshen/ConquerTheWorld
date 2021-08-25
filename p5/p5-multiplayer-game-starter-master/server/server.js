@@ -206,7 +206,7 @@ io.sockets.on("connection", socket => {
         p.end_turn = true;
         if(checkAllEndTurnInRoom(p.room_name)) {
             let room = getRoom(p.room_name);
-            room.resolveWorld();
+            room.resolveWorld(io);
             io.in(room.name).emit("heartbeat", room.region_cells);
         }
     });

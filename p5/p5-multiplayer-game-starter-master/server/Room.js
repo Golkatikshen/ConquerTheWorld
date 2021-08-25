@@ -23,7 +23,7 @@ export class Room {
         this.voronoi_regions = delaunay.voronoi([0, 0, map_width, map_height]); 
     }
 
-    resolveWorld()
+    resolveWorld(io)
     {
         // QUI CI VORRANNO RESOLUTIONS DEI CONFLITTI
         for(let j=0; j<this.region_cells.length; j++) {
@@ -73,10 +73,10 @@ export class Room {
 
         let w = this.thereIsWinner();
         if(w) {
-            io.in(room.name).emit("player_winner", w.igid);
+            io.in(this.name).emit("player_winner", w.igid);
         }
         else if(this.isDraw()) { // hanno perso tutti
-            io.in(room.name).emit("draw_game");
+            io.in(this.name).emit("draw_game");
         }
     }
 
