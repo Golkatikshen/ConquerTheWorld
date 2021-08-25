@@ -201,6 +201,11 @@ io.sockets.on("connection", socket => {
         io.in(p.room_name).emit("player_defeated", p.igid);
     });
 
+    socket.on("i_won", () => {
+        let p = getPlayer(socket.id);
+        io.in(p.room_name).emit("player_winner", p.igid);
+    });
+
     socket.on("end_turn", () => {
         let p = getPlayer(socket.id);
         p.end_turn = true;

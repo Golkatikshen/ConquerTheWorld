@@ -90,10 +90,12 @@ function updatePlayersRankings()
 {
     let rank = [];
 
+    // calcolo percentuale
     for(let i=0; i<players.length; i++) {
         rank.push([int(p_count[players[i].igid]/total_land*100), players[i].name, players[i].igid]);
     }
 
+    // ordinamento classifica
     for(let i=0; i<rank.length-1; i++) {
         for(let j=i+1; j<rank.length; j++) {
             if(rank[i][0] < rank[j][0]) {
@@ -104,6 +106,7 @@ function updatePlayersRankings()
         }
     }
 
+    // display in HTML
     for(let i=0; i<rank.length; i++) {
         let p = document.getElementById("pnas"+i+"_id");
         p.style.color = getColorFromIGID(rank[i][2]);

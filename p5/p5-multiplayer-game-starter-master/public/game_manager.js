@@ -157,6 +157,14 @@ function updateRegionCells(updated_region_cells)
     if(!region_cells[local_player.capital].is_capital) { 
         gameOver();
     }
+    else { // check game won
+        for(let i=0; i<players.length; i++) {
+            // il primo giocatore che conquista il 51% della mappa
+            if(int(p_count[players[i].igid]/total_land*100) == 51) {
+                socket.emit("i_won"); // vince
+            }
+        }
+    }
 
     // graphics updates
     if(borders_changed) {
