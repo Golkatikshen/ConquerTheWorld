@@ -196,6 +196,11 @@ io.sockets.on("connection", socket => {
         room.region_cells[reg].units -= cost;
     });
 
+    socket.on("update_pane", (u_pane) => {
+        let p = getPlayer(socket.id);
+        p.pane = u_pane;
+    });
+
     socket.on("me_defeated", () => {
         let p = getPlayer(socket.id);
         io.in(p.room_name).emit("player_defeated", p.igid);

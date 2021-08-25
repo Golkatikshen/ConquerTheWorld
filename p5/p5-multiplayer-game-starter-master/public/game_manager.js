@@ -150,6 +150,7 @@ function updateRegionCells(updated_region_cells)
     legno += falegnamerie;
     rocce += miniere;
     denaro += p_count[local_player.igid];
+    socket.emit("update_pane", pane);
 
 
     // check game lost

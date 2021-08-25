@@ -13,6 +13,7 @@ export class Player {
     this.capital = -1; // index of the region where the capital of this player is located
 
     this.defeated = false; // capital lost = defeated
+    this.pane = 0;
   }
 }
 

@@ -50,8 +50,10 @@ export class Room {
             r.moving = false;
 
             // generazione unità ogni tick in capitale (in futuro anche edifici militari)
-            if((r.is_capital || r.is_accampamento) && r.units < 5) {
-                r.units += 1;
+            if((r.is_capital || r.is_accampamento)) {
+                let p = this.players.find(e => e.igid == r.igid_owner);
+                if(r.units < 5+int(p.pane/10)) // una unità generabile in più ogni 10 pani
+                    r.units += 1;
             }
 
             //togliere possessione mare/laghi se non c'è nessuno sopra
