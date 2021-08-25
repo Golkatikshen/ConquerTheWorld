@@ -127,6 +127,12 @@ function winMessage(winner)
     unhideElement("win_msg");
 }
 
+function drawMessage()
+{
+    document.getElementById("win_msg").innerHTML = "<b>OMG it is a DRAW!</b>"
+    unhideElement("win_msg");
+}
+
 
 function onMouseEnterHUD()
 {

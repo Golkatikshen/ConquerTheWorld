@@ -132,7 +132,8 @@ function playerWinner(p_igid)
 
 function drawGame()
 {
-
+    stop_game = true;
+    drawMessage();
 }
 
 

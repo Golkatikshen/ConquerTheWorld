@@ -198,18 +198,7 @@ io.sockets.on("connection", socket => {
 
     socket.on("me_defeated", () => {
         let p = getPlayer(socket.id);
-        let room = getRoomFromPlayer(socket.id);
-        p.defeated = true;
-        io.in(room.name).emit("player_defeated", p.igid);
-
-        let w = thereIsWinner(room);
-        if(w) {
-            io.in(room.name).emit("player_winner", w.igid);
-        }
-
-        if(isDraw(room)) {
-            io.in(room.name).emit("draw_game");
-        }
+        io.in(p.room_name).emit("player_defeated", p.igid);
     });
 
     socket.on("end_turn", () => {

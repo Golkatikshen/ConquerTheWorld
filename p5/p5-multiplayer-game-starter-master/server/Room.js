@@ -64,7 +64,49 @@ export class Room {
 
         for(let i=0; i<this.players.length; i++) {
             this.players[i].end_turn = false;
+
+            // check continuo delle capitali perdute (ridondante ad ogni turno, forse c'è modo migliore)
+            if(!this.region_cells[this.players[i].capital].is_capital) {
+                this.players[i].defeated = true;
+            }
         }
+
+        let w = this.thereIsWinner();
+        if(w) {
+            io.in(room.name).emit("player_winner", w.igid);
+        }
+        else if(this.isDraw()) { // hanno perso tutti
+            io.in(room.name).emit("draw_game");
+        }
+    }
+
+    // se trova solo un giocatore non defeated (con capitale)
+    // allora è lui il vincitore
+    thereIsWinner()
+    {
+        let w = null;
+        for(let i=0; i<this.players.length; i++) {
+            if(!this.players[i].defeated) {
+                if(w == null) {
+                    w = this.players[i];
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+
+        return w;
+    }
+
+    isDraw()
+    {
+        for(let i=0; i<this.players.length; i++) {
+            if(!this.players[i].defeated)
+                return false;
+        }
+
+        return true;
     }
 
     resolveRegion(index)
