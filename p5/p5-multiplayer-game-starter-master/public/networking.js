@@ -24,6 +24,7 @@ socket.on("set_igid", (player_id, igid) => setIGID(player_id, igid));
 socket.on("start_game", capitals => startGame(capitals));
 
 socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
+socket.on("pay_pane", c_pane => payPane(c_pane));
 //socket.on("stop_actions", () => stopActions());
 socket.on("player_defeated", p_igid => playerDefeated(p_igid));
 socket.on("player_winner", p_igid => playerWinner(p_igid));
@@ -104,6 +105,13 @@ function roomGameAlreadyStarted()
 function roomNameDoesntExist()
 {
     showErrorMessage(2);
+}
+
+
+function payPane(c_pane)
+{
+    pane -= c_pane;
+    updateResourcesHTML();
 }
 
 

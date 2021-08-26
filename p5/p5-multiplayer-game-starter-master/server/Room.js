@@ -54,8 +54,13 @@ export class Room {
                 let p = this.players.find(e => e.igid == r.igid_owner);
                 if(p) { // check if defined (il giocatore potrebbe essere uscito (gestire sta cosa...))
                     if(!p.defeated) // check if giocatore non è stato già sconfitto
-                        if(r.units < 5+Math.floor(p.pane/10)) // una unità generabile in più ogni 10 pani
+                        if(r.units < 5) { // una unità generabile in più ogni 10 pani
                             r.units += 1;
+                        }
+                        else if(Math.floor(p.pane/10) > 0) {
+                            r.units += 1;
+                            p.has_to_pay_pane = true;
+                        }
                 }
             }
 
@@ -73,6 +78,10 @@ export class Room {
             // check continuo delle capitali perdute (ridondante ad ogni turno, forse c'è modo migliore)
             if(!this.region_cells[this.players[i].capital].is_capital) {
                 this.players[i].defeated = true;
+            }
+            else if(this.players[i].has_to_pay_pane) { // check has to pay pane
+                io.to(this.players[i].id).emit("pay_pane", 10);
+                this.players[i].has_to_pay_pane = false;
             }
         }
 
