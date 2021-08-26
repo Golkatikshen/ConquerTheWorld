@@ -27,9 +27,10 @@ function addStrada(i, j)
 
     // graphic
     physical_strade_image.strokeWeight(5);
-    physical_strade_image.stroke(150);
-    physical_strade_image.strokeWeight(4);
     physical_strade_image.stroke(55, 29, 16);
+    physical_strade_image.line(region_cells[i].centroid[0], region_cells[i].centroid[1], region_cells[j].centroid[0], region_cells[j].centroid[1]);
+    physical_strade_image.strokeWeight(3);
+    physical_strade_image.stroke(150);
     physical_strade_image.line(region_cells[i].centroid[0], region_cells[i].centroid[1], region_cells[j].centroid[0], region_cells[j].centroid[1]);
     
     political_strade_image.strokeWeight(5);
@@ -40,7 +41,7 @@ function addStrada(i, j)
 function isOnSameRoad(curr, end)
 {
     // non ha senso creare una strada sulla stessa casella
-    if(curr == end || curr == -1 || end == -1)
+    if(curr === end || curr === -1 || end === -1)
         return false;
 
     for(let i=0; i<region_cells.length; i++) {
@@ -55,7 +56,7 @@ function DFS_strade(curr, end)
     if(curr == end)
         return true;
 
-    region_cells[curr].visited == true;
+    region_cells[curr].visited = true;
     for(let i=0; i<strade[curr].length; i++) {
         if(!region_cells[strade[curr][i]].visited) {
             if(DFS_strade(strade[curr][i], end)) {

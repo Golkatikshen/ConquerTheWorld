@@ -110,6 +110,7 @@ function updateRegionCells(updated_region_cells)
 {
     actions_queue = [];
     selected_region = -1;
+    building_strada = false;
     turn_timer = 5000; // milliseconds
     actions_stopped = false;
     let fattorie = 0;
