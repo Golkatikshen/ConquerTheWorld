@@ -1,4 +1,6 @@
 
+// https://socket.io/docs/v3/emit-cheatsheet/index.html
+
 //const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
 const socket = io.connect('http://localhost:3000');
 let world_generated = false;
@@ -25,6 +27,7 @@ socket.on("start_game", capitals => startGame(capitals));
 
 socket.on("heartbeat", region_cells => updateRegionCells(region_cells));
 socket.on("pay_pane", c_pane => payPane(c_pane));
+socket.on("add_strada", (i, j) => addStrada(i, j));
 //socket.on("stop_actions", () => stopActions());
 socket.on("player_defeated", p_igid => playerDefeated(p_igid));
 socket.on("player_winner", p_igid => playerWinner(p_igid));

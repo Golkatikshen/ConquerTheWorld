@@ -34,6 +34,7 @@ async function startMapGeneration(seed)
     setTimeout( function(seed) {
         let start = millis();
         worldInit(seed);
+        initStrade();
         updateBordersImages();
         updateRegionsOverlay();
         updateResourcesHTML();

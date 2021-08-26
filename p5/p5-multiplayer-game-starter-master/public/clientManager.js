@@ -154,8 +154,8 @@ function clickMartello()
     if(stop_game)
         return false;
         
-    let sr = region_cells[selected_region];
     if(selected_region != -1) {
+        let sr = region_cells[selected_region];
         if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
             let payed = false;
 
@@ -196,7 +196,13 @@ function clickStrada()
     if(stop_game)
         return;
 
-    // TODO
+    if(selected_region != -1) {
+        let sr = region_cells[selected_region];
+        if(sr.is_land && sr.h != 4) { // se è terra e non è montagna
+            if(sr.units >= 1 && legno >= 2 && rocce >= 5 && denaro >= 10)
+                building_strada = true;
+        }
+    }
 }
 
 function clickAccampamento()
@@ -204,8 +210,8 @@ function clickAccampamento()
     if(stop_game)
         return;
 
-    let sr = region_cells[selected_region];
     if(selected_region != -1) {
+        let sr = region_cells[selected_region];
         if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
             if(denaro >= 200 && legno >= 100 && sr.units >= 5) {
                 denaro -= 200;

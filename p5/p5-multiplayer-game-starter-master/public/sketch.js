@@ -1,3 +1,5 @@
+import { text } from "express";
+
 let off_x = 0, off_y = 0, zoom = 1;
 let z_t = 0; // zoom times
 let political_mode = false;
@@ -21,10 +23,14 @@ function draw()
     {
         background(6, 66, 115);
         // borders_image ha map_image come background e i borders
-        if(political_mode)
+        if(political_mode) {
             image(political_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
-        else
+            image(political_strade_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+        }
+        else {
             image(physical_borders_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+            image(physical_strade_image, -off_x, -off_y, map_width*zoom, map_height*zoom);
+        }
         image(regions_overlay, -off_x, -off_y, map_width*zoom, map_height*zoom);
         
         if(!mouse_on_hud) {
@@ -42,8 +48,6 @@ function draw()
         text("FPS: " + int(frameRate()), 10, 20);
         text("Gen time: " + nf(gen_time, 0, 2) + " seconds", 10, 40);
         text("Region biome (" + current_region + "): " + regionBiomeToString(region_cells[current_region]), 10, 60);
-        if(show_infos)
-            tabellinaInfo();
 
         if(actions_stopped)
             fill(255, 0, 0);
@@ -55,6 +59,11 @@ function draw()
             }
             turn_timer = 0;
         }
+
+        if(building_strada)
+            text("BUILDING ROAD", 100)
+        if(show_infos)
+            tabellinaInfo(30);
 
 
         // movement screen with mouse close to edges
@@ -91,10 +100,25 @@ function mouseClicked()
     {
         if(mouseButton == LEFT) {
             if(currentInSelectedAdjacents(selected_region, current_region)) {
-                moveUnits(selected_region, current_region);
+                if(building_strada) { // se stiamo costruendo strada
+                    let sr = region_cells[selected_region];
+                    legno -= 2;
+                    rocce -= 5;
+                    denaro -= 10;
+                    sr.units -= 1;
+                    socket.emit("pay_units_struct", selected_region, 1);
+                    socket.emit("create_strada", selected_region, current_region);
+                    addStrada(selected_region, current_region);
+                }
+                else { // altrimenti muoviamo unità
+                    moveUnits(selected_region, current_region);
+                }
+                
+                building_strada = false; // togli building road a prescindere
                 selected_region = -1; // deselect region
             }
             else {
+                building_strada = false; // togli building road a prescindere
                 selected_region = setSelectedRegion(current_region);
             }
         }
@@ -182,19 +206,19 @@ function windowResized()
     z_t = 0;
 }
 
-function tabellinaInfo()
+function tabellinaInfo(y_off)
 {
-    text("Press I to toggle INFOS", 10, 130);
-    text("Fattoria - 1 unità - produce 1 cibo ogni turno", 10, 160);
-    text("Falegnameria - 2 unità - produce 1 legno ogni turno", 10, 180);
-    text("Miniera - 2 unità, 5 legno - produce 1 roccia ogni turno", 10, 200);
-    text("Strada - 1 unità, 2 legno, 5 pietra, 10 oro", 10, 220);
-    text("Accampamento - 5 unità, 100 legno, 200 oro", 10, 240);
+    text("Press I to toggle INFOS", 10, y_off+130);
+    text("Fattoria - 1 unità - produce 1 cibo ogni turno", 10, y_off+160);
+    text("Falegnameria - 2 unità - produce 1 legno ogni turno", 10, y_off+180);
+    text("Miniera - 2 unità, 5 legno - produce 1 roccia ogni turno", 10, y_off+200);
+    text("Strada - 1 unità, 2 legno, 5 pietra, 10 oro", 10, y_off+220);
+    text("Accampamento - 5 unità, 100 legno, 200 oro", 10, y_off+240);
 
     text("- Ogni regione conquistata fa guadagnare 1 oro per turno.\n"+
          "- Ogni unità costa 10 di cibo per turno (prodotte automaticamente).\n"+
          "- Gli accampamenti producono unità extra senza costi aggiuntivi\n"+
          "  (se la capitale produce una unità, anche gli accampamenti lo faranno).\n"+
          "- Le strade permettono alle unità di muoversi in un solo turno.\n"+
-         "  fino a qualsiasi punto collegato dalla strada stessa.", 10, 270);
+         "  fino a qualsiasi punto collegato dalla strada stessa.", 10, y_off+270);
 }

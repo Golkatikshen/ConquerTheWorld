@@ -201,6 +201,11 @@ io.sockets.on("connection", socket => {
         p.pane = u_pane;
     });
 
+    socket.on("create_strada", (i, j) => {
+        let p = getPlayer(socket.id);
+        socket.to(p.room_name).emit("add_strada", i, j);
+    });
+
     socket.on("me_defeated", () => {
         let p = getPlayer(socket.id);
         io.in(p.room_name).emit("player_defeated", p.igid);

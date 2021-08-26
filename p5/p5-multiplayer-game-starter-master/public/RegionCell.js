@@ -6,7 +6,7 @@ class RegionCell // mostly gameplay support
         this.is_land = is_land;
         this.is_sea = false; // a priori, tutto ciò che non è terra, è lago
         // DFS in voronoiRegionsInit troverà il mare a partire dalla cella in alto a sinistra
-        this.visited = false;
+        this.visited = false; // per mare e per strade
         this.h = 0; // land biome
 
         this.igid_owner = -1; // -1 = di nessuno
