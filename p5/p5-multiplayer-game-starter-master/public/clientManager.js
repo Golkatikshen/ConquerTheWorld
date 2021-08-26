@@ -201,6 +201,7 @@ function clickStrada()
         if(sr.is_land && sr.h != 4) { // se è terra e non è montagna
             if(sr.units >= 1 && legno >= 2 && rocce >= 5 && denaro >= 10) {
                 building_strada = true;
+                //console.log("boh");
             }
         }
     }

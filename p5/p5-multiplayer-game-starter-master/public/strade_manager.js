@@ -26,10 +26,14 @@ function addStrada(i, j)
     strade[j].push(i);
 
     // graphic
-    strokeWeight(5);
-    stroke(150);
+    physical_strade_image.strokeWeight(5);
+    physical_strade_image.stroke(150);
+    physical_strade_image.strokeWeight(4);
+    physical_strade_image.stroke(55, 29, 16);
     physical_strade_image.line(region_cells[i].centroid[0], region_cells[i].centroid[1], region_cells[j].centroid[0], region_cells[j].centroid[1]);
-    stroke(230);
+    
+    political_strade_image.strokeWeight(5);
+    political_strade_image.stroke(230);
     political_strade_image.line(region_cells[i].centroid[0], region_cells[i].centroid[1], region_cells[j].centroid[0], region_cells[j].centroid[1]);
 }
 

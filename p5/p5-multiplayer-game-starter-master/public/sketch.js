@@ -49,7 +49,7 @@ function draw()
         text("Region biome (" + current_region + "): " + regionBiomeToString(region_cells[current_region]), 10, 60);
         
         if(building_strada)
-            text("BUILDING ROAD", 100)
+            text("## BUILDING ROAD ##", 10, 100)
         if(show_infos)
             tabellinaInfo(30);
 
@@ -98,10 +98,13 @@ function mouseClicked()
     {
         if(mouseButton == LEFT) {
             if(building_strada) { // se stiamo costruendo strada
+                //console.log("ma che cazz1");
                 if(currentInSelectedAdjacents(selected_region, current_region)) {
+                    //console.log("ma che cazz2");
                     let cr = region_cells[current_region];
                     // un giocatore può costruire strada verso terra propria che non sia montagna
                     if(cr.is_land && cr.h != 4 && cr.igid_owner == local_player.igid) {
+                        //console.log("ma che cazz3");
                         legno -= 2;
                         rocce -= 5;
                         denaro -= 10;
