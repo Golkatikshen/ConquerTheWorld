@@ -169,14 +169,17 @@ export class Room {
         }
 
         //il più forte conquista la regione
-        if(region.igid_owner != mem1) // capire se vale la pena distruggere la capitale o meno
+        if(region.igid_owner !== mem1) { // capire se vale la pena distruggere la capitale o meno
             region.is_capital = false;
+            region.is_accampamento = false;
+            region.is_producing = false;
+        }
 
         //region.igid_owner = mem1;
         region.next_igid_owner = mem1;
 
         //e perde tante forze militari quante ne aveva il secondo più forte
-        if(mem2 != -1)
+        if(mem2 !== -1)
             n_units_pp[mem1] -= max2;
 
         //tutti gli altri perdono tutte le forze militari
