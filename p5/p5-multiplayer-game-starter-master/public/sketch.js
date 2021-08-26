@@ -1,4 +1,3 @@
-import { text } from "express";
 
 let off_x = 0, off_y = 0, zoom = 1;
 let z_t = 0; // zoom times
@@ -99,27 +98,34 @@ function mouseClicked()
     if(game_started && !actions_stopped && !mouse_on_hud)
     {
         if(mouseButton == LEFT) {
-            if(currentInSelectedAdjacents(selected_region, current_region)) {
-                if(building_strada) { // se stiamo costruendo strada
-                    let sr = region_cells[selected_region];
-                    legno -= 2;
-                    rocce -= 5;
-                    denaro -= 10;
-                    sr.units -= 1;
-                    socket.emit("pay_units_struct", selected_region, 1);
-                    socket.emit("create_strada", selected_region, current_region);
-                    addStrada(selected_region, current_region);
+            if(building_strada) { // se stiamo costruendo strada
+                if(currentInSelectedAdjacents(selected_region, current_region)) {
+                    let cr = region_cells[current_region];
+                    // un giocatore può costruire strada verso terra propria che non sia montagna
+                    if(cr.is_land && cr.h != 4 && cr.igid_owner == local_player.igid) {
+                        legno -= 2;
+                        rocce -= 5;
+                        denaro -= 10;
+                        region_cells[selected_region].units -= 1;
+                        socket.emit("pay_units_struct", selected_region, 1);
+                        socket.emit("create_strada", selected_region, current_region);
+                        addStrada(selected_region, current_region);
+                    }
                 }
-                else { // altrimenti muoviamo unità
-                    moveUnits(selected_region, current_region);
-                }
-                
+
                 building_strada = false; // togli building road a prescindere
                 selected_region = -1; // deselect region
             }
-            else {
-                building_strada = false; // togli building road a prescindere
-                selected_region = setSelectedRegion(current_region);
+            else { // altrimenti muoviamo unità se sono in casella adiacente o su stessa strada
+                if(currentInSelectedAdjacents(selected_region, current_region) ||
+                   isOnSameRoad(selected_region, current_region)) {
+                    moveUnits(selected_region, current_region);
+                    selected_region = -1; // deselect region
+                }
+                else {
+                    building_strada = false; // togli building road a prescindere
+                    selected_region = setSelectedRegion(current_region);
+                }
             }
         }
     }

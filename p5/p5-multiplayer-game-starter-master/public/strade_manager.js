@@ -32,3 +32,28 @@ function addStrada(i, j)
     political_strade_image.line(region_cells[i].centroid[0], region_cells[i].centroid[1], region_cells[j].centroid[0], region_cells[j].centroid[1]);
 }
 
+function isOnSameRoad(curr, end)
+{
+    for(let i=0; i<region_cells.length; i++) {
+        region_cells[i].visited = false;
+    }
+
+    return DFS_strade(curr, end);
+}
+
+function DFS_strade(curr, end)
+{
+    if(curr == end)
+        return true;
+
+    region_cells[curr].visited == true;
+    for(let i=0; i<strade[curr].length; i++) {
+        if(!region_cells[strade[curr][i]].visited) {
+            if(DFS_strade(strade[curr][i], end)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
