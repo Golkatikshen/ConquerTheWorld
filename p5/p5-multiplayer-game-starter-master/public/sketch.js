@@ -1,9 +1,9 @@
-
 let off_x = 0, off_y = 0, zoom = 1;
 let z_t = 0; // zoom times
 let political_mode = false;
 let w_pressed = false, a_pressed = false, s_pressed = false, d_pressed = false;
 let mouse_on_hud = false;
+let show_infos = true;
 
 
 function setup()
@@ -42,7 +42,9 @@ function draw()
         text("FPS: " + int(frameRate()), 10, 20);
         text("Gen time: " + nf(gen_time, 0, 2) + " seconds", 10, 40);
         text("Region biome (" + current_region + "): " + regionBiomeToString(region_cells[current_region]), 10, 60);
-        
+        if(show_infos)
+            tabellinaInfo();
+
         if(actions_stopped)
             fill(255, 0, 0);
         text("Timer: " + nf(turn_timer/1000, 0, 2) + " seconds", 10, 80);
@@ -106,6 +108,11 @@ function keyPressed()
     if(key == 'm' || key == 'M') {
         political_mode = !political_mode;
     }
+
+    if(key == 'i' || key == 'I') {
+        show_infos = !show_infos;
+    }
+
 
     if(key == 'a' || key == 'A') {
         a_pressed = true;
@@ -173,4 +180,21 @@ function windowResized()
     resizeCanvas(windowWidth, windowHeight);
     zoom = windowWidth/map_width;
     z_t = 0;
+}
+
+function tabellinaInfo()
+{
+    text("Press I to toggle INFOS", 10, 130);
+    text("Fattoria - 1 unità - produce 1 cibo ogni turno", 10, 160);
+    text("Falegnameria - 2 unità - produce 1 legno ogni turno", 10, 180);
+    text("Miniera - 2 unità, 5 legno - produce 1 roccia ogni turno", 10, 200);
+    text("Strada - 1 unità, 2 legno, 5 pietra, 10 oro", 10, 220);
+    text("Accampamento - 5 unità, 100 legno, 200 oro", 10, 240);
+
+    text("- Ogni regione conquistata fa guadagnare 1 oro per turno.\n"+
+         "- Ogni unità costa 10 di cibo per turno (prodotte automaticamente).\n"+
+         "- Gli accampamenti producono unità extra senza costi aggiuntivi\n"+
+         "  (se la capitale produce una unità, anche gli accampamenti lo faranno).\n"+
+         "- Le strade permettono alle unità di muoversi in un solo turno.\n"+
+         "  fino a qualsiasi punto collegato dalla strada stessa.", 10, 270);
 }

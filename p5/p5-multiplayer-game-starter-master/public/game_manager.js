@@ -18,7 +18,7 @@ let total_land = 0;
 let p_count = {}; // numero di caselle che ogni giocatore possiede calcolato in updateRegionsCells
 
 let denaro = 0;
-let pane = 0;
+let pane = 100;
 let legno = 0;
 let rocce = 0;
 let unita_totali = 0; // da aggiungere

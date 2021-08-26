@@ -165,7 +165,7 @@ function clickMartello()
                 payed = true;
             }
 
-            if(sr.h == 2 && sr.units >= 1 && legno >= 5) { // miniera
+            if(sr.h == 2 && sr.units >= 2 && legno >= 5) { // miniera
                 sr.units -= 1;
                 legno -= 5;
                 socket.emit("pay_units_struct", selected_region, 1);
@@ -207,9 +207,9 @@ function clickAccampamento()
     let sr = region_cells[selected_region];
     if(selected_region != -1) {
         if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
-            if(denaro >= 200 && legno >= 10 && sr.units >= 5) {
+            if(denaro >= 200 && legno >= 100 && sr.units >= 5) {
                 denaro -= 200;
-                legno -= 10;
+                legno -= 100;
                 sr.units -= 5;
                 socket.emit("pay_units_accamp", selected_region, 5);
                 sr.is_accampamento = true;

@@ -14,7 +14,7 @@ export class Player {
 
     this.defeated = false; // capital lost = defeated
     this.has_to_pay_pane = false;
-    this.pane = 0;
+    this.pane = 100;
   }
 }
 
