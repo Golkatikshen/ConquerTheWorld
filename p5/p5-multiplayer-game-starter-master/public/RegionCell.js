@@ -1,7 +1,8 @@
 class RegionCell // mostly gameplay support
 { 
-    constructor(is_land)
+    constructor(is_land, i)
     {
+        this.id = i;
         this.centroid = [];
         this.is_land = is_land;
         this.is_sea = false; // a priori, tutto ciò che non è terra, è lago
@@ -20,6 +21,7 @@ class RegionCell // mostly gameplay support
         this.is_capital = false;
         this.is_producing = false;
         this.is_accampamento = false;
+        this.is_fortified = false;
 
         this.move_here_from = [];   // server side only (on client there is action queue for visualization)
         this.moving = false;
@@ -27,8 +29,12 @@ class RegionCell // mostly gameplay support
 
     displayUnits(ctx)
     {
-        if(this.units > 0)
+        if(this.units > 0) {
+            ctx.fill(0);
+            ctx.noStroke();
             ctx.text(this.units, this.centroid[0], this.centroid[1]);
+        }
+            
     }
 
     displayCapital(ctx)
@@ -41,7 +47,7 @@ class RegionCell // mostly gameplay support
         }       
     }
 
-    displayProdOrAccamp(ctx)
+    displayProdOrAccamp(ctx) // or fortification
     {
         if(this.is_producing)
         {
@@ -59,6 +65,20 @@ class RegionCell // mostly gameplay support
         if(this.is_accampamento)
         {
             ctx.image(accampamento_img, this.centroid[0]-accampamento_img.width/2, this.centroid[1]-accampamento_img.height/2);
+        }
+
+        if(this.is_fortified)
+        {
+            ctx.strokeWeight(3);
+            ctx.stroke(50);
+            ctx.beginShape();
+            ctx.noFill();
+            let conv_poly = voronoi_regions.cellPolygon(this.id);
+            for(let j=0; j<conv_poly.length; j++) {
+                let scaled_point = scaleVector(conv_poly[j], this.centroid, 0.7);
+                ctx.vertex(scaled_point[0], scaled_point[1]);
+            }
+            ctx.endShape(CLOSE);
         }
     }
 }

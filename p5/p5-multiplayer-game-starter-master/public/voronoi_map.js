@@ -208,7 +208,7 @@ function voronoiRegionsInit()
         if(hv > 0.05)
             is_land = true;
 
-        region_cells.push(new RegionCell(is_land));
+        region_cells.push(new RegionCell(is_land, i));
     }
 
     calcRegionCentroids();

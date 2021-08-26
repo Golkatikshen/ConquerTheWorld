@@ -233,7 +233,6 @@ function updateRegionsOverlay()
     regions_overlay.textSize(16);
     regions_overlay.textFont(open_sans_extrabold);
     regions_overlay.textAlign(CENTER, CENTER);
-    regions_overlay.fill(0);
     for(const r of region_cells) {
         r.displayProdOrAccamp(regions_overlay)
         r.displayCapital(regions_overlay);
