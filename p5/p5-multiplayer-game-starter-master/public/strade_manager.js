@@ -26,14 +26,19 @@ function addStrada(i, j)
     strade[j].push(i);
 
     // graphic
-    stroke(100);
+    strokeWeight(5);
+    stroke(150);
     physical_strade_image.line(region_cells[i].centroid[0], region_cells[i].centroid[1], region_cells[j].centroid[0], region_cells[j].centroid[1]);
-    stroke(10);
+    stroke(230);
     political_strade_image.line(region_cells[i].centroid[0], region_cells[i].centroid[1], region_cells[j].centroid[0], region_cells[j].centroid[1]);
 }
 
 function isOnSameRoad(curr, end)
 {
+    // non ha senso creare una strada sulla stessa casella
+    if(curr == end || curr == -1 || end == -1)
+        return false;
+
     for(let i=0; i<region_cells.length; i++) {
         region_cells[i].visited = false;
     }

@@ -47,6 +47,11 @@ function draw()
         text("FPS: " + int(frameRate()), 10, 20);
         text("Gen time: " + nf(gen_time, 0, 2) + " seconds", 10, 40);
         text("Region biome (" + current_region + "): " + regionBiomeToString(region_cells[current_region]), 10, 60);
+        
+        if(building_strada)
+            text("BUILDING ROAD", 100)
+        if(show_infos)
+            tabellinaInfo(30);
 
         if(actions_stopped)
             fill(255, 0, 0);
@@ -59,14 +64,8 @@ function draw()
             turn_timer = 0;
         }
 
-        if(building_strada)
-            text("BUILDING ROAD", 100)
-        if(show_infos)
-            tabellinaInfo(30);
 
-
-        // movement screen with mouse close to edges
-        
+        // movement screen with mouse close to edges and wasd 
         if(/*mouseX < 50 ||*/ a_pressed) {
             off_x -= 5*zoom;
             off_x = max(off_x, 0);
@@ -123,7 +122,6 @@ function mouseClicked()
                     selected_region = -1; // deselect region
                 }
                 else {
-                    building_strada = false; // togli building road a prescindere
                     selected_region = setSelectedRegion(current_region);
                 }
             }

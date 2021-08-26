@@ -166,9 +166,9 @@ function clickMartello()
             }
 
             if(sr.h == 2 && sr.units >= 2 && legno >= 5) { // miniera
-                sr.units -= 1;
+                sr.units -= 2;
                 legno -= 5;
-                socket.emit("pay_units_struct", selected_region, 1);
+                socket.emit("pay_units_struct", selected_region, 2);
                 payed = true;
             }
 
@@ -199,8 +199,9 @@ function clickStrada()
     if(selected_region != -1) {
         let sr = region_cells[selected_region];
         if(sr.is_land && sr.h != 4) { // se è terra e non è montagna
-            if(sr.units >= 1 && legno >= 2 && rocce >= 5 && denaro >= 10)
+            if(sr.units >= 1 && legno >= 2 && rocce >= 5 && denaro >= 10) {
                 building_strada = true;
+            }
         }
     }
 }
