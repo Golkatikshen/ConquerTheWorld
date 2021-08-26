@@ -199,7 +199,7 @@ function clickStrada()
     if(selected_region != -1) {
         let sr = region_cells[selected_region];
         if(sr.is_land && sr.h != 4) { // se è terra e non è montagna
-            if(sr.units >= 1 && legno >= 2 && rocce >= 5 && denaro >= 10) {
+            if(sr.units >= 1 && legno >= 10 && rocce >= 20 && denaro >= 100) {
                 building_strada = true;
                 //console.log("boh");
             }
@@ -215,8 +215,8 @@ function clickAccampamento()
     if(selected_region != -1) {
         let sr = region_cells[selected_region];
         if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
-            if(denaro >= 200 && legno >= 100 && sr.units >= 5) {
-                denaro -= 200;
+            if(denaro >= 2000 && legno >= 100 && sr.units >= 5) {
+                denaro -= 2000;
                 legno -= 100;
                 sr.units -= 5;
                 socket.emit("pay_units_accamp", selected_region, 5);

@@ -103,11 +103,11 @@ function mouseClicked()
                     //console.log("ma che cazz2");
                     let cr = region_cells[current_region];
                     // un giocatore può costruire strada verso terra propria che non sia montagna
-                    if(cr.is_land && cr.h != 4 && cr.igid_owner == local_player.igid) {
+                    if(cr.is_land && cr.h !== 4 && cr.igid_owner === local_player.igid) {
                         //console.log("ma che cazz3");
-                        legno -= 2;
-                        rocce -= 5;
-                        denaro -= 10;
+                        legno -= 10;
+                        rocce -= 20;
+                        denaro -= 100;
                         region_cells[selected_region].units -= 1;
                         socket.emit("pay_units_struct", selected_region, 1);
                         socket.emit("create_strada", selected_region, current_region);
@@ -119,10 +119,12 @@ function mouseClicked()
                 selected_region = -1; // deselect region
             }
             else { // altrimenti muoviamo unità se sono in casella adiacente o su stessa strada
-                if(currentInSelectedAdjacents(selected_region, current_region) ||
-                   isOnSameRoad(selected_region, current_region)) {
-                    moveUnits(selected_region, current_region);
-                    selected_region = -1; // deselect region
+                if(region_cells[current_region].igid_owner === local_player.igid) {
+                    if(currentInSelectedAdjacents(selected_region, current_region) ||
+                       isOnSameRoad(selected_region, current_region)) {
+                        moveUnits(selected_region, current_region);
+                        selected_region = -1; // deselect region
+                    }
                 }
                 else {
                     selected_region = setSelectedRegion(current_region);
@@ -219,8 +221,8 @@ function tabellinaInfo(y_off)
     text("Fattoria - 1 unità - produce 1 cibo ogni turno", 10, y_off+160);
     text("Falegnameria - 2 unità - produce 1 legno ogni turno", 10, y_off+180);
     text("Miniera - 2 unità, 5 legno - produce 1 roccia ogni turno", 10, y_off+200);
-    text("Strada - 1 unità, 2 legno, 5 pietra, 10 oro", 10, y_off+220);
-    text("Accampamento - 5 unità, 100 legno, 200 oro", 10, y_off+240);
+    text("Strada - 1 unità, 10 legno, 20 pietra, 100 oro", 10, y_off+220);
+    text("Accampamento - 5 unità, 100 legno, 2000 oro", 10, y_off+240);
 
     text("- Ogni regione conquistata fa guadagnare 1 oro per turno.\n"+
          "- Ogni unità costa 10 di cibo per turno (prodotte automaticamente).\n"+
