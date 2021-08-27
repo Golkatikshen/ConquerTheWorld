@@ -149,7 +149,10 @@ export class Room {
         // le unità già dentro contribuiscono come quelle che attaccano o danno manforte
         // se non si stanno muovendo per andare da un'altra parte
         if(region.igid_owner !== -1 && !region.moving) { // ridondante, se si muovono => region.units = 0
-            n_units_pp[region.igid_owner] += region.units;
+            if(region.is_fortified) // se è fortified quelle dentro valgono per due
+                n_units_pp[region.igid_owner] += region.units * 2;
+            else
+                n_units_pp[region.igid_owner] += region.units;
         }
 
         // trovo il migliore e il secondo migliore
@@ -179,8 +182,15 @@ export class Room {
         region.next_igid_owner = mem1;
 
         //e perde tante forze militari quante ne aveva il secondo più forte
-        if(mem2 !== -1)
-            n_units_pp[mem1] -= max2;
+        if(mem2 !== -1) {
+            if(region.igid_owner === mem1) {
+                n_units_pp[mem1] -= Math.floor(max2/2);
+            }
+            else {
+                n_units_pp[mem1] -= max2;
+            }
+        }
+            
 
         //tutti gli altri perdono tutte le forze militari
         /*for(let p of room.players) {
