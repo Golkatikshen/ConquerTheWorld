@@ -230,6 +230,6 @@ function tabellinaInfo(y_off)
          "- Gli accampamenti producono unità extra senza costi aggiuntivi\n"+
          "  (se la capitale produce una unità, anche gli accampamenti lo faranno).\n"+
          "- Le strade permettono alle unità di muoversi in un solo turno.\n"+
-         "  fino a qualsiasi punto collegato dalla strada stessa.\n",+
+         "  fino a qualsiasi punto collegato dalla strada stessa.\n"+
          "- Le unità dentro una fortezza valgono il doppio.", 10, y_off+270);
 }

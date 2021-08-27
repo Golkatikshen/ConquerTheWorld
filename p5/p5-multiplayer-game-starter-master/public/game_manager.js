@@ -134,6 +134,7 @@ function updateRegionCells(updated_region_cells)
         region_cells[i].is_capital = updated_region_cells[i].is_capital;
         region_cells[i].is_producing = updated_region_cells[i].is_producing;
         region_cells[i].is_accampamento = updated_region_cells[i].is_accampamento;
+        region_cells[i].is_fortified = updated_region_cells[i].is_fortified;
         region_cells[i].in_queue = false;
 
         p_count[region_cells[i].igid_owner] ++; // conteggio percentuale
