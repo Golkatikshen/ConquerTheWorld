@@ -110,8 +110,8 @@ function mouseClicked()
                         legno -= 10;
                         rocce -= 20;
                         denaro -= 100;
-                        region_cells[selected_region].units -= 1;
-                        socket.emit("pay_units_struct", selected_region, 1);
+                        //region_cells[selected_region].units -= 1;
+                        //socket.emit("pay_units_struct", selected_region, 1);
                         socket.emit("create_strada", selected_region, current_region);
                         addStrada(selected_region, current_region);
                     }

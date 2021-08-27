@@ -159,22 +159,22 @@ function clickMartello()
         if(!sr.is_capital && !sr.is_producing && !sr.is_accampamento && sr.is_land) {
             let payed = false;
 
-            if(sr.h == 0 && sr.units >= 1) { // fattoria
-                sr.units -= 1;
-                socket.emit("pay_units_struct", selected_region, 1);
+            if(sr.h == 0 /*&& sr.units >= 1*/) { // fattoria
+                //sr.units -= 1;
+                socket.emit("pay_units_struct", selected_region, 0);
                 payed = true;
             }
 
-            if(sr.h == 2 && sr.units >= 2 && legno >= 5) { // miniera
-                sr.units -= 2;
+            if(sr.h == 2 /*&& sr.units >= 2*/ && legno >= 5) { // miniera
+                //sr.units -= 2;
                 legno -= 5;
-                socket.emit("pay_units_struct", selected_region, 2);
+                socket.emit("pay_units_struct", selected_region, 0);
                 payed = true;
             }
 
-            if(sr.h == 3 && sr.units >= 2) { // falegnameria
-                sr.units -= 2;
-                socket.emit("pay_units_struct", selected_region, 2);
+            if(sr.h == 3 /*&& sr.units >= 2*/) { // falegnameria
+                //sr.units -= 2;
+                socket.emit("pay_units_struct", selected_region, 0);
                 payed = true;
             }
 
@@ -199,7 +199,7 @@ function clickStrada()
     if(selected_region != -1) {
         let sr = region_cells[selected_region];
         if(sr.is_land && sr.h != 4) { // se è terra e non è montagna
-            if(sr.units >= 1 && legno >= 10 && rocce >= 20 && denaro >= 100) {
+            if(/*sr.units >= 1 &&*/ legno >= 10 && rocce >= 20 && denaro >= 100) {
                 building_strada = true;
                 //console.log("boh");
             }
