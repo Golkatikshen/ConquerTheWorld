@@ -1,8 +1,8 @@
 
 // https://socket.io/docs/v3/emit-cheatsheet/index.html
 
-//const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect("https://test-conquertheworld.herokuapp.com/");
+//const socket = io.connect('http://localhost:3000');
 let world_generated = false;
 let players = [];
 let local_player;

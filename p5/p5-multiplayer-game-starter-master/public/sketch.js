@@ -223,11 +223,13 @@ function tabellinaInfo(y_off)
     text("Miniera - 2 unità, 5 legno - produce 1 roccia ogni turno", 10, y_off+200);
     text("Strada - 1 unità, 10 legno, 20 pietra, 100 oro", 10, y_off+220);
     text("Accampamento - 5 unità, 100 legno, 2000 oro", 10, y_off+240);
+    text("Fortificazione - 3 unità, 100 pietra, 300 oro", 10, y_off+260);
 
     text("- Ogni regione conquistata fa guadagnare 1 oro per turno.\n"+
          "- Ogni unità costa 10 di cibo per turno (prodotte automaticamente).\n"+
          "- Gli accampamenti producono unità extra senza costi aggiuntivi\n"+
          "  (se la capitale produce una unità, anche gli accampamenti lo faranno).\n"+
          "- Le strade permettono alle unità di muoversi in un solo turno.\n"+
-         "  fino a qualsiasi punto collegato dalla strada stessa.", 10, y_off+270);
+         "  fino a qualsiasi punto collegato dalla strada stessa.\n",+
+         "- Le unità dentro una fortezza valgono il doppio.", 10, y_off+270);
 }
