@@ -47,7 +47,7 @@ class RegionCell // mostly gameplay support
         }       
     }
 
-    displayProdOrAccamp(ctx) // or fortification
+    displayFeatures(ctx) // prod or accamps or fortification
     {
         if(this.is_producing)
         {

@@ -234,7 +234,7 @@ function updateRegionsOverlay()
     regions_overlay.textFont(open_sans_extrabold);
     regions_overlay.textAlign(CENTER, CENTER);
     for(const r of region_cells) {
-        r.displayProdOrAccamp(regions_overlay)
+        r.displayFeatures(regions_overlay)
         r.displayCapital(regions_overlay);
         r.displayUnits(regions_overlay);
     }

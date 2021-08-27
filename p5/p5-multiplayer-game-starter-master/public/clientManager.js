@@ -181,7 +181,7 @@ function clickMartello()
             if(payed) {
                 sr.is_producing = true;
                 regions_overlay.tint(255, 160);
-                sr.displayProdOrAccamp(regions_overlay)
+                sr.displayFeatures(regions_overlay)
                 regions_overlay.noTint();
             }
         }
@@ -222,7 +222,29 @@ function clickAccampamento()
                 socket.emit("pay_units_accamp", selected_region, 5);
                 sr.is_accampamento = true;
                 regions_overlay.tint(255, 160);
-                sr.displayProdOrAccamp(regions_overlay)
+                sr.displayFeatures(regions_overlay)
+                regions_overlay.noTint();
+            }
+        }
+    }
+}
+
+function clickFortificazione()
+{
+    if(stop_game)
+        return;
+
+    if(selected_region !== -1) {
+        let sr = region_cells[selected_region];
+        if(sr.is_land && !sr.is_fortified) {
+            if(denaro >= 300 && rocce >= 100 && sr.units >= 3) {
+                sr.units -= 3;
+                denaro -= 300;
+                rocce -= 100;
+                socket.emit("pay_units_fort", selected_region, 3);
+                sr.is_fortified = true;
+                regions_overlay.tint(255, 160);
+                sr.displayFeatures(regions_overlay)
                 regions_overlay.noTint();
             }
         }

@@ -196,6 +196,12 @@ io.sockets.on("connection", socket => {
         room.region_cells[reg].units -= cost;
     });
 
+    socket.on("pay_units_fort", (reg, cost) => {
+        let room = getRoomFromPlayer(socket.id);
+        room.region_cells[reg].is_fortified = true;
+        room.region_cells[reg].units -= cost;
+    });
+
     socket.on("update_pane", (u_pane) => {
         let p = getPlayer(socket.id);
         p.pane = u_pane;
