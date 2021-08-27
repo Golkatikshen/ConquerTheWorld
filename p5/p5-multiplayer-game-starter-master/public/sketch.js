@@ -98,13 +98,13 @@ function mouseClicked()
     {
         if(mouseButton == LEFT) {
             if(building_strada) { // se stiamo costruendo strada
-                //console.log("ma che cazz1");
+                console.log("ma che cazz1");
                 if(currentInSelectedAdjacents(selected_region, current_region)) {
-                    //console.log("ma che cazz2");
+                    console.log("ma che cazz2");
                     let cr = region_cells[current_region];
                     // un giocatore può costruire strada verso terra propria che non sia montagna
                     if(cr.is_land && cr.h !== 4 && cr.igid_owner === local_player.igid) {
-                        //console.log("ma che cazz3");
+                        console.log("ma che cazz3");
                         legno -= 10;
                         rocce -= 20;
                         denaro -= 100;
@@ -119,15 +119,15 @@ function mouseClicked()
                 selected_region = -1; // deselect region
             }
             else { // altrimenti muoviamo unità se sono in casella adiacente o su stessa strada
-                if(region_cells[current_region].igid_owner === local_player.igid) {
-                    if(currentInSelectedAdjacents(selected_region, current_region) ||
-                       isOnSameRoad(selected_region, current_region)) {
+                if( currentInSelectedAdjacents(selected_region, current_region) ||
+                    (region_cells[current_region].igid_owner === local_player.igid &&
+                    isOnSameRoad(selected_region, current_region)) ) {
                         moveUnits(selected_region, current_region);
                         selected_region = -1; // deselect region
-                    }
                 }
-                else {
+                else { 
                     selected_region = setSelectedRegion(current_region);
+                    console.log(selected_region, " che succcede1");
                 }
             }
         }

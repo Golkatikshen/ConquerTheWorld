@@ -224,6 +224,7 @@ function clickAccampamento()
                 regions_overlay.tint(255, 160);
                 sr.displayFeatures(regions_overlay)
                 regions_overlay.noTint();
+                selected_region = -1;
             }
         }
     }
@@ -246,6 +247,7 @@ function clickFortificazione()
                 regions_overlay.tint(255, 160);
                 sr.displayFeatures(regions_overlay)
                 regions_overlay.noTint();
+                selected_region = -1;
             }
         }
     }
