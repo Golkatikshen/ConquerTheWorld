@@ -36,6 +36,7 @@ function draw()
             drawRegionHovered();
         }
         drawRegionSelected();
+        drawPossibleMovementOrBuildRoadsRegions();
 
         for(let a of actions_queue) {
             a.display();
@@ -98,13 +99,13 @@ function mouseClicked()
     {
         if(mouseButton == LEFT) {
             if(building_strada) { // se stiamo costruendo strada
-                console.log("ma che cazz1");
+                //console.log("ma che cazz1");
                 if(currentInSelectedAdjacents(selected_region, current_region)) {
-                    console.log("ma che cazz2");
+                    //console.log("ma che cazz2");
                     let cr = region_cells[current_region];
                     // un giocatore può costruire strada verso terra propria che non sia montagna
                     if(cr.is_land && cr.h !== 4 && cr.igid_owner === local_player.igid) {
-                        console.log("ma che cazz3");
+                        //console.log("ma che cazz3");
                         legno -= 10;
                         rocce -= 20;
                         denaro -= 100;
@@ -127,10 +128,16 @@ function mouseClicked()
                 }
                 else { 
                     selected_region = setSelectedRegion(current_region);
-                    console.log(selected_region, " che succcede1");
+                    updatePossibleRegions();
+                    //console.log(selected_region, " che succcede1");
                 }
             }
         }
+    }
+    
+    if(mouseButton == RIGHT) {
+        building_strada = false; // togli building road
+        selected_region = -1; // deselect region
     }
 
     return false;

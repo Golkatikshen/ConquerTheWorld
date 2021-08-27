@@ -1,5 +1,6 @@
 
 let current_region = 0; // hovering
+let possible_regions = []; // destination of movement or roads construction
 let gen_time = 0;
 let game_started = false;
 let stop_game = false;
@@ -80,6 +81,14 @@ function drawRegionSelected()
     }
 }
 
+function drawPossibleMovementOrBuildRoadsRegions()
+{
+    for(let pr of possible_regions) {
+        drawRegion(pr);
+    }
+}
+
+
 function drawRegionsConquered()
 {
     noStroke();
@@ -102,6 +111,36 @@ function drawRegion(index_region)
         vertex((conv_poly[j][0]*zoom)-off_x, (conv_poly[j][1]*zoom)-off_y);
     }
     endShape(CLOSE);
+}
+
+function drawAdjacentRegions(index_region) {
+    for(let n of voronoi_regions.neighbors(index_region)) {
+        drawRegion(n);
+    }
+}
+
+function drawMyRegionsOnRoad(index_region)
+{
+
+}
+
+
+function updatePossibleRegions()
+{
+    if(selected_region !== -1) {
+        if(building_strada) {
+            fill(0, 0, 255, 50);
+            for(let n of voronoi_regions.neighbors(selected_region)) {
+                if(region_cells[n].is_land && region_cells[n].h !== 4) // check extra per costruzione strade
+                    drawRegion(n);
+            }
+        }
+        else {
+            fill(255, 50);
+            drawAdjacentRegions(selected_region);
+            drawMyRegionsOnRoad(selected_region);
+        }
+    }
 }
 
 
