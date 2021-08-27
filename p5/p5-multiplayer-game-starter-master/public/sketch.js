@@ -107,9 +107,9 @@ function mouseClicked()
                     // un giocatore può costruire strada verso terra propria che non sia montagna
                     if(cr.is_land && cr.h !== 4 && cr.igid_owner === local_player.igid) {
                         //console.log("ma che cazz3");
-                        legno -= 10;
-                        rocce -= 20;
-                        denaro -= 100;
+                        legno -= 1;
+                        rocce -= 2;
+                        denaro -= 50;
                         //region_cells[selected_region].units -= 1;
                         //socket.emit("pay_units_struct", selected_region, 1);
                         socket.emit("create_strada", selected_region, current_region);

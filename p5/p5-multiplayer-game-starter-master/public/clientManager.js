@@ -220,7 +220,7 @@ function clickAccampamento()
             if(denaro >= 1000 && legno >= 100 && sr.units >= 4) {
                 denaro -= 1000;
                 legno -= 100;
-                sr.units -= 5;
+                sr.units -= 4;
                 socket.emit("pay_units_accamp", selected_region, 4);
                 sr.is_accampamento = true;
                 regions_overlay.tint(255, 160);
