@@ -100,7 +100,8 @@ function mouseClicked()
         if(mouseButton == LEFT) {
             if(building_strada) { // se stiamo costruendo strada
                 //console.log("ma che cazz1");
-                if(currentInSelectedAdjacents(selected_region, current_region)) {
+                /*if(currentInSelectedAdjacents(selected_region, current_region))*/
+                if(possible_regions_strada.includes(current_region)) {
                     //console.log("ma che cazz2");
                     let cr = region_cells[current_region];
                     // un giocatore può costruire strada verso terra propria che non sia montagna
@@ -117,14 +118,15 @@ function mouseClicked()
                 }
 
                 building_strada = false; // togli building road a prescindere
-                selected_region = -1; // deselect region
+                resetSelectedRegion();
             }
             else { // altrimenti muoviamo unità se sono in casella adiacente o su stessa strada
-                if( currentInSelectedAdjacents(selected_region, current_region) ||
+                /*if( currentInSelectedAdjacents(selected_region, current_region) ||
                     (region_cells[current_region].igid_owner === local_player.igid &&
-                    isOnSameRoad(selected_region, current_region)) ) {
+                    isOnSameRoad(selected_region, current_region)) )*/
+                if(possible_regions.includes(current_region)) {
                         moveUnits(selected_region, current_region);
-                        selected_region = -1; // deselect region
+                        resetSelectedRegion();
                 }
                 else { 
                     selected_region = setSelectedRegion(current_region);
@@ -137,7 +139,7 @@ function mouseClicked()
     
     if(mouseButton == RIGHT) {
         building_strada = false; // togli building road
-        selected_region = -1; // deselect region
+        resetSelectedRegion();
     }
 
     return false;
@@ -238,5 +240,5 @@ function tabellinaInfo(y_off)
          "  (se la capitale produce una unità, anche gli accampamenti lo faranno).\n"+
          "- Le strade permettono alle unità di muoversi in un solo turno.\n"+
          "  fino a qualsiasi punto collegato dalla strada stessa.\n"+
-         "- Le unità dentro una fortezza valgono il doppio.", 10, y_off+270);
+         "- Le unità dentro una fortezza valgono il doppio.", 10, y_off+290);
 }

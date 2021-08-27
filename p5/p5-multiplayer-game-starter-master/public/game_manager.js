@@ -1,6 +1,7 @@
 
 let current_region = 0; // hovering
-let possible_regions = []; // destination of movement or roads construction
+let possible_regions = []; // destination of movement 
+let possible_regions_strada = []; // destination of roads construction
 let gen_time = 0;
 let game_started = false;
 let stop_game = false;
@@ -83,13 +84,57 @@ function drawRegionSelected()
 
 function drawPossibleMovementOrBuildRoadsRegions()
 {
-    for(let pr of possible_regions) {
-        drawRegion(pr);
+    if(building_strada) {
+        fill(255, 0, 0, 35);
+        for(let pr of possible_regions_strada) {
+            drawRegion(pr);
+        }
+    }
+    else {
+        fill(255, 35);
+        for(let pr of possible_regions) {
+            drawRegion(pr);
+        }
     }
 }
 
+function updatePossibleRegions()
+{
+    possible_regions = [];
+    possible_regions_strada = [];
 
-function drawRegionsConquered()
+    if(selected_region !== -1) {
+        for(let n of voronoi_regions.neighbors(selected_region)) {
+            possible_regions.push(n);
+            if(region_cells[n].is_land && region_cells[n].h !== 4) // check extra per costruzione strade
+                possible_regions_strada.push(n);
+        }
+        
+        for(let i=0; i<region_cells.length; i++) {
+            region_cells[i].visited = false;
+        }
+
+        if(region_cells[selected_region].is_land && region_cells[selected_region].h !== 4)
+            DFS_possibleRoads(selected_region);
+        //drawMyRegionsOnRoad(selected_region);
+    }
+}
+
+function DFS_possibleRoads(curr)
+{
+    if(region_cells[curr].visited || region_cells[curr].igid_owner !== local_player.igid)
+        return;
+    region_cells[curr].visited = true;
+
+    if(selected_region !== curr)
+        possible_regions.push(curr);
+
+    for(let i=0; i<strade[curr].length; i++) {
+        DFS_possibleRoads(strade[curr][i])
+    }
+}
+
+/*function drawRegionsConquered()
 {
     noStroke();
     for(let i=0; i<region_cells.length; i++) {
@@ -100,7 +145,7 @@ function drawRegionsConquered()
             }
         }
     }
-}
+}*/
 
 function drawRegion(index_region)
 {
@@ -113,42 +158,22 @@ function drawRegion(index_region)
     endShape(CLOSE);
 }
 
-function drawAdjacentRegions(index_region) {
-    for(let n of voronoi_regions.neighbors(index_region)) {
-        drawRegion(n);
-    }
-}
-
-function drawMyRegionsOnRoad(index_region)
+function resetSelectedRegion()
 {
-
+    selected_region = -1;
+    possible_regions = [];
+    possible_regions_strada = [];
 }
 
 
-function updatePossibleRegions()
-{
-    if(selected_region !== -1) {
-        if(building_strada) {
-            fill(0, 0, 255, 50);
-            for(let n of voronoi_regions.neighbors(selected_region)) {
-                if(region_cells[n].is_land && region_cells[n].h !== 4) // check extra per costruzione strade
-                    drawRegion(n);
-            }
-        }
-        else {
-            fill(255, 50);
-            drawAdjacentRegions(selected_region);
-            drawMyRegionsOnRoad(selected_region);
-        }
-    }
-}
+
 
 
 // MAIN UPDATE FUNCTION
 function updateRegionCells(updated_region_cells)
 {
     actions_queue = [];
-    selected_region = -1;
+    resetSelectedRegion();
     building_strada = false;
     turn_timer = 5000; // milliseconds
     actions_stopped = false;
