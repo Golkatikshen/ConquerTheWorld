@@ -42,6 +42,8 @@ function draw()
             a.display();
         }
 
+        barraAvanzamentoTurno();
+
 
         noStroke();
         fill(255, 255, 0);
@@ -88,6 +90,15 @@ function draw()
     {
         background(13, 179, 207);
     }
+}
+
+function barraAvanzamentoTurno()
+{
+    noStroke();
+    fill(0);
+    rect(width/2-202, 10, 404, 14);
+    fill(255, 255, 0);
+    rect(width/2-200, 12, 400*turn_timer/5000, 10);
 }
 
 function mouseClicked()
@@ -228,11 +239,11 @@ function tabellinaInfo(y_off)
 {
     text("Press I to toggle INFOS", 10, y_off+130);
     text("Fattoria - 1 unità - produce 1 cibo ogni turno", 10, y_off+160);
-    text("Falegnameria - 2 unità - produce 1 legno ogni turno", 10, y_off+180);
-    text("Miniera - 2 unità, 5 legno - produce 1 roccia ogni turno", 10, y_off+200);
-    text("Strada - 1 unità, 10 legno, 20 pietra, 100 oro", 10, y_off+220);
-    text("Accampamento - 5 unità, 100 legno, 2000 oro", 10, y_off+240);
-    text("Fortificazione - 3 unità, 100 pietra, 300 oro", 10, y_off+260);
+    text("Falegnameria - 10 oro - produce 1 legno ogni turno", 10, y_off+180);
+    text("Miniera - 5 legno, 10 oro - produce 1 roccia ogni turno", 10, y_off+200);
+    text("Strada - 1 unità, 1 legno, 2 pietra, 50 oro", 10, y_off+220);
+    text("Accampamento - 4 unità, 100 legno, 1000 oro", 10, y_off+240);
+    text("Fortificazione - 3 unità, 30 pietra, 300 oro", 10, y_off+260);
 
     text("- Ogni regione conquistata fa guadagnare 1 oro per turno.\n"+
          "- Ogni unità costa 10 di cibo per turno (prodotte automaticamente).\n"+

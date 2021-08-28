@@ -214,6 +214,8 @@ io.sockets.on("connection", socket => {
 
     socket.on("me_defeated", () => {
         let p = getPlayer(socket.id);
+        p.defeated = true;
+        wipeOutKingdom(p);
         io.in(p.room_name).emit("player_defeated", p.igid);
     });
 
@@ -317,7 +319,7 @@ function fartherApartRegion(room, pl_cap_dict, land_indexes)
         let mem_index = -1;
         for(let i=0; i<land_indexes.length; i++) {
             let sum = 0;
-            for (const [key, value] of pl_cap_dict.entries()) {
+            for (const [key, value] of Object.entries(pl_cap_dict)) {
                 sum += calcDistSquared(room, land_indexes[i], value);
             }
 
@@ -336,9 +338,23 @@ function fartherApartRegion(room, pl_cap_dict, land_indexes)
 function calcDistSquared(room, a, b)
 {
     let p_a = room.region_cells[a].centroid;
-    let p_a = room.region_cells[b].centroid;
+    let p_b = room.region_cells[b].centroid;
 
     return (p_a[0]-p_b[0])*(p_a[0]-p_b[0])+(p_a[1]-p_b[1])*(p_a[1]-p_b[1]);
+}
+
+
+function wipeOutKingdom(player)
+{
+    let room = getRoom(player.room_name);
+    for(let i=0; i<room.region_cells; i++) {
+        if(room.region_cells[i].igid_owner === player.igid) {
+            room.region_cells[i].igid_owner = -1;
+            room.region_cells[i].is_producing = false;
+            room.region_cells[i].is_accampamento = false;
+            room.region_cells[i].units = 0;
+        }
+    }
 }
 
 
@@ -367,7 +383,7 @@ function checkAllEndTurnInRoom(room_name)
     let room = getRoom(room_name);
 
     for(let i=0; i<room.players.length; i++) {
-        if(!room.players[i].end_turn) {
+        if(!room.players[i].end_turn && !room.players[i].defeated) {
             return false;
         }
     }
