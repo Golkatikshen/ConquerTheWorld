@@ -320,7 +320,7 @@ function fartherApartRegion(room, pl_cap_dict, land_indexes)
         for(let i=0; i<land_indexes.length; i++) {
             let sum = 0;
             for (const [key, value] of Object.entries(pl_cap_dict)) {
-                sum += calcDistSquared(room, land_indexes[i], value);
+                sum += calcDist(room, land_indexes[i], value);
             }
 
             if(sum > max) {
@@ -335,12 +335,12 @@ function fartherApartRegion(room, pl_cap_dict, land_indexes)
     }
 }
 
-function calcDistSquared(room, a, b)
+function calcDist(room, a, b)
 {
     let p_a = room.region_cells[a].centroid;
     let p_b = room.region_cells[b].centroid;
 
-    return (p_a[0]-p_b[0])*(p_a[0]-p_b[0])+(p_a[1]-p_b[1])*(p_a[1]-p_b[1]);
+    return Math.sqrt((p_a[0]-p_b[0])*(p_a[0]-p_b[0])+(p_a[1]-p_b[1])*(p_a[1]-p_b[1]));
 }
 
 
