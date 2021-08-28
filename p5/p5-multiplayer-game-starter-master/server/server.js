@@ -290,20 +290,57 @@ function genCapitals(room)
 
     let pl_cap_dict = {};
     for(let i=0; i<room.players.length; i++) {
-        let index = Math.floor(Math.random()*land_indexes.length);
-        let c = land_indexes[index];
+        let c = fartherApartRegion(room, pl_cap_dict, land_indexes);
 
         pl_cap_dict[room.players[i].id] = c;
 
         room.players[i].capital = c;
         room.region_cells[c].is_capital = true;
         room.region_cells[c].igid_owner = room.players[i].igid;
-
-        land_indexes.splice(index, 1);
     }
 
     return pl_cap_dict;
 }
+
+function fartherApartRegion(room, pl_cap_dict, land_indexes)
+{
+    let len_dict = Object.keys(pl_cap_dict).length;
+
+    if(len_dict === 0) {
+        let index = Math.floor(Math.random()*land_indexes.length);
+        let c = land_indexes[index];
+        land_indexes.splice(index, 1);
+        return c;
+    }
+    else {
+        let max = 0;
+        let mem_index = -1;
+        for(let i=0; i<land_indexes.length; i++) {
+            let sum = 0;
+            for (const [key, value] of pl_cap_dict.entries()) {
+                sum += calcDistSquared(room, land_indexes[i], value);
+            }
+
+            if(sum > max) {
+                max = sum;
+                mem_index = i;
+            }
+        }
+
+        let c = land_indexes[mem_index];
+        land_indexes.splice(mem_index, 1);
+        return c;
+    }
+}
+
+function calcDistSquared(room, a, b)
+{
+    let p_a = room.region_cells[a].centroid;
+    let p_a = room.region_cells[b].centroid;
+
+    return (p_a[0]-p_b[0])*(p_a[0]-p_b[0])+(p_a[1]-p_b[1])*(p_a[1]-p_b[1]);
+}
+
 
 function removeRoom(room_name)
 {    
