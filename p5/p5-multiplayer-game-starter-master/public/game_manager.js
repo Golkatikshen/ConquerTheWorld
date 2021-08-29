@@ -106,8 +106,9 @@ function updatePossibleRegions()
     if(selected_region !== -1) {
         for(let n of voronoi_regions.neighbors(selected_region)) {
             possible_regions.push(n);
-            if(region_cells[n].is_land && region_cells[n].h !== 4) // check extra per costruzione strade
-                possible_regions_strada.push(n);
+            if(region_cells[n].igid_owner == local_player.igid)
+                if(region_cells[n].is_land && region_cells[n].h !== 4) // check extra per costruzione strade
+                    possible_regions_strada.push(n);
         }
         
         for(let i=0; i<region_cells.length; i++) {

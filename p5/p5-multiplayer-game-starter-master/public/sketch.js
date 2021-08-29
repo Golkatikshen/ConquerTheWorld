@@ -241,7 +241,7 @@ function tabellinaInfo(y_off)
     text("Fattoria - 1 unità - produce 1 cibo ogni turno", 10, y_off+160);
     text("Falegnameria - 10 oro - produce 1 legno ogni turno", 10, y_off+180);
     text("Miniera - 5 legno, 10 oro - produce 1 roccia ogni turno", 10, y_off+200);
-    text("Strada - 1 unità, 1 legno, 2 pietra, 50 oro", 10, y_off+220);
+    text("Strada - 1 legno, 2 pietra, 50 oro", 10, y_off+220);
     text("Accampamento - 4 unità, 100 legno, 1000 oro", 10, y_off+240);
     text("Fortificazione - 3 unità, 30 pietra, 300 oro", 10, y_off+260);
 
