@@ -89,6 +89,8 @@ function draw()
     else
     {
         background(13, 179, 207);
+        //if(show_infos)
+        tabellinaInfo(30);
     }
 }
 
@@ -158,26 +160,45 @@ function mouseClicked()
 
 function keyPressed()
 {
-    if(key == 'm' || key == 'M') {
-        political_mode = !political_mode;
-    }
+    if(game_started) {
+        if(key == 'm' || key == 'M') {
+            political_mode = !political_mode;
+        }
+    
+        if(key == 'i' || key == 'I') {
+            show_infos = !show_infos;
+        }
+    
 
-    if(key == 'i' || key == 'I') {
-        show_infos = !show_infos;
-    }
+        if(key == '1') {
+            clickMartello();
+        }
 
+        if(key == '2') {
+            clickStrada();
+        }
 
-    if(key == 'a' || key == 'A') {
-        a_pressed = true;
-    }
-    if(key == 'd' || key == 'D') {
-        d_pressed = true;
-    }
-    if(key == 'w' || key == 'W') {
-        w_pressed = true;
-    }
-    if(key == 's' || key == 'S') {
-        s_pressed = true;
+        if(key == '3') {
+            clickAccampamento();
+        }
+
+        if(key == '4') {
+            clickFortificazione();
+        }
+    
+
+        if(key == 'a' || key == 'A') {
+            a_pressed = true;
+        }
+        if(key == 'd' || key == 'D') {
+            d_pressed = true;
+        }
+        if(key == 'w' || key == 'W') {
+            w_pressed = true;
+        }
+        if(key == 's' || key == 'S') {
+            s_pressed = true;
+        }
     }
 }
 

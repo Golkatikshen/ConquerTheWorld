@@ -184,7 +184,7 @@ export class Room {
         //e perde tante forze militari quante ne aveva il secondo più forte
         if(mem2 !== -1) {
             if(region.igid_owner === mem1 && region.is_fortified) {
-                n_units_pp[mem1] = n_units_pp[mem1]-region.units-sMath.floor(max2/2);
+                n_units_pp[mem1] = n_units_pp[mem1]-region.units-Math.floor(max2/2);
             }
             else {
                 n_units_pp[mem1] -= max2;
